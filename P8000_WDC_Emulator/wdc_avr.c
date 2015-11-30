@@ -53,7 +53,7 @@ void wdc_init_avr ()
     configure_pin_wdardy();
     configure_pin_tr();
     configure_pin_reset();
-	configure_not_used();
+    configure_not_used();
 
     configure_port_data_read();
 

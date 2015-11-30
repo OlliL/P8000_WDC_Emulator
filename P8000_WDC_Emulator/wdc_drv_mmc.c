@@ -182,17 +182,17 @@ uint8_t mmc_enable_crc ( uint8_t on_off )
 
 uint8_t mmc_init ()
 {
-	uint8_t i;
-	uint8_t ret= 1;
-	
-	for( i = 0; i < 10 ; i++) {
-		ret = mmc_do_init();
-		if(ret == 0) {
-			break;
-		}
-	}
+    uint8_t i;
+    uint8_t ret = 1;
 
-	return ret;
+    for ( i = 0; i < 10; i++ ) {
+        ret = mmc_do_init();
+        if ( ret == 0 ) {
+            break;
+        }
+    }
+
+    return ret;
 }
 
 uint8_t mmc_do_init ()
