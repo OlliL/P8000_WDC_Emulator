@@ -29,6 +29,13 @@
  * $Id: wdc_avr.c,v 1.6 2013/05/04 15:40:14 olivleh1 Exp $
  */
 
+/*
+ * Fuses:
+ *  - BODLEVEL 4V3
+ *  - SPIEN
+ *  - SUT_CKSEL EXTXOSC_8MHZ_XX_16KCK_65MS
+ */
+
 #include <avr/io.h>
 #include "wdc_config.h"
 #include "wdc_avr.h"
