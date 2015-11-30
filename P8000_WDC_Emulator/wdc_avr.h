@@ -42,6 +42,7 @@
 #define configure_pin_wdardy()      DDR_INFO &= ~( 1 << PIN_INFO_WDARDY )
 #define configure_pin_tr()          DDR_INFO |= ( 1 << PIN_INFO_TR )
 #define configure_pin_reset()       DDR_INFO &= ~( 1 << PIN_INFO_RST ); PORT_INFO |= ( 1 << PIN_INFO_RST )
+#define configure_not_used()		DDR_INFO &= ~( 1 << PIN_NOT_CONNECTED ); PORT_INFO |= ( 1 << PIN_NOT_CONNECTED )
 
 #define port_data_set( x )            ( PORT_DATA = ( x ) )
 #define port_info_set( x )            ( PORT_INFO = ( x ) )

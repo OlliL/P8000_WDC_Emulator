@@ -59,6 +59,7 @@
 
 uint8_t mmc_read_block ( uint8_t *, uint8_t *, uint16_t );
 uint8_t mmc_cmd ( uint8_t * );
+uint8_t mmc_do_init ();
 
 uint8_t is_sdhc = 0;
 
@@ -180,6 +181,21 @@ uint8_t mmc_enable_crc ( uint8_t on_off )
 #endif
 
 uint8_t mmc_init ()
+{
+	uint8_t i;
+	uint8_t ret= 1;
+	
+	for( i = 0; i < 10 ; i++) {
+		ret = mmc_do_init();
+		if(ret == 0) {
+			break;
+		}
+	}
+
+	return ret;
+}
+
+uint8_t mmc_do_init ()
 {
     uint16_t t16 = 0;
     uint8_t  a;

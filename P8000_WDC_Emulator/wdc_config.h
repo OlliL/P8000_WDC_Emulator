@@ -63,6 +63,7 @@
 #define PIN_INFO_STATUS0    PINC0
 #define PIN_INFO_STATUS1    PINC1
 #define PIN_INFO_STATUS2    PINC2
+#define PIN_NOT_CONNECTED	PINC3
 #define PIN_INFO_TE         PINC4
 #define PIN_INFO_WDARDY     PINC5
 #define PIN_INFO_TR         PINC6

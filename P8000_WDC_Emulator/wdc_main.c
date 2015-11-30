@@ -435,11 +435,12 @@ main ( void )
 void atmega_setup ( void )
 {
     set_sleep_mode ( SLEEP_MODE_IDLE );
-    /* is needed for some disks (for example Maxtor 6L080J4) and SD-Cards*/
-    _delay_ms ( 400 );
-    uart_init();
-    uart_putstring ( PSTR ( "=== P8000 WDC Emulator 0.92 ===" ), true );
+
+    _delay_ms ( 1000 );
     wdc_init_avr();
+    uart_init();
+    _delay_ms ( 1000 );
+    uart_putstring ( PSTR ( "=== P8000 WDC Emulator 0.92 ===" ), true );
     wdc_get_sysconf();
 
     if ( wdc_init_disk() ) {
