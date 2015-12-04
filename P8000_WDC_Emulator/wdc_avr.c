@@ -43,6 +43,26 @@
 #include "wdc_drv_pata.h"
 #include "wdc_if_disk.h"
 
+void wdc_init_led ()
+{
+    configure_pin_led();
+}
+
+void wdc_led_on ()
+{
+    PORT_INFO |= ( 1 << PIN_INFO_LED );
+}
+
+void wdc_led_off ()
+{
+    PORT_INFO &= ~( 1 << PIN_INFO_LED );
+}
+
+void wdc_led_toggle ()
+{
+    PORT_INFO ^= ( 1 << PIN_INFO_LED );
+}
+
 void wdc_init_avr ()
 {
     /* configure the P8000 interface */
@@ -53,7 +73,6 @@ void wdc_init_avr ()
     configure_pin_wdardy();
     configure_pin_tr();
     configure_pin_reset();
-    configure_not_used();
 
     configure_port_data_read();
 

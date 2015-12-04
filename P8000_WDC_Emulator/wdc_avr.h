@@ -42,12 +42,10 @@
 #define configure_pin_wdardy()      DDR_INFO &= ~( 1 << PIN_INFO_WDARDY )
 #define configure_pin_tr()          DDR_INFO |= ( 1 << PIN_INFO_TR )
 #define configure_pin_reset()       DDR_INFO &= ~( 1 << PIN_INFO_RST ); PORT_INFO |= ( 1 << PIN_INFO_RST )
-#define configure_not_used()		DDR_INFO &= ~( 1 << PIN_NOT_CONNECTED ); PORT_INFO |= ( 1 << PIN_NOT_CONNECTED )
+#define configure_pin_led()         DDR_INFO |= ( 1 << PIN_INFO_LED )
 
-#define port_data_set( x )            ( PORT_DATA = ( x ) )
-#define port_info_set( x )            ( PORT_INFO = ( x ) )
+#define port_data_set( x )          ( PORT_DATA = ( x ) )
 #define port_data_get()             PIN_DATA
-#define port_info_get()             PIN_INFO
 
 /* functions dealing with the 74138 address decoder */
 #define configure_pin_addr0()       DDR_ADRDEC |= ( 1 << PIN_ADRDEC_ADDR0 )
@@ -105,5 +103,10 @@
 
 extern void wdc_init_avr ();
 extern void wdc_get_sysconf ();
+
+extern void wdc_init_led ();
+extern void wdc_led_on ();
+extern void wdc_led_off ();
+extern void wdc_led_toggle ();
 
 #endif /* WDC_AVR_H_ */

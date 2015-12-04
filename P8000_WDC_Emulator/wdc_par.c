@@ -122,14 +122,6 @@ void wdc_write_par_table ( uint8_t *buffer, uint16_t count )
     } while ( count > 0 );
 }
 
-void wdc_read_wdc_par ( uint8_t *buffer, uint16_t count )
-{
-    do {
-        count--;
-        buffer[count] = par_table[count + POS_PAR_WDC_PAR];
-    } while ( count > 0 );
-}
-
 void wdc_write_wdc_par ( uint8_t *buffer, uint16_t count )
 {
     do {
@@ -192,7 +184,7 @@ uint8_t wdc_add_btt_entry ( uint16_t cylinder, uint8_t head )
         btt_count++;
         wdc_set_btt_count ( btt_count );
         return 0;
-    }else {
+    } else {
         return ERR_BTT_FULL;
     }
 }

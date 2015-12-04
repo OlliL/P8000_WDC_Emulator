@@ -39,74 +39,79 @@
 void wdc_wait_for_reset ()
 {
     port_data_set ( DATA_CLEAR );
-    port_info_set ( INFO_CLEAR );
+    unset_info();
+
     wdc_set_initialized ( 1 );
 
     while ( isset_info_reset() ) {}
+
+    configure_port_data_read();
 }
 
 uint8_t wdc_read_data_from_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status )
 {
-    uint16_t datacnt;
-
-    _delay_us ( DELAY_PIO_US );
-
-    configure_port_data_read();
-    datacnt = 0;
-    port_info_set ( wdc_status );
+    set_info ( wdc_status );
 
     while ( !isset_info_te() ) {
         if ( isset_info_reset() ) {
             return 0;
         }
     }
+
     while ( !isset_info_wdardy() ) {}
+
     do {
         enable_p8000com();  /* this also generates /ASTB in the moment /WDARDY gets low with a 7403 */
+        count--;
         while ( isset_info_wdardy() ) {}
         *buffer++ = port_data_get();
         disable_p8000com(); /* this additionally brings /ASTB to high */
         while ( !isset_info_wdardy() ) {}
-        datacnt++;
-    } while ( datacnt < count );
-    port_info_set ( INFO_CLEAR );
+    } while ( count > 0 );
 
+    unset_info();
     return 1;
 }
 
 void wdc_write_data_to_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status )
 {
-    uint16_t datacnt = 0;
+    set_info ( INFO_TR | wdc_status );
 
-    _delay_us ( DELAY_PIO_US );
-
-    port_info_set ( INFO_TR | wdc_status );
     while ( isset_info_te() ) {}
+
     configure_port_data_write();
+
     while ( !isset_info_wdardy() ) {}
+
     do {
         enable_p8000com();  /* this also generates /ASTB in the moment /WDARDY gets low with a 7403 */
+        count--;
         while ( isset_info_wdardy() ) {}
         port_data_set ( *buffer++ );
         disable_p8000com(); /* this additionally brings /ASTB to high */
         while ( !isset_info_wdardy() ) {}
-        datacnt++;
-    } while ( datacnt < count );
+    } while ( count > 0 );
 
     while ( isset_info_wdardy() ) {}
 
+    /* toggle /ASB once more */
     enable_p8000com();
     nop();
     disable_p8000com();
+
     configure_port_data_read();
+
     while ( !isset_info_wdardy() ) {}
-    port_info_set ( INFO_CLEAR );
+
+    unset_info();
 }
 
-uint8_t wdc_receive_cmd ( uint8_t *buffer, uint16_t count )
+uint8_t wdc_receive_cmd ( uint8_t *buffer )
 {
+    _delay_us ( DELAY_PIO_US );
+
     return wdc_read_data_from_p8k ( buffer
-                                  , count
+                                  , 9
                                   , INFO_STAT_GCMD
                                   );
 }

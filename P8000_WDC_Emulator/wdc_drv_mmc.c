@@ -185,6 +185,8 @@ uint8_t mmc_init ()
     uint8_t i;
     uint8_t ret = 1;
 
+    uart_putstring ( PSTR ( "INFO: SDCard init start" ), true );
+
     for ( i = 0; i < 10; i++ ) {
         ret = mmc_do_init();
         if ( ret == 0 ) {
@@ -201,7 +203,6 @@ uint8_t mmc_do_init ()
     uint8_t  a;
     uint8_t  cmd[6];
 
-    uart_putstring ( PSTR ( "INFO: SDCard init start" ), true );
 
     for ( a = 0; a < 200; a++ ) {
         nop();
@@ -492,15 +493,9 @@ uint8_t mmc_read_sector ( uint32_t addr, uint8_t *buffer )
 
 uint8_t mmc_read_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks )
 {
-    sint32   x;
-    uint8_t  resp;
-    uint8_t  cmd[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF };
-    uint8_t  n = numblocks;
-    uint16_t i;
-
-#ifdef SPI_CRC
-    uint16_t crc;
-#endif
+    sint32  x;
+    uint8_t resp;
+    uint8_t cmd[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF };
 
     enable_mmc();
 
@@ -554,6 +549,10 @@ uint8_t mmc_read_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks 
 
     /* read the number of requested blocks */
     do {
+        uint16_t i;
+#ifdef SPI_CRC
+        uint16_t crc;
+#endif
 
 #ifndef MMC_MULTIBLOCK
         cmd[1] = x.value8.hh;
@@ -572,7 +571,7 @@ uint8_t mmc_read_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks 
         x.value32 += MMC_BLOCKLEN;
 #endif
 
-        n--;
+        numblocks--;
         i = MMC_BLOCKLEN - 1;
         /* wait for startbyte */
         while ( 1 ) {
@@ -610,7 +609,7 @@ uint8_t mmc_read_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks 
         buffer++;
 #endif
 
-    } while ( n );
+    } while ( numblocks );
 #ifdef MMC_MULTIBLOCK
     wait_till_card_ready();
 
@@ -637,16 +636,11 @@ uint8_t mmc_read_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks 
 
 uint8_t mmc_write_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks )
 {
-    sint32   x;
-    uint8_t  resp;
-    uint8_t  cmd[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF };
-    uint8_t  n = numblocks;
-    uint16_t i;
+    sint32  x;
+    uint8_t resp;
+    uint8_t cmd[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF };
 
-#ifdef SPI_CRC
-    uint16_t crc;
-    uint8_t  crcl, crch;
-#endif
+/*    uint16_t i; */
 
     enable_mmc();
     wait_till_card_ready();
@@ -694,6 +688,11 @@ uint8_t mmc_write_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks
 #endif
 
     do {
+        uint16_t i;
+#ifdef SPI_CRC
+        uint16_t crc;
+        uint8_t  crcl, crch;
+#endif
 
 #ifndef MMC_MULTIBLOCK
         cmd[1] = x.value8.hh;
@@ -734,7 +733,7 @@ uint8_t mmc_write_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks
             wait_till_send_done();
             xmit_byte ( data );
         }
-        n--;
+        numblocks--;
         wait_till_send_done();
         /* handle CRC */
 #ifdef SPI_CRC
@@ -764,7 +763,7 @@ uint8_t mmc_write_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks
         wait_till_card_ready();
 #endif
 
-    } while ( n );
+    } while ( numblocks );
 
 #ifdef MMC_MULTIBLOCK
     wait_till_card_ready();

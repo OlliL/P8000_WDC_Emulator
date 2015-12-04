@@ -39,7 +39,7 @@ uint8_t pata_bsy ();
 uint8_t pata_rdy ();
 uint8_t pata_drq ();
 uint8_t pata_err ();
-void    ata_identify ();
+uint8_t ata_identify ();
 void    pata_set_highbyte ( uint8_t byte );
 void    pata_set_lowbyte ( uint8_t byte );
 uint8_t pata_get_highbyte ();
@@ -253,7 +253,7 @@ void pata_write_bytes ( uint8_t *buffer, uint16_t bytes )
     }
 }
 
-void ata_identify ()
+uint8_t ata_identify ()
 {
     uint8_t  buffer[512], i;
     uint16_t word[256], n;
@@ -269,6 +269,12 @@ void ata_identify ()
         i++;
     }
 
+    if ( word[1] == word[3] && word[54] == word[56] ) {
+        /* invalid data */
+        return 1;
+    }
+
+    uart_putstring ( PSTR ( "INFO: PATA disk has been found" ), true );
     uart_putstring ( PSTR ( "INFO: Number of logical cylinders: " ), false );
     uart_putw_dec ( word[1] );
     uart_put_nl();
@@ -317,6 +323,8 @@ void ata_identify ()
     uart_putstring ( PSTR ( "INFO: Minimum PIO transfer cycle time without flow control: " ), false );
     uart_putdw_dec ( word[67] );
     uart_putstring ( PSTR ( "ns" ), true );
+
+    return 0;
 }
 
 /*
@@ -337,10 +345,8 @@ uint8_t pata_init ()
     while ( pata_bsy() ) {}
 
 
-    uart_putstring ( PSTR ( "INFO: PATA disk has been found" ), true );
-    ata_identify();
+    return ata_identify();
 
-    return 0;
 }
 
 uint8_t pata_read_block ( uint32_t addr, uint8_t *buffer )

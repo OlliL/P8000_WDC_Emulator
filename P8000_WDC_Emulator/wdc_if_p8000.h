@@ -32,7 +32,7 @@
 #ifndef WDC_IF_P8000_H_
 #define WDC_IF_P8000_H_
 
-#define DELAY_PIO_US                550
+#define DELAY_PIO_US                500
 
 /* input pin handling */
 #define isset_info_reset()          (( PIN_INFO ) & ( 1 << PIN_INFO_RST ))
@@ -41,17 +41,19 @@
 
 /* output pin handling */
 #define DATA_CLEAR          0x00
-#define INFO_CLEAR          0x00
 
-#define INFO_STAT_GCMD      (( 1 << PIN_INFO_STATUS0 )                                                    )      /* 0x01 */
-#define INFO_STAT_RDATA     (                          ( 1 << PIN_INFO_STATUS1 )                          )      /* 0x02 */
-#define INFO_STAT_WDATA     (( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 )                          )      /* 0x03 */
-#define _INFO_STAT_CRCERR   (                          ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ))      /* 0x06 */
-#define INFO_STAT_ERROR     (( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ))      /* 0x07 */
+#define INFO_STAT_GCMD      (( 1 << PIN_INFO_STATUS0 )                                                        )  /* 0x01 */
+#define INFO_STAT_RDATA     (                            ( 1 << PIN_INFO_STATUS1 )                            )  /* 0x02 */
+#define INFO_STAT_WDATA     (( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 )                            )  /* 0x03 */
+#define _INFO_STAT_CRCERR   (                            ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ))  /* 0x06 */
+#define INFO_STAT_ERROR     (( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ))  /* 0x07 */
 #define INFO_TR             ( 1 << PIN_INFO_TR )                                                                 /* 0x40 */
 
+#define set_info( x )        ( PORT_INFO |= ( x ) )
+#define unset_info()         PORT_INFO &= ~(( 1 << PIN_INFO_TR ) | ( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ))
+
 extern void    wdc_wait_for_reset ();
-extern uint8_t wdc_receive_cmd ( uint8_t *buffer, uint16_t count );
+extern uint8_t wdc_receive_cmd ( uint8_t *buffer );
 extern void    wdc_receive_data ( uint8_t *buffer, uint16_t count );
 extern void    wdc_send_data ( uint8_t *buffer, uint16_t count );
 extern void    wdc_send_error ();

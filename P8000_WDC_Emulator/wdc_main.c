@@ -33,14 +33,12 @@
 
 /* TODO:  - right now, BTT entries are not taken into account */
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
-
 #include <string.h>
 #include <stdlib.h>
+#include "wdc_config.h"
 #include <avr/pgmspace.h>
 #include <avr/sleep.h>
-#include "wdc_config.h"
+#include <avr/interrupt.h>
 #include <util/delay.h>
 #include "wdc_main.h"
 #ifdef DEBUG
@@ -70,7 +68,6 @@ int __attribute__( ( OS_main ) )
 main ( void )
 {
 #ifndef MEASURE_DISK_PERFORMANCE
-    uint16_t cmd_counter = 9;
     uint16_t data_counter;
     uint32_t blockno;
     uint8_t  errorcode;
@@ -98,9 +95,11 @@ main ( void )
             wdc_write_par_table ( data_buffer, data_counter );
             uart_putstring ( PSTR ( "INFO: Disk found and ready to use." ), true );
             wdc_set_disk_valid();
+            wdc_led_on();
         } else {
             uart_putstring ( PSTR ( "INFO: Disk found but Sector 0 is invalid, please execute sa.format to initialize this disk properly." ), true );
             wdc_set_disk_invalid();
+            wdc_led_off();
         }
     }
 
@@ -108,13 +107,11 @@ main ( void )
 
         wdc_wait_for_reset();
 
-        if ( wdc_receive_cmd ( cmd_buffer
-                             , cmd_counter
-                             ) ) {
+        if ( wdc_receive_cmd ( cmd_buffer ) ) {
 
 #if DEBUG >= 2
 #if DEBUG >= 3
-            uart_putstring ( PSTR ( "DEBUG: received command is:" ), false );
+            uart_putstring ( PSTR ( "DEBUG: received command is: " ), false );
 #endif
             uart_putc_hex ( cmd_buffer[0] );
 #if DEBUG >= 3
@@ -127,7 +124,7 @@ main ( void )
             uart_putc_hex ( cmd_buffer[7] );
             uart_putc_hex ( cmd_buffer[8] );
 #endif
-            uart_putnl();
+            uart_put_nl();
 #endif
 
             /* no drive attached */
@@ -432,19 +429,46 @@ main ( void )
     return 0;
 }
 
+void setup_timer ()
+{
+    GTCCR |= ( 1 << TSM ) | ( 1 << PSRASY );  /*Timer anhalten, Prescaler Reset*/
+    ASSR |= ( 1 << AS2 );                   /*Asynchron Mode einschalten*/
+    TCCR2A = ( 1 << WGM21 );                /*CTC Modus*/
+    TCCR2B |= ( 1 << CS22 ) | ( 1 << CS21 );  /*Prescaler 256*/
+    /* 32768 / 256 / 1 = 128                Intervall = 1s */
+    OCR2A = 128 - 1;
+    TIMSK2 |= ( 1 << OCIE2A );                /*Enable Compare Interrupt*/
+    GTCCR &= ~( 1 << TSM );                 /*Timer starten*/
+    sei();                                /*Enable global Interrupts*/
+}
+
 void atmega_setup ( void )
 {
     set_sleep_mode ( SLEEP_MODE_IDLE );
 
+    wdc_init_led();
+    wdc_led_off();
+
     _delay_ms ( 1000 );
+
     wdc_init_avr();
     uart_init();
+
     _delay_ms ( 1000 );
+
+    wdc_led_on();
+
     uart_putstring ( PSTR ( "=== P8000 WDC Emulator 0.92 ===" ), true );
     wdc_get_sysconf();
 
     if ( wdc_init_disk() ) {
         uart_putstring ( PSTR ( "ERROR: No disk found!" ), true );
         wdc_set_no_disk();
+        setup_timer();
+
     }
+}
+
+ISR ( TIMER2_OVF_vect ) {
+    wdc_led_toggle();
 }
