@@ -429,19 +429,6 @@ main ( void )
     return 0;
 }
 
-void setup_timer ()
-{
-    GTCCR |= ( 1 << TSM ) | ( 1 << PSRASY );  /*Timer anhalten, Prescaler Reset*/
-    ASSR |= ( 1 << AS2 );                   /*Asynchron Mode einschalten*/
-    TCCR2A = ( 1 << WGM21 );                /*CTC Modus*/
-    TCCR2B |= ( 1 << CS22 ) | ( 1 << CS21 );  /*Prescaler 256*/
-    /* 32768 / 256 / 1 = 128                Intervall = 1s */
-    OCR2A = 128 - 1;
-    TIMSK2 |= ( 1 << OCIE2A );                /*Enable Compare Interrupt*/
-    GTCCR &= ~( 1 << TSM );                 /*Timer starten*/
-    sei();                                /*Enable global Interrupts*/
-}
-
 void atmega_setup ( void )
 {
     set_sleep_mode ( SLEEP_MODE_IDLE );
@@ -456,19 +443,11 @@ void atmega_setup ( void )
 
     _delay_ms ( 1000 );
 
-    wdc_led_on();
-
-    uart_putstring ( PSTR ( "=== P8000 WDC Emulator 0.92 ===" ), true );
+    uart_putstring ( PSTR ( "=== P8000 WDC Emulator 0.93 ===" ), true );
     wdc_get_sysconf();
 
     if ( wdc_init_disk() ) {
         uart_putstring ( PSTR ( "ERROR: No disk found!" ), true );
         wdc_set_no_disk();
-        setup_timer();
-
     }
-}
-
-ISR ( TIMER2_OVF_vect ) {
-    wdc_led_toggle();
 }

@@ -51,6 +51,7 @@
 #define CMD24 ( 0x40 + 24 )
 #define CMD25 ( 0x40 + 25 )
 #define CMD55 ( 0x40 + 55 )
+#define CMD58 ( 0x40 + 58 ) /* READ_OCR */
 #define CMD59 ( 0x40 + 59 )
 
 #define SB_START 0xFE
@@ -61,7 +62,7 @@ uint8_t mmc_read_block ( uint8_t *, uint8_t *, uint16_t );
 uint8_t mmc_cmd ( uint8_t * );
 uint8_t mmc_do_init ();
 
-uint8_t is_sdhc = 0;
+uint8_t is_block_addressing = 0;
 
 typedef union {
     uint32_t value32;
@@ -202,6 +203,7 @@ uint8_t mmc_do_init ()
     uint16_t t16 = 0;
     uint8_t  a;
     uint8_t  cmd[6];
+    uint8_t  is_sd2 = 0;
 
 
     for ( a = 0; a < 200; a++ ) {
@@ -220,7 +222,7 @@ uint8_t mmc_do_init ()
     enable_mmc();
 
     /*
-     * send CMD0
+     * Send CMD0 to enter idle state.
      */
     cmd[0] = CMD0;
     cmd[1] = 0x00;
@@ -237,40 +239,44 @@ uint8_t mmc_do_init ()
 
     send_dummy_byte();
 
+    /*
+     * Send CMD8 to find out if it is a SD 2.0 or SDSC / MMC card.
+     */
     cmd[0] = CMD8;
     cmd[1] = 0x00;
     cmd[2] = 0x00;
     cmd[3] = 0x01;
     cmd[4] = 0xaa;
-    cmd[5] = 0x86;
-    a = mmc_cmd ( cmd );
-    /* if SDHC Card */
-    if ( a <= 1 ) {
-        /* skip 6 bytes */
-        for ( a = 0; a < 6; a++ ) {
+    cmd[5] = 0x87;
+    /* if SD 2.0 Card */
+    if ( mmc_cmd ( cmd ) == 1 ) {
+        /* skip 5 bytes */
+        for ( a = 0; a < 5; a++ ) {
             send_dummy_byte();
         }
 
-        is_sdhc = 1;
+        is_sd2 = 1;
 
         /* prepare next cmd */
         cmd[0] = CMD1;
-        cmd[1] = 0x40;
+        cmd[1] = 0x40; /* HCS bit */
         cmd[2] = cmd[3] = cmd[4] = 0x00;
         cmd[5] = 0xFF;
     } else {
 
         send_dummy_byte();
-        is_sdhc = 0;
+        is_block_addressing = 0;
 
         /* prepare next cmd */
         cmd[0] = CMD1;
         cmd[1] = cmd[2] = cmd[3] = cmd[4] = 0x00;
         cmd[5] = 0xFF;
+
+        uart_putstring ( PSTR ( "INFO: SDSC disk has been found" ), true );
     }
 
     /*
-     * send CMD1
+     * Send CMD1 to wait until the card leaves idle state.
      */
     t16 = 0;
     while ( mmc_cmd ( cmd ) != 0 ) {
@@ -283,6 +289,31 @@ uint8_t mmc_do_init ()
 
     send_dummy_byte();
 
+    if ( is_sd2 == 1 ) {
+        /*
+         * Send CMD58 to find out if the SD 2.0 card wants block or by addressing.
+         */
+        cmd[0] = CMD58;
+        cmd[1] = 0x00;
+        if ( mmc_cmd ( cmd ) == 0 ) {
+            send_dummy_byte();
+            a = recv_byte();
+            if ( a & 0x40 ) {
+                is_block_addressing = 1;
+                uart_putstring ( PSTR ( "INFO: SD2.0 disk with block addressing has been found" ), true );
+            } else {
+                uart_putstring ( PSTR ( "INFO: SD2.0 disk with byte addressing has been found" ), true );
+            }
+
+            /* skip 4 bytes */
+            for ( a = 1; a < 5; a++ ) {
+                send_dummy_byte();
+            }
+        }
+    }
+
+    send_dummy_byte();
+
     /* SPI Bus to max. speed */
     SPCR &= ~( ( 1 << SPR0 ) | ( 1 << SPR1 ) );
     SPSR = SPSR | ( 1 << SPI2X );
@@ -290,8 +321,6 @@ uint8_t mmc_do_init ()
 #ifdef SPI_CRC
     mmc_enable_crc ( 1 );
 #endif
-
-    uart_putstring ( PSTR ( "INFO: SDCard disk has been found" ), true );
 
     disable_mmc();
     return 0;
@@ -348,7 +377,7 @@ uint8_t mmc_write_sector ( uint32_t addr, uint8_t *buffer )
     wait_till_card_ready();
 
     /* convert blocks to bytes */
-    if ( !is_sdhc ) {
+    if ( !is_block_addressing ) {
         addr = addr * MMC_BLOCKLEN;
     }
     x.value32 = addr;
@@ -479,7 +508,7 @@ uint8_t mmc_read_sector ( uint32_t addr, uint8_t *buffer )
     uint8_t cmd[] = { CMD17, 0x00, 0x00, 0x00, 0x00, 0xFF };
 
     /* convert blocks to bytes */
-    if ( !is_sdhc ) {
+    if ( !is_block_addressing ) {
         addr = addr * MMC_BLOCKLEN;
     }
     x.value32 = addr;
@@ -521,7 +550,7 @@ uint8_t mmc_read_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks 
 #endif
 
     /* convert blocks to bytes */
-    if ( !is_sdhc ) {
+    if ( !is_block_addressing ) {
         addr = addr * MMC_BLOCKLEN;
     }
     x.value32 = addr;
@@ -664,7 +693,7 @@ uint8_t mmc_write_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks
 #endif
 #endif
     /* convert blocks to bytes */
-    if ( !is_sdhc ) {
+    if ( !is_block_addressing ) {
         addr = addr * MMC_BLOCKLEN;
     }
     x.value32 = addr;

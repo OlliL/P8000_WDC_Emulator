@@ -269,8 +269,8 @@ uint8_t ata_identify ()
         i++;
     }
 
-    if ( word[1] == word[3] && word[54] == word[56] ) {
-        /* invalid data */
+    /* check if data is nonsense or if drive does not support LBA */
+    if ( word[1] == word[3] || !( word[49] & 512 )) {
         return 1;
     }
 
@@ -303,26 +303,71 @@ uint8_t ata_identify ()
     }
     uart_put_nl();
     uart_putstring ( PSTR ( "INFO: Capabilities: " ), false );
-    uart_putw_dec ( word[49] );
+    if ( word[49] & ( 1 << 8 )) {
+        uart_putstring ( PSTR ( "DMA, " ), false );
+    }
+    if ( word[49] & ( 1 << 9 )) {
+        uart_putstring ( PSTR ( "LBA, " ), false );
+    }
+    if ( word[49] & ( 1 << 10 )) {
+        uart_putstring ( PSTR ( "IORDY may be disabled, " ), false );
+    }
+    if ( word[49] & ( 1 << 11 )) {
+        uart_putstring ( PSTR ( "IORDY, " ), false );
+    }
+    if ( word[49] & ( 1 << 13 )) {
+        uart_putstring ( PSTR ( "Standard standby timer values, " ), false );
+    }
     uart_put_nl();
-    uart_putstring ( PSTR ( "INFO: Number of current logical cylinders: " ), false );
-    uart_putw_dec ( word[54] );
-    uart_put_nl();
-    uart_putstring ( PSTR ( "INFO: Number of current logical heads: " ), false );
-    uart_putw_dec ( word[55] );
-    uart_put_nl();
-    uart_putstring ( PSTR ( "INFO: Number of current logical sectors per track: " ), false );
-    uart_putw_dec ( word[56] );
-    uart_put_nl();
-    uart_putstring ( PSTR ( "INFO: Current capacity in sectors: " ), false );
-    uart_putdw_dec ( word[57] | (uint32_t)word[58] << 16 );
-    uart_put_nl();
-    uart_putstring ( PSTR ( "INFO: Total number of user addressable sectors (LBA mode only): " ), false );
-    uart_putdw_dec ( word[60] | (uint32_t)word[61] << 16 );
-    uart_put_nl();
-    uart_putstring ( PSTR ( "INFO: Minimum PIO transfer cycle time without flow control: " ), false );
-    uart_putdw_dec ( word[67] );
-    uart_putstring ( PSTR ( "ns" ), true );
+
+    if ( word[53] & ( 1 << 0 )) {
+        uart_putstring ( PSTR ( "INFO: Number of current logical cylinders: " ), false );
+        uart_putw_dec ( word[54] );
+        uart_put_nl();
+        uart_putstring ( PSTR ( "INFO: Number of current logical heads: " ), false );
+        uart_putw_dec ( word[55] );
+        uart_put_nl();
+        uart_putstring ( PSTR ( "INFO: Number of current logical sectors per track: " ), false );
+        uart_putw_dec ( word[56] );
+        uart_put_nl();
+        uart_putstring ( PSTR ( "INFO: Current capacity in sectors: " ), false );
+        uart_putdw_dec ( word[57] | (uint32_t)word[58] << 16 );
+        uart_put_nl();
+    }
+    if ( word[53] & ( 1 << 1 )) {
+        uart_putstring ( PSTR ( "INFO: User addressable sectors for 28-bit commands: " ), false );
+        uart_putdw_dec ( word[60] | (uint32_t)word[61] << 16 );
+        uart_put_nl();
+        uart_putstring ( PSTR ( "Single Word DMA modes: " ), false );
+        uart_putw_dec ( word[62] );
+        uart_put_nl();
+        uart_putstring ( PSTR ( "Multiword Word DMA modes: " ), false );
+        uart_putw_dec ( word[63] );
+        uart_put_nl();
+        uart_putstring ( PSTR ( "PIO modes: " ), false );
+        uart_putw_dec ( word[64] );
+        uart_put_nl();
+        uart_putstring ( PSTR ( "INFO: Minimum Multiword DMA cycle time per word: " ), false );
+        uart_putw_dec ( word[65] );
+        uart_putstring ( PSTR ( "ns" ), true );
+        uart_putstring ( PSTR ( "INFO: Recommended Multiword DMA cycle time: " ), false );
+        uart_putw_dec ( word[66] );
+        uart_putstring ( PSTR ( "ns" ), true );
+        uart_putstring ( PSTR ( "INFO: Minimum PIO transfer cycle time without flow control: " ), false );
+        uart_putw_dec ( word[67] );
+        uart_putstring ( PSTR ( "ns" ), true );
+        uart_putstring ( PSTR ( "INFO: Minimum PIO cycle time with IORDY flow control: " ), false );
+        uart_putw_dec ( word[68] );
+        uart_putstring ( PSTR ( "ns" ), true );
+        uart_putstring ( PSTR ( "INFO: Additional support: " ), false );
+        uart_putw_dec ( word[69] );
+        uart_put_nl();
+    }
+    if ( word[53] & ( 1 << 2 )) {
+        uart_putstring ( PSTR ( "INFO: Ultra DMA modes: " ), false );
+        uart_putw_dec ( word[88] );
+        uart_put_nl();
+    }
 
     return 0;
 }
