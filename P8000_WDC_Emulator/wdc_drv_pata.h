@@ -46,6 +46,7 @@ extern uint8_t pata_write_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t n
 #define ATA_STAT_ERR  0x01  /* ATA error        */
 
 #define ATA_LBA_DRIVE_0 0xE0
+#define ATA_CHS_DRIVE_0 0xA0
 
 /* implemented ATA commands */
 #define CMD_IDENTIFY_DEVICE              0xEC
@@ -55,5 +56,15 @@ extern uint8_t pata_write_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t n
 #define CMD_WRITE_SECTORS                0x30
 
 #define PATA_BLOCKLEN 512
+
+typedef struct
+{
+	 uint16_t cylinders;
+	 uint16_t heads;
+	 uint16_t sectors;
+	 uint32_t sizeinsectors;
+	 uint8_t LBAsupport;
+} typeDriveInfo;
+
 
 #endif /* WDC_DRV_PATA_H_ */
