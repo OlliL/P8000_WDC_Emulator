@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2012, 2013 Oliver Lehmann
+ * Copyright (c) 2012, 2013, 2105 Oliver Lehmann
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,16 +25,11 @@
  *
  */
 
-/*
- * $Id: wdc_drv_pata.c,v 1.14 2013/05/07 17:38:06 olivleh1 Exp $
- */
-
 #include "wdc_config.h"
 #include <avr/io.h>
 #include "wdc_avr.h"
 #include "uart.h"
 #include "wdc_drv_pata.h"
-#include <util/delay.h>
 
 uint8_t pata_bsy ();
 uint8_t pata_rdy ();
@@ -47,11 +42,9 @@ uint8_t pata_get_highbyte ();
 uint8_t pata_get_lowbyte ();
 void    set_io_register ( uint8_t ioreg );
 uint8_t read_io_register ( uint8_t ioreg );
-
-
-void write_io_register ( uint8_t ioreg, uint8_t byte );
-void pata_read_bytes ( uint8_t *buffer, uint16_t bytes );
-
+void    write_io_register ( uint8_t ioreg, uint8_t byte );
+void    pata_read_bytes ( uint8_t *buffer, uint16_t bytes );
+void    pata_rw_command( uint32_t addr, uint8_t numblocks, uint8_t cmd );
 
 /*
  *                                                  +----- CS0

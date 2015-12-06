@@ -25,10 +25,6 @@
  *
  */
 
-/*
- * $Id: wdc_if_p8000.h,v 1.13 2013/05/04 15:40:15 olivleh1 Exp $
- */
-
 #ifndef WDC_IF_P8000_H_
 #define WDC_IF_P8000_H_
 
