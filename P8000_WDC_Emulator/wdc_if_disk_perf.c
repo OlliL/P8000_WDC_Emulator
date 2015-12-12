@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2012, 2013 Oliver Lehmann
+ * Copyright (c) 2012, 2013, 2015 Oliver Lehmann
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,10 +23,6 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- */
-
-/*
- * $Id: wdc_if_disk_perf.c,v 1.12 2013/05/04 15:40:15 olivleh1 Exp $
  */
 
 #include <avr/io.h>
@@ -60,8 +56,7 @@ void test_write4k ( uint8_t numblocks, uint8_t nr_of_tests )
     uint32_t blockno = 0;
     uint8_t  i8, errorcode;
 
-    uart_putstring ( PSTR ( "Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):" ) );
-    uart_putc ( '\n' );
+    uart_putstring ( PSTR ( "Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):" ), true );
     memset ( &data_buffer[0], 0xCC, WDC_BLOCKLEN * numblocks );
 
     for ( i8 = 0; i8 < nr_of_tests; i8++ ) {
@@ -90,8 +85,7 @@ void test_read4k ( uint8_t numblocks, uint8_t nr_of_tests )
     uint32_t blockno = 0;
     uint8_t  i8, errorcode;
 
-    uart_putstring ( PSTR ( "Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):" ) );
-    uart_putc ( '\n' );
+    uart_putstring ( PSTR ( "Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):" ), true );
 
     for ( i8 = 0; i8 < nr_of_tests; i8++ ) {
         blockno = BLOCKNO;
@@ -119,8 +113,7 @@ void test_write512 ( uint8_t numblocks, uint8_t nr_of_tests )
     uint32_t blockno = 0;
     uint8_t  i8, errorcode;
 
-    uart_putstring ( PSTR ( "Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):" ) );
-    uart_putc ( '\n' );
+    uart_putstring ( PSTR ( "Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):" ), true );
     memset ( &data_buffer[0], 0xEF, WDC_BLOCKLEN * numblocks );
 
     for ( i8 = 0; i8 < nr_of_tests; i8++ ) {
@@ -149,8 +142,7 @@ void test_read512 ( uint8_t numblocks, uint8_t nr_of_tests )
     uint32_t blockno = 0;
     uint8_t  i8, errorcode;
 
-    uart_putstring ( PSTR ( "Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):" ) );
-    uart_putc ( '\n' );
+    uart_putstring ( PSTR ( "Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):" ), true );
 
     for ( i8 = 0; i8 < nr_of_tests; i8++ ) {
         blockno = BLOCKNO;
@@ -181,10 +173,8 @@ void measure_performance ()
     TIMSK0 |= ( 0x01 << TOIE0 );
     TCCR0B = ( 1 << CS01 ); /* Prescaler 8 */
     TCNT0 = 0x00;
-    uart_putstring ( PSTR ( "Performance Measurement. Displayed are the Timer-Overflows." ) );
-    uart_putc ( '\n' );
-    uart_putstring ( PSTR ( "Timer is initialized with a Prescaler 8" ) );
-    uart_putc ( '\n' );
+    uart_putstring ( PSTR ( "Performance Measurement. Displayed are the Timer-Overflows." ), true );
+    uart_putstring ( PSTR ( "Timer is initialized with a Prescaler 8" ), true );
     test_write512 ( numblocks, nr_of_tests );
     test_read512 ( numblocks, nr_of_tests );
     test_write512 ( numblocks, nr_of_tests );
@@ -198,8 +188,7 @@ void measure_performance ()
     test_read512 ( numblocks, nr_of_tests );
     test_write4k ( numblocks, nr_of_tests );
     test_write512 ( numblocks, nr_of_tests );
-    uart_putstring ( PSTR ( "End" ) );
-    uart_putc ( '\n' );
+    uart_putstring ( PSTR ( "End" ), true );
 
     while ( 1 ) {}
 }

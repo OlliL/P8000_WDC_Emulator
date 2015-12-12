@@ -27,6 +27,7 @@
 
 #include "wdc_config.h"
 #include <avr/io.h>
+#include <util/delay.h>
 #include "wdc_avr.h"
 #include "uart.h"
 #include "wdc_drv_pata.h"
@@ -43,7 +44,8 @@ uint8_t pata_get_lowbyte ();
 void    set_io_register ( uint8_t ioreg );
 uint8_t read_io_register ( uint8_t ioreg );
 void    write_io_register ( uint8_t ioreg, uint8_t byte );
-void    pata_read_bytes ( uint8_t *buffer, uint16_t bytes );
+void    pata_read_bytes ( uint8_t *buffer, uint8_t numblocks );
+void    pata_write_bytes ( uint8_t *buffer, uint8_t numblocks );
 void    pata_rw_command( uint32_t addr, uint8_t numblocks, uint8_t cmd );
 
 /*
@@ -81,34 +83,17 @@ uint8_t pata_rdy ()
 
 uint8_t pata_bsy ()
 {
-    uint8_t reg;
-
-    reg = read_io_register ( PATA_R_STATUS_REGISTER );
-
-    uart_putc_hex ( reg );
-    uart_put_nl();
-
-    return ( reg & ATA_STAT_BSY ) ? 1 : 0;
+    return ( read_io_register ( PATA_R_STATUS_REGISTER ) & ATA_STAT_BSY ) ? 1 : 0;
 }
 
 uint8_t pata_drq ()
 {
-    uint8_t reg;
-
-    reg = read_io_register ( PATA_R_STATUS_REGISTER );
-
-    uart_putc_hex ( reg );
-    uart_put_nl();
-
-    return ( reg & ATA_STAT_DRQ ) ? 1 : 0;
+    return ( read_io_register ( PATA_R_STATUS_REGISTER ) & ATA_STAT_DRQ ) ? 1 : 0;
 }
 
 uint8_t pata_err ()
 {
-    uint8_t reg;
-
-    reg = read_io_register ( PATA_R_STATUS_REGISTER );
-    if ( reg & ATA_STAT_ERR ) {
+    if ( read_io_register ( PATA_R_STATUS_REGISTER ) & ATA_STAT_ERR ) {
         return read_io_register ( PATA_R_ERROR_REGISTER );
     }
     return 0;
@@ -116,28 +101,28 @@ uint8_t pata_err ()
 
 void set_io_register ( uint8_t ioreg )
 {
-    /* set all to low */
-    ata_cs0_enable();
-    ata_cs1_enable();
-    ata_da0_enable();
-    ata_da1_enable();
-    ata_da2_enable();
-
-    /* set the requested signals to high */
+    /* set the requested signals */
     if ( ( ioreg & ( 1 << 0 ) ) ) {
         ata_da2_disable();
+    } else {
+        ata_da2_enable();
     }
     if ( ( ioreg & ( 1 << 1 ) ) ) {
         ata_da1_disable();
+    } else {
+        ata_da1_enable();
     }
     if ( ( ioreg & ( 1 << 2 ) ) ) {
         ata_da0_disable();
+    } else {
+        ata_da0_enable();
     }
     if ( ( ioreg & ( 1 << 3 ) ) ) {
         ata_cs1_disable();
-    }
-    if ( ( ioreg & ( 1 << 4 ) ) ) {
+        ata_cs0_enable();
+    } else {
         ata_cs0_disable();
+        ata_cs1_enable();
     }
 }
 
@@ -210,15 +195,13 @@ void write_io_register ( uint8_t ioreg, uint8_t byte )
     ata_wr_disable();
 }
 
-void pata_read_bytes ( uint8_t *buffer, uint16_t bytes )
+void pata_read_bytes ( uint8_t *buffer, uint8_t numblocks )
 {
-    uint16_t i;
-    uint8_t  blocks;
+    uint8_t i = 0;
 
     configure_port_data_read();
 
-    for ( blocks = bytes / PATA_BLOCKLEN; blocks; blocks-- ) {
-
+    do {
         while ( pata_bsy() ) {}
         if ( pata_err() ) {
             return;
@@ -229,22 +212,28 @@ void pata_read_bytes ( uint8_t *buffer, uint16_t bytes )
 
         ata_rd_enable();
 
-        for ( i = 0; i < PATA_BLOCKLEN / 2; i++ ) {
+        while ( 1 ) {
             *buffer++ = pata_get_lowbyte();
             *buffer++ = pata_get_highbyte();
+
+            /* overflow, 512 bytes read */
+            if ( ++i == 0 ) {
+                break;
+            }
         }
 
         ata_rd_disable();
-    }
+
+    } while ( --numblocks );
 }
 
-void pata_write_bytes ( uint8_t *buffer, uint16_t bytes )
+void pata_write_bytes ( uint8_t *buffer, uint8_t numblocks )
 {
-    uint16_t i, a;
-    uint8_t  blocks;
+    uint8_t  i = 0;
+    uint16_t a;
 
     a = 0;
-    for ( blocks = bytes / PATA_BLOCKLEN; blocks; blocks-- ) {
+    do {
         while ( pata_bsy() ) {}
         if ( pata_err() ) {
             return;
@@ -257,14 +246,19 @@ void pata_write_bytes ( uint8_t *buffer, uint16_t bytes )
 
         ata_wr_enable();
 
-        for ( i = 0; i < PATA_BLOCKLEN / 2; i++ ) {
+        while ( 1 ) {
             pata_set_highbyte ( buffer[a + 1] );
             pata_set_lowbyte ( buffer[a] );
             a += 2;
+            /* overflow, 512 bytes read */
+            if ( ++i == 0 ) {
+                break;
+            }
         }
 
         ata_wr_disable();
-    }
+
+    } while ( --numblocks );
 }
 
 uint8_t ata_identify ()
@@ -272,10 +266,9 @@ uint8_t ata_identify ()
     uint8_t  buffer[512], i;
     uint16_t word[256], n;
 
-    while ( pata_bsy() ) {}
     write_io_register ( PATA_W_COMMAND_REGISTER, CMD_IDENTIFY_DEVICE );
 
-    pata_read_bytes ( buffer, 512 );
+    pata_read_bytes ( buffer, 1 );
 
     i = 0;
     for ( n = 0; n < 512; n += 2 ) {
@@ -437,14 +430,16 @@ void pata_rw_command ( uint32_t addr, uint8_t numblocks, uint8_t cmd )
     }
 
     while ( pata_bsy() ) {}
+    while ( pata_drq() ) {}
 
+    write_io_register ( PATA_RW_DEVICE_HEAD_REGISTER, head );
     write_io_register ( PATA_RW_SECTOR_COUNT_REGISTER, numblocks );
     write_io_register ( PATA_RW_SECTOR_NUMBER_REGISTER, sector );
     write_io_register ( PATA_RW_CYLINDER_LOW_REGISTER, cyllow );
     write_io_register ( PATA_RW_CYLINDER_HIGH_REGISTER, cylhigh );
-    write_io_register ( PATA_RW_DEVICE_HEAD_REGISTER, head );
 
     write_io_register ( PATA_W_COMMAND_REGISTER, cmd );
+
 }
 
 /*
@@ -453,11 +448,18 @@ void pata_rw_command ( uint32_t addr, uint8_t numblocks, uint8_t cmd )
 
 uint8_t pata_init ()
 {
+    uint8_t wait_for_drive = 50;
+
     uart_putstring ( PSTR ( "INFO: PATA init start" ), true );
-    while ( !pata_rdy() ) {}
+    while ( !pata_rdy() ) {
+        if ( --wait_for_drive == 0 ) {
+            return 1;
+        }
+        _delay_ms ( 500 );
+    }
     while ( pata_bsy() ) {}
 
-    write_io_register ( PATA_RW_DEVICE_HEAD_REGISTER, 0 );
+    write_io_register ( PATA_RW_DEVICE_HEAD_REGISTER, ATA_CHS_DRIVE_0 );
 
     return ata_identify();
 }
@@ -476,7 +478,7 @@ uint8_t pata_read_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks
 {
     pata_rw_command ( addr, numblocks, CMD_READ_SECTORS );
 
-    pata_read_bytes ( buffer, numblocks * PATA_BLOCKLEN );
+    pata_read_bytes ( buffer, numblocks );
 
     return pata_err();
 }
@@ -485,7 +487,7 @@ uint8_t pata_write_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblock
 {
     pata_rw_command ( addr, numblocks, CMD_WRITE_SECTORS );
 
-    pata_write_bytes ( buffer, numblocks * PATA_BLOCKLEN );
+    pata_write_bytes ( buffer, numblocks );
 
     /* wait until drive completed write */
     while ( pata_bsy() ) {}
