@@ -39,12 +39,12 @@
 #define configure_pin_te()          DDR_INFO &= ~( 1 << PIN_INFO_TE )
 #define configure_pin_wdardy()      DDR_INFO &= ~( 1 << PIN_INFO_WDARDY )
 #define configure_pin_reset()       DDR_INFO &= ~( 1 << PIN_INFO_RST ); PORT_INFO |= ( 1 << PIN_INFO_RST )
-#define configure_p8000_com()		DDR_P8000_ACT |= ( 1 << PIN_P8000_COM )
+#define configure_p8000_com()       DDR_P8000_ACT |= ( 1 << PIN_P8000_COM )
 
-#define assert_astb()				PORT_INFO &= ~( 1 << PIN_INFO_ASTB )
-#define deassert_astb()				PORT_INFO |= ( 1 << PIN_INFO_ASTB )
-#define assert_tr()					PORT_INFO &= ~( 1 << PIN_INFO_TR )
-#define deassert_tr()				PORT_INFO |= ( 1 << PIN_INFO_TR )
+#define assert_astb()               PORT_INFO &= ~( 1 << PIN_INFO_ASTB )
+#define deassert_astb()             PORT_INFO |= ( 1 << PIN_INFO_ASTB )
+#define assert_tr()                 PORT_INFO &= ~( 1 << PIN_INFO_TR )
+#define deassert_tr()               PORT_INFO |= ( 1 << PIN_INFO_TR )
 
 #define enable_p8000com()           PORT_P8000_ACT &= ~( 1 << PIN_P8000_COM )
 #define disable_p8000com()          PORT_P8000_ACT |= ( 1 << PIN_P8000_COM )
@@ -66,8 +66,8 @@
 #define configure_ata_da1()         DDR_ATADA |= ( 1 << PIN_ATADA_DA1 )
 #define configure_ata_da2()         DDR_ATADA |= ( 1 << PIN_ATADA_DA2 )
 
-#define configure_ata_data_read()   DDR_ATADATA8L = 0x00 ; DDR_ATADATA8H = 0x00
-#define configure_ata_data_write()  DDR_ATADATA8L = 0xff ; DDR_ATADATA8H = 0xff
+#define configure_ata_data_read()   DDR_ATADATA8L = 0x00; DDR_ATADATA8H = 0x00
+#define configure_ata_data_write()  DDR_ATADATA8L = 0xff; DDR_ATADATA8H = 0xff
 #define port_ata_data_8l_set( x )   ( PORT_ATADATA8L = ( x ) )
 #define port_ata_data_8l_get()      PIN_ATADATA8L
 #define port_ata_data_8h_set( x )   ( PORT_ATADATA8H = ( x ) )

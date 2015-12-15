@@ -213,7 +213,7 @@ void wdc_set_disk_invalid ()
     }
 /*
     wdc_led_off();
-*/
+ */
 }
 
 void wdc_set_disk_valid ()
@@ -244,20 +244,20 @@ void wdc_set_disk_valid ()
 /*
     wdc_led_on();
 
-}
+   }
 
-void setup_led_timer ()
-{
+   void setup_led_timer ()
+   {
     OCR1A = 0x3D08;
     TCCR1B |= ( 1 << WGM12 );
     TIMSK1 |= ( 1 << OCIE1A );
     TCCR1B |= ( 1 << CS12 );
     sei();
-}
+   }
 
-ISR ( TIMER1_COMPA_vect ) {
+   ISR ( TIMER1_COMPA_vect ) {
     wdc_led_toggle();
-*/
+ */
 }
 
 void wdc_set_no_disk ()
@@ -271,7 +271,7 @@ void wdc_set_no_disk ()
     }
 /*
     setup_led_timer();
-*/
+ */
 }
 
 uint8_t wdc_get_disk_valid ()

@@ -55,11 +55,11 @@ uint8_t wdc_read_data_from_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_st
     while ( !isset_info_wdardy() ) {}
 
     do {
-		assert_astb();
+        assert_astb();
         count--;
         while ( isset_info_wdardy() ) {}
         *buffer++ = port_data_get();
-		deassert_astb();
+        deassert_astb();
         while ( !isset_info_wdardy() ) {}
     } while ( count > 0 );
 
@@ -69,7 +69,7 @@ uint8_t wdc_read_data_from_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_st
 
 void wdc_write_data_to_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status )
 {
-	assert_tr();
+    assert_tr();
     set_status ( wdc_status );
 
     while ( isset_info_te() ) {}
@@ -96,7 +96,7 @@ void wdc_write_data_to_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status
 
     while ( !isset_info_wdardy() ) {}
 
-	deassert_tr();
+    deassert_tr();
     reset_status();
 }
 

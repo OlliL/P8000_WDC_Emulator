@@ -56,7 +56,7 @@
 #define PIN_INFO_STATUS1    PINC1
 #define PIN_INFO_STATUS2    PINC2
 #define PIN_INFO_TR         PINC3
-#define PIN_INFO_ASTB		PINC4
+#define PIN_INFO_ASTB       PINC4
 #define PIN_INFO_TE         PINC5
 #define PIN_INFO_WDARDY     PINC6
 #define PIN_INFO_RST        PINC7

@@ -91,13 +91,13 @@ main ( void )
             wdc_set_disk_valid();
 /*
             wdc_led_on();
-*/
+ */
         } else {
             uart_putstring ( PSTR ( "INFO: Disk found but Sector 0 is invalid, please execute sa.format to initialize this disk properly." ), true );
             wdc_set_disk_invalid();
 /*
             wdc_led_off();
-*/
+ */
         }
     }
 
@@ -433,7 +433,7 @@ void atmega_setup ( void )
 /*
     wdc_init_led();
     wdc_led_off();
-*/
+ */
     _delay_ms ( 1000 );
 
     wdc_init_avr();

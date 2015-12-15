@@ -46,8 +46,8 @@
 #define _INFO_STAT_CRCERR   (                            ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ))  /* 0x06 */
 #define INFO_STAT_ERROR     (( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ))  /* 0x07 */
 
-#define set_status( x )				( PORT_INFO |= ( x ) )
-#define reset_status()				PORT_INFO &= ~(( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ))
+#define set_status( x )             ( PORT_INFO |= ( x ) )
+#define reset_status()              PORT_INFO &= ~(( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ))
 
 extern void    wdc_wait_for_reset ();
 extern uint8_t wdc_receive_cmd ( uint8_t *buffer );

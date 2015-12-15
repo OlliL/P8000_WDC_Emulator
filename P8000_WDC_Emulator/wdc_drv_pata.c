@@ -32,8 +32,8 @@
 #include "uart.h"
 #include "wdc_drv_pata.h"
 
-void deactivate_p8000com();
-void activate_p8000com();
+void    deactivate_p8000com();
+void    activate_p8000com();
 uint8_t pata_bsy ();
 uint8_t pata_rdy ();
 uint8_t pata_drq ();
@@ -68,30 +68,30 @@ void    pata_rw_command( uint32_t addr, uint8_t numblocks, uint8_t cmd );
 #define PATA_R_ALTERNATE_STATUS_REGISTER 0x0D  /* 0b1101 */
 
 typeDriveInfo ataDriveInfo;
-uint8_t p8000_info_restore;
+uint8_t       p8000_info_restore;
 
 /*
  * Private functions
  */
 
-void deactivate_p8000com()
+void deactivate_p8000com ()
 {
-	disable_p8000com();
-	p8000_info_restore = PORT_INFO;
+    disable_p8000com();
+    p8000_info_restore = PORT_INFO;
 /*
-	configure_ata_data_read();
-	port_ata_data_8l_set(0x00);
-	port_ata_data_8h_set(0x00);
-*/
+    configure_ata_data_read();
+    port_ata_data_8l_set(0x00);
+    port_ata_data_8h_set(0x00);
+ */
 }
 
-void activate_p8000com()
+void activate_p8000com ()
 {
-	ata_wr_disable();
-	ata_rd_disable();
-	wdc_config_p8000_ports();
-	PORT_INFO = p8000_info_restore;
-	enable_p8000com();
+    ata_wr_disable();
+    ata_rd_disable();
+    wdc_config_p8000_ports();
+    PORT_INFO = p8000_info_restore;
+    enable_p8000com();
 }
 
 uint8_t pata_rdy ()
@@ -120,8 +120,8 @@ uint8_t pata_err ()
 void set_io_register ( uint8_t ioreg )
 {
     /* set the requested signals */
- 	PORT_ATADA = PORT_ATADA & 0xf0; 		    /* Clear previous signals (lower 4 bits of PORT_ATADA) */
-  	PORT_ATADA = PORT_ATADA | (ioreg & 0x0f); 	/* Assert the signal Lines (lower 4 bits of PORT_ATADA) */
+    PORT_ATADA = PORT_ATADA & 0xf0;             /* Clear previous signals (lower 4 bits of PORT_ATADA) */
+    PORT_ATADA = PORT_ATADA | ( ioreg & 0x0f );   /* Assert the signal Lines (lower 4 bits of PORT_ATADA) */
 }
 
 uint8_t read_io_register ( uint8_t ioreg )
@@ -149,7 +149,8 @@ void write_io_register ( uint8_t ioreg, uint8_t byte )
     ata_wr_enable();
     nop();
     nop();
-    ata_wr_disable();}
+    ata_wr_disable();
+}
 
 void pata_read_bytes ( uint8_t *buffer, uint8_t numblocks )
 {
@@ -166,14 +167,14 @@ void pata_read_bytes ( uint8_t *buffer, uint8_t numblocks )
 
         set_io_register ( PATA_RW_DATA_REGISTER );
 
-         do {
-			ata_rd_enable();
-			nop();
-			nop();
+        do {
+            ata_rd_enable();
+            nop();
+            nop();
             *buffer++ = port_ata_data_8l_get();
             *buffer++ = port_ata_data_8h_get();
-		    ata_rd_disable();
-       } while ( ++i != 0 );  /* overflow, 512 bytes read */
+            ata_rd_disable();
+        } while ( ++i != 0 ); /* overflow, 512 bytes read */
     } while ( --numblocks );
 }
 
@@ -194,11 +195,11 @@ void pata_write_bytes ( uint8_t *buffer, uint8_t numblocks )
 
         do {
             port_ata_data_8l_set ( *buffer++ );
-			port_ata_data_8h_set ( *buffer++ );
-		    ata_wr_enable();
-			nop();
-			nop();
-			ata_wr_disable();
+            port_ata_data_8h_set ( *buffer++ );
+            ata_wr_enable();
+            nop();
+            nop();
+            ata_wr_disable();
         } while ( ++i != 0 );  /* overflow, 512 bytes written */
     } while ( --numblocks );
 }
@@ -223,7 +224,7 @@ uint8_t ata_identify ()
         return 1;
     }
 
- 
+
     ataDriveInfo.cylinders = word[1];
     ataDriveInfo.heads = word[3];
     ataDriveInfo.sectors = word[6];
@@ -343,13 +344,13 @@ void pata_rw_command ( uint32_t addr, uint8_t numblocks, uint8_t cmd )
             uint8_t hh;
         } value8;
     } sint32;
-   typedef union {
-	   uint16_t value16;
-	   struct {
-		   uint8_t l;
-		   uint8_t h;
-	   } value8;
-   } sint16;
+    typedef union {
+        uint16_t value16;
+        struct {
+            uint8_t l;
+            uint8_t h;
+        } value8;
+    } sint16;
 
     sint32  startblock;
     uint8_t sector, cyllow, cylhigh, head;
@@ -391,15 +392,15 @@ void pata_rw_command ( uint32_t addr, uint8_t numblocks, uint8_t cmd )
 uint8_t pata_init ()
 {
     uint8_t wait_for_drive = 50;
-	uint8_t ret;
+    uint8_t ret;
 
-	deactivate_p8000com();
+    deactivate_p8000com();
 
     uart_putstring ( PSTR ( "INFO: PATA init start" ), true );
     while ( !pata_rdy() ) {
         if ( --wait_for_drive == 0 ) {
-            ret=1;
-			goto out;
+            ret = 1;
+            goto out;
         }
         _delay_ms ( 500 );
     }
@@ -408,10 +409,10 @@ uint8_t pata_init ()
     write_io_register ( PATA_RW_DEVICE_HEAD_REGISTER, ATA_CHS_DRIVE_0 );
 
     ret = ata_identify();
-	
+
 out:
-	activate_p8000com();
-	return ret;
+    activate_p8000com();
+    return ret;
 }
 
 uint8_t pata_read_block ( uint32_t addr, uint8_t *buffer )
@@ -426,26 +427,26 @@ uint8_t pata_write_block ( uint32_t addr, uint8_t *buffer )
 
 uint8_t pata_read_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks )
 {
-	uint8_t ret;
+    uint8_t ret;
 
-	deactivate_p8000com();
-	
+    deactivate_p8000com();
+
     pata_rw_command ( addr, numblocks, CMD_READ_SECTORS );
 
     pata_read_bytes ( buffer, numblocks );
 
-	ret = pata_err();
+    ret = pata_err();
 
-	activate_p8000com();
+    activate_p8000com();
 
-	return ret;
+    return ret;
 }
 
 uint8_t pata_write_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks )
 {
-	uint8_t ret;
+    uint8_t ret;
 
-	deactivate_p8000com();
+    deactivate_p8000com();
 
     pata_rw_command ( addr, numblocks, CMD_WRITE_SECTORS );
 
@@ -454,9 +455,9 @@ uint8_t pata_write_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblock
     /* wait until drive completed write */
     while ( pata_bsy() ) {}
 
-	ret = pata_err();
+    ret = pata_err();
 
-	activate_p8000com();
+    activate_p8000com();
 
     return ret;
 }

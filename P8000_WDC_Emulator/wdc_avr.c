@@ -59,30 +59,32 @@ void wdc_led_toggle ()
 {
     PORT_INFO ^= ( 1 << PIN_INFO_LED );
 }
+
 #endif
 
-void wdc_config_p8000_ports()
+void wdc_config_p8000_ports ()
 {
-	    /* configure the P8000 interface */
-	    configure_pin_status0();
-	    configure_pin_status1();
-	    configure_pin_status2();
-	    configure_pin_astb();
-	    configure_pin_tr();
-	    configure_pin_te();
-	    configure_pin_wdardy();
-	    configure_pin_reset();
-	    configure_port_data_read();
-	    configure_p8000_com();
+    /* configure the P8000 interface */
+    configure_pin_status0();
+    configure_pin_status1();
+    configure_pin_status2();
+    configure_pin_astb();
+    configure_pin_tr();
+    configure_pin_te();
+    configure_pin_wdardy();
+    configure_pin_reset();
+    configure_port_data_read();
+    configure_p8000_com();
 }
+
 void wdc_init_avr ()
 {
     /* configure the P8000 interface */
-	wdc_config_p8000_ports();
-	deassert_astb();
-	deassert_tr();
-	
-	enable_p8000com();
+    wdc_config_p8000_ports();
+    deassert_astb();
+    deassert_tr();
+
+    enable_p8000com();
 
 #ifdef _OFF
     /* configure the MMC interface */
@@ -111,11 +113,11 @@ void wdc_get_sysconf ()
     nop();
 
     if ( jumper_pata_set() ) {
-*/      drv_init = pata_init;
-        drv_read_block = pata_read_block;
-        drv_write_block = pata_write_block;
-        drv_read_multiblock = pata_read_multiblock;
-        drv_write_multiblock = pata_write_multiblock;
+ */ drv_init = pata_init;
+    drv_read_block = pata_read_block;
+    drv_write_block = pata_write_block;
+    drv_read_multiblock = pata_read_multiblock;
+    drv_write_multiblock = pata_write_multiblock;
 /*  } else {
         drv_init = mmc_init;
         drv_read_block = mmc_read_sector;
@@ -125,5 +127,5 @@ void wdc_get_sysconf ()
     }
 
     disable_sysconf();
-*/
+ */
 }
