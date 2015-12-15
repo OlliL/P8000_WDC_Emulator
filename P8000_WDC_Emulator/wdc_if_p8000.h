@@ -43,10 +43,8 @@
 #define INFO_STAT_WDATA     (( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 )                            )  /* 0x03 */
 #define _INFO_STAT_CRCERR   (                            ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ))  /* 0x06 */
 #define INFO_STAT_ERROR     (( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ))  /* 0x07 */
-#define INFO_TR             ( 1 << PIN_INFO_TR )                                                                 /* 0x40 */
-
-#define set_info( x )        ( PORT_INFO |= ( x ) )
-#define unset_info()         PORT_INFO &= ~(( 1 << PIN_INFO_TR ) | ( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ))
+#define INFO_TR             ( 1 << PIN_INFO_TR )                                                                 /* 0x08 */
+#define INFO_ASTB           ( 1 << PIN_INFO_ASTB )                                                               /* 0x16 */
 
 extern void    wdc_wait_for_reset ();
 extern uint8_t wdc_receive_cmd ( uint8_t *buffer );

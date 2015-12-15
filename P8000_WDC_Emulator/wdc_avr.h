@@ -34,29 +34,21 @@
 #define configure_pin_status0()     DDR_INFO |= ( 1 << PIN_INFO_STATUS0 )
 #define configure_pin_status1()     DDR_INFO |= ( 1 << PIN_INFO_STATUS1 )
 #define configure_pin_status2()     DDR_INFO |= ( 1 << PIN_INFO_STATUS2 )
+#define configure_pin_tr()          DDR_INFO |= ( 1 << PIN_INFO_TR )
+#define configure_pin_astb()        DDR_INFO |= ( 1 << PIN_INFO_ASTB )
 #define configure_pin_te()          DDR_INFO &= ~( 1 << PIN_INFO_TE )
 #define configure_pin_wdardy()      DDR_INFO &= ~( 1 << PIN_INFO_WDARDY )
-#define configure_pin_tr()          DDR_INFO |= ( 1 << PIN_INFO_TR )
 #define configure_pin_reset()       DDR_INFO &= ~( 1 << PIN_INFO_RST ); PORT_INFO |= ( 1 << PIN_INFO_RST )
-#define configure_pin_led()         DDR_INFO |= ( 1 << PIN_INFO_LED )
+#define configure_p8000_com()		DDR_P8000_ACT |= ( 1 << PIN_P8000_COM )
 
 #define port_data_set( x )          ( PORT_DATA = ( x ) )
 #define port_data_get()             PIN_DATA
+#define set_info( x )				( PORT_INFO |= ( x ) )
+#define unset_info( x )				( PORT_INFO &= ~( x ) )
+#define reset_info()				unset_info(( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 )) ; set_info((( 1 << PIN_INFO_TR ) | ( 1 << PIN_INFO_ASTB )))
 
-/* functions dealing with the 74138 address decoder */
-#define configure_pin_addr0()       DDR_ADRDEC |= ( 1 << PIN_ADRDEC_ADDR0 )
-#define configure_pin_addr1()       DDR_ADRDEC |= ( 1 << PIN_ADRDEC_ADDR1 )
-#define configure_pin_addr2()       DDR_ADRDEC |= ( 1 << PIN_ADRDEC_ADDR2 )
-
-#define init_addressdecoder()       PORT_ADRDEC &= ~( ( 1 << PIN_ADRDEC_ADDR0 ) | ( 1 << PIN_ADRDEC_ADDR1 ) | ( 1 << PIN_ADRDEC_ADDR2 ) )
-#define enable_p8000com()           PORT_ADRDEC |= ( 1 << PIN_ADRDEC_ADDR0 )
-#define disable_p8000com()          PORT_ADRDEC &= ~( 1 << PIN_ADRDEC_ADDR0 )
-#define enable_rdwrtoata()          PORT_ADRDEC |= ( 1 << PIN_ADRDEC_ADDR1 )
-#define disable_rdwrtoata()         PORT_ADRDEC &= ~( 1 << PIN_ADRDEC_ADDR1 )
-#define enable_atalatch()           PORT_ADRDEC |= ( ( 1 << PIN_ADRDEC_ADDR0 ) | ( 1 << PIN_ADRDEC_ADDR1 ))
-#define disable_atalatch()          PORT_ADRDEC &= ~( ( 1 << PIN_ADRDEC_ADDR0 ) | ( 1 << PIN_ADRDEC_ADDR1 ))
-#define enable_sysconf()            PORT_ADRDEC |= ( ( 1 << PIN_ADRDEC_ADDR0 ) | ( 1 << PIN_ADRDEC_ADDR1 ) | ( 1 << PIN_ADRDEC_ADDR2 ) )
-#define disable_sysconf()           PORT_ADRDEC &= ~( ( 1 << PIN_ADRDEC_ADDR0 ) | ( 1 << PIN_ADRDEC_ADDR1 ) | ( 1 << PIN_ADRDEC_ADDR2 ) )
+#define enable_p8000com()           PORT_P8000_ACT &= ~( 1 << PIN_P8000_COM )
+#define disable_p8000com()          PORT_P8000_ACT |= ( 1 << PIN_P8000_COM )
 
 /* functions dealing with the MMC interface */
 #define configure_pin_miso()        DDR_MMC &= ~( 1 << PIN_MMC_MISO )
@@ -77,10 +69,16 @@
 #define configure_ata_wr()          DDR_ATARDWR |= ( 1 << PIN_ATARDWR_WR )
 #define configure_ata_rd()          DDR_ATARDWR |= ( 1 << PIN_ATARDWR_RD )
 #define configure_ata_cs0()         DDR_ATACS |= ( 1 << PIN_ATACS_CS0 )
-#define configure_ata_cs1()         DDR_ATACS |= ( 1 << PIN_ATACS_CS1 )
 #define configure_ata_da0()         DDR_ATADA |= ( 1 << PIN_ATADA_DA0 )
 #define configure_ata_da1()         DDR_ATADA |= ( 1 << PIN_ATADA_DA1 )
 #define configure_ata_da2()         DDR_ATADA |= ( 1 << PIN_ATADA_DA2 )
+
+#define configure_ata_data_read()   DDR_ATADATA8L = 0x00 ; DDR_ATADATA8H = 0x00
+#define configure_ata_data_write()  DDR_ATADATA8L = 0xff ; DDR_ATADATA8H = 0xff
+#define port_ata_data_8l_set( x )   ( PORT_ATADATA8L = ( x ) )
+#define port_ata_data_8l_get()      PIN_ATADATA8L
+#define port_ata_data_8h_set( x )   ( PORT_ATADATA8H = ( x ) )
+#define port_ata_data_8h_get()      PIN_ATADATA8H
 
 #define ata_wr_disable()            PORT_ATARDWR |= ( 1 << PIN_ATARDWR_WR )
 #define ata_wr_enable()             PORT_ATARDWR &= ~( 1 << PIN_ATARDWR_WR )
@@ -88,8 +86,8 @@
 #define ata_rd_enable()             PORT_ATARDWR &= ~( 1 << PIN_ATARDWR_RD )
 #define ata_cs0_disable()           PORT_ATACS |= ( 1 << PIN_ATACS_CS0 )
 #define ata_cs0_enable()            PORT_ATACS &= ~( 1 << PIN_ATACS_CS0 )
-#define ata_cs1_disable()           PORT_ATACS |= ( 1 << PIN_ATACS_CS1 )
-#define ata_cs1_enable()            PORT_ATACS &= ~( 1 << PIN_ATACS_CS1 )
+#define ata_cs1_disable()           PORT_ATACS &= ~( 1 << PIN_ATACS_CS0 )
+#define ata_cs1_enable()            PORT_ATACS |= ( 1 << PIN_ATACS_CS0 )
 #define ata_da0_disable()           PORT_ATADA |= ( 1 << PIN_ATADA_DA0 )
 #define ata_da0_enable()            PORT_ATADA &= ~( 1 << PIN_ATADA_DA0 )
 #define ata_da1_disable()           PORT_ATADA |= ( 1 << PIN_ATADA_DA1 )
@@ -99,6 +97,7 @@
 
 extern void wdc_init_avr ();
 extern void wdc_get_sysconf ();
+extern void wdc_config_p8000_ports ();
 
 extern void wdc_init_led ();
 extern void wdc_led_on ();

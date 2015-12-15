@@ -28,7 +28,8 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-#define F_CPU        18432000UL
+/*#define F_CPU        8000000UL */
+#define F_CPU       16000000UL
 
 /*
  * P8000 Interface
@@ -42,11 +43,6 @@
 #define PIN_INFO        PINC
 #define DDR_INFO        DDRC
 
-#define PORT_ADRDEC     PORTD
-#define PIN_ADRDEC      PIND
-#define DDR_ADRDEC      DDRD
-
-
 #define PIN_DATA_D0         PINA0
 #define PIN_DATA_D1         PINA1
 #define PIN_DATA_D2         PINA2
@@ -59,15 +55,17 @@
 #define PIN_INFO_STATUS0    PINC0
 #define PIN_INFO_STATUS1    PINC1
 #define PIN_INFO_STATUS2    PINC2
-#define PIN_INFO_LED        PINC3
-#define PIN_INFO_TE         PINC4
-#define PIN_INFO_WDARDY     PINC5
-#define PIN_INFO_TR         PINC6
+#define PIN_INFO_TR         PINC3
+#define PIN_INFO_ASTB		PINC4
+#define PIN_INFO_TE         PINC5
+#define PIN_INFO_WDARDY     PINC6
 #define PIN_INFO_RST        PINC7
 
-#define PIN_ADRDEC_ADDR0    PIND5
-#define PIN_ADRDEC_ADDR1    PIND6
-#define PIN_ADRDEC_ADDR2    PIND7
+#define PORT_P8000_ACT    PORTD
+#define PIN_P8000_ACT     PIND
+#define DDR_P8000_ACT     DDRD
+
+#define PIN_P8000_COM     PIND4
 
 /*
  * SD-Card Interface
@@ -85,25 +83,32 @@
  * ATA Interface
  */
 
-#define PORT_ATARDWR    PORTB
-#define PIN_ATARDWR     PINB
-#define DDR_ATARDWR     DDRB
+#define PORT_ATADATA8L    PORTA
+#define PIN_ATADATA8L     PINA
+#define DDR_ATADATA8L     DDRA
+
+#define PORT_ATADATA8H    PORTC
+#define PIN_ATADATA8H     PINC
+#define DDR_ATADATA8H     DDRC
+
+#define PORT_ATARDWR    PORTD
+#define PIN_ATARDWR     PIND
+#define DDR_ATARDWR     DDRD
 
 #define PORT_ATACS      PORTB
 #define PIN_ATACS       PINB
 #define DDR_ATACS       DDRB
 
-#define PORT_ATADA      PORTD
-#define PIN_ATADA       PIND
-#define DDR_ATADA       DDRD
+#define PORT_ATADA      PORTB
+#define PIN_ATADA       PINB
+#define DDR_ATADA       DDRB
 
-#define PIN_ATARDWR_WR      PINB2
-#define PIN_ATARDWR_RD      PINB3
+#define PIN_ATARDWR_WR      PIND2
+#define PIN_ATARDWR_RD      PIND3
 #define PIN_ATACS_CS0       PINB0
-#define PIN_ATACS_CS1       PINB1
-#define PIN_ATADA_DA0       PIND2
-#define PIN_ATADA_DA1       PIND4
-#define PIN_ATADA_DA2       PIND3
+#define PIN_ATADA_DA0       PINB1
+#define PIN_ATADA_DA1       PINB2
+#define PIN_ATADA_DA2       PINB3
 
 /*
  * maximum performance with both turned off
@@ -118,7 +123,7 @@
 #define MEASURE_DISK_PERFORMANCE 1
 #undef  MEASURE_DISK_PERFORMANCE
 
-#define DEBUG 1
+#define DEBUG 999
 
 #define nop()  __asm__ __volatile__ ( "nop" ::)
 

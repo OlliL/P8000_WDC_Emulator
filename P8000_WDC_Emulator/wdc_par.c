@@ -211,8 +211,9 @@ void wdc_set_disk_invalid ()
     for ( i = 0; i < 128; i++ ) {
         par_table[i] = par_tab_new_dsk[i];
     }
-
+/*
     wdc_led_off();
+*/
 }
 
 void wdc_set_disk_valid ()
@@ -240,8 +241,9 @@ void wdc_set_disk_valid ()
     par_table[73] = 0x6c;
     par_table[91] = 0x33;
     par_table[95] = 0x00;
-
+/*
     wdc_led_on();
+
 }
 
 void setup_led_timer ()
@@ -255,6 +257,7 @@ void setup_led_timer ()
 
 ISR ( TIMER1_COMPA_vect ) {
     wdc_led_toggle();
+*/
 }
 
 void wdc_set_no_disk ()
@@ -266,8 +269,9 @@ void wdc_set_no_disk ()
     for ( i = 0; i < 128; i++ ) {
         par_table[i] = par_tab_no_dsk[i];
     }
-
+/*
     setup_led_timer();
+*/
 }
 
 uint8_t wdc_get_disk_valid ()

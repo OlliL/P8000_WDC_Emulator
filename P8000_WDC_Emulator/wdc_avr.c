@@ -39,6 +39,7 @@
 #include "wdc_drv_pata.h"
 #include "wdc_if_disk.h"
 
+#ifdef OFF
 void wdc_init_led ()
 {
     configure_pin_led();
@@ -58,38 +59,40 @@ void wdc_led_toggle ()
 {
     PORT_INFO ^= ( 1 << PIN_INFO_LED );
 }
+#endif
 
+void wdc_config_p8000_ports()
+{
+	    /* configure the P8000 interface */
+	    configure_pin_status0();
+	    configure_pin_status1();
+	    configure_pin_status2();
+	    configure_pin_astb();
+	    configure_pin_tr();
+	    configure_pin_te();
+	    configure_pin_wdardy();
+	    configure_pin_reset();
+	    configure_port_data_read();
+	    configure_p8000_com();
+}
 void wdc_init_avr ()
 {
     /* configure the P8000 interface */
-    configure_pin_status0();
-    configure_pin_status1();
-    configure_pin_status2();
-    configure_pin_te();
-    configure_pin_wdardy();
-    configure_pin_tr();
-    configure_pin_reset();
+	wdc_config_p8000_ports();
+	reset_info();
+	enable_p8000com();
 
-    configure_port_data_read();
-
-    /* configure the address decoder */
-    configure_pin_addr0();
-    configure_pin_addr1();
-    configure_pin_addr2();
-
-    init_addressdecoder();
-
+#ifdef _OFF
     /* configure the MMC interface */
     configure_pin_miso();
     configure_pin_sck();
     configure_pin_mosi();
     configure_pin_mmc_cs();
-
+#endif
     /* configure the ATA interface */
     configure_ata_wr();
     configure_ata_rd();
     configure_ata_cs0();
-    configure_ata_cs1();
     configure_ata_da0();
     configure_ata_da1();
     configure_ata_da2();
@@ -97,7 +100,6 @@ void wdc_init_avr ()
     ata_wr_disable();
     ata_rd_disable();
     ata_cs0_disable();
-    ata_cs1_disable();
     ata_da0_disable();
     ata_da1_disable();
     ata_da2_disable();
@@ -105,17 +107,18 @@ void wdc_init_avr ()
 
 void wdc_get_sysconf ()
 {
+/*
     enable_sysconf();
     nop();
     nop();
 
     if ( jumper_pata_set() ) {
-        drv_init = pata_init;
+*/      drv_init = pata_init;
         drv_read_block = pata_read_block;
         drv_write_block = pata_write_block;
         drv_read_multiblock = pata_read_multiblock;
         drv_write_multiblock = pata_write_multiblock;
-    } else {
+/*  } else {
         drv_init = mmc_init;
         drv_read_block = mmc_read_sector;
         drv_write_block = mmc_write_sector;
@@ -124,4 +127,5 @@ void wdc_get_sysconf ()
     }
 
     disable_sysconf();
+*/
 }
