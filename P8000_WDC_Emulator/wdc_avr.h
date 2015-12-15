@@ -41,11 +41,10 @@
 #define configure_pin_reset()       DDR_INFO &= ~( 1 << PIN_INFO_RST ); PORT_INFO |= ( 1 << PIN_INFO_RST )
 #define configure_p8000_com()		DDR_P8000_ACT |= ( 1 << PIN_P8000_COM )
 
-#define port_data_set( x )          ( PORT_DATA = ( x ) )
-#define port_data_get()             PIN_DATA
-#define set_info( x )				( PORT_INFO |= ( x ) )
-#define unset_info( x )				( PORT_INFO &= ~( x ) )
-#define reset_info()				unset_info(( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 )) ; set_info((( 1 << PIN_INFO_TR ) | ( 1 << PIN_INFO_ASTB )))
+#define assert_astb()				PORT_INFO &= ~( 1 << PIN_INFO_ASTB )
+#define deassert_astb()				PORT_INFO |= ( 1 << PIN_INFO_ASTB )
+#define assert_tr()					PORT_INFO &= ~( 1 << PIN_INFO_TR )
+#define deassert_tr()				PORT_INFO |= ( 1 << PIN_INFO_TR )
 
 #define enable_p8000com()           PORT_P8000_ACT &= ~( 1 << PIN_P8000_COM )
 #define disable_p8000com()          PORT_P8000_ACT |= ( 1 << PIN_P8000_COM )
@@ -58,12 +57,6 @@
 
 #define disable_mmc()               PORT_MMC |= ( 1 << PIN_MMC_CS );
 #define enable_mmc()                PORT_MMC &= ~( 1 << PIN_MMC_CS );
-
-/* functions dealing with the sysconf jumperpad */
-#define jumper_pata_set()           ~port_data_get() & ( 1 << PIN_DATA_D0 )
-#define jumper_nn2_set()            ~port_data_get() & ( 1 << PIN_DATA_D1 )
-#define jumper_nn3_set()            ~port_data_get() & ( 1 << PIN_DATA_D2 )
-#define jumper_nn4_set()            ~port_data_get() & ( 1 << PIN_DATA_D3 )
 
 /* functions dealing with the ATA interface */
 #define configure_ata_wr()          DDR_ATARDWR |= ( 1 << PIN_ATARDWR_WR )

@@ -39,7 +39,7 @@
 #include "wdc_drv_pata.h"
 #include "wdc_if_disk.h"
 
-#ifdef OFF
+#ifdef _OFF
 void wdc_init_led ()
 {
     configure_pin_led();
@@ -79,7 +79,9 @@ void wdc_init_avr ()
 {
     /* configure the P8000 interface */
 	wdc_config_p8000_ports();
-	reset_info();
+	deassert_astb();
+	deassert_tr();
+	
 	enable_p8000com();
 
 #ifdef _OFF
@@ -99,10 +101,6 @@ void wdc_init_avr ()
 
     ata_wr_disable();
     ata_rd_disable();
-    ata_cs0_disable();
-    ata_da0_disable();
-    ata_da1_disable();
-    ata_da2_disable();
 }
 
 void wdc_get_sysconf ()

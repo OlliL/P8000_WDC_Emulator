@@ -123,7 +123,7 @@
 #define MEASURE_DISK_PERFORMANCE 1
 #undef  MEASURE_DISK_PERFORMANCE
 
-#define DEBUG 999
+#define DEBUG 1
 
 #define nop()  __asm__ __volatile__ ( "nop" ::)
 

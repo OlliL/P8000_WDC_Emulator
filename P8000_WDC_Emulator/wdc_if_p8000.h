@@ -35,16 +35,19 @@
 #define isset_info_te()             (( PIN_INFO ) & ( 1 << PIN_INFO_TE ))
 #define isset_info_wdardy()         (( PIN_INFO ) & ( 1 << PIN_INFO_WDARDY ))
 
+#define port_data_set( x )          ( PORT_DATA = ( x ) )
+#define port_data_get()             PIN_DATA
+
 /* output pin handling */
-#define DATA_CLEAR          0x00
 
 #define INFO_STAT_GCMD      (( 1 << PIN_INFO_STATUS0 )                                                        )  /* 0x01 */
 #define INFO_STAT_RDATA     (                            ( 1 << PIN_INFO_STATUS1 )                            )  /* 0x02 */
 #define INFO_STAT_WDATA     (( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 )                            )  /* 0x03 */
 #define _INFO_STAT_CRCERR   (                            ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ))  /* 0x06 */
 #define INFO_STAT_ERROR     (( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ))  /* 0x07 */
-#define INFO_TR             ( 1 << PIN_INFO_TR )                                                                 /* 0x08 */
-#define INFO_ASTB           ( 1 << PIN_INFO_ASTB )                                                               /* 0x16 */
+
+#define set_status( x )				( PORT_INFO |= ( x ) )
+#define reset_status()				PORT_INFO &= ~(( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ))
 
 extern void    wdc_wait_for_reset ();
 extern uint8_t wdc_receive_cmd ( uint8_t *buffer );

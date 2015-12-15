@@ -33,70 +33,44 @@
 #include "wdc_par.h"
 #include "uart.h"
 
-void init_p8000_ports() {
-    disable_p8000com();
-	
-    /* configure the P8000 interface */
-    configure_pin_status0();
-    configure_pin_status1();
-    configure_pin_status2();
-    configure_pin_astb();
-    configure_pin_tr();
-    configure_pin_te();
-    configure_pin_wdardy();
-    configure_pin_reset();
-    configure_port_data_read();
-    configure_p8000_com();
-	
-    reset_info();
-	port_data_set ( DATA_CLEAR );
-    
-    /* activate P8000 communication */
-    enable_p8000com();
-
-}
 void wdc_wait_for_reset ()
 {
-    init_p8000_ports();
-
     wdc_set_initialized ( 1 );
-uart_putstring(PSTR("waiting for reset"),true);
+
     while ( isset_info_reset() ) {}
-uart_putstring(PSTR("reset asserted"),true);
 }
 
 uint8_t wdc_read_data_from_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status )
 {
-    _delay_us ( DELAY_PIO_US );
-/*    init_p8000_ports(); */
-    set_info ( wdc_status );
+    set_status ( wdc_status );
+
     while ( !isset_info_te() ) {
         if ( isset_info_reset() ) {
             return 0;
         }
     }
 
+    configure_port_data_read();
+
     while ( !isset_info_wdardy() ) {}
 
     do {
-        while ( isset_info_wdardy() ) {}
-        unset_info(INFO_ASTB);
-        *buffer++ = port_data_get();
-        set_info(INFO_ASTB);
-        while ( !isset_info_wdardy() ) {}
+		assert_astb();
         count--;
+        while ( isset_info_wdardy() ) {}
+        *buffer++ = port_data_get();
+		deassert_astb();
+        while ( !isset_info_wdardy() ) {}
     } while ( count > 0 );
 
-    reset_info();
+    reset_status();
     return 1;
 }
 
 void wdc_write_data_to_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status )
 {
-    _delay_us ( DELAY_PIO_US );
-/*    init_p8000_ports(); */
-	unset_info(INFO_TR);
-    set_info ( wdc_status );
+	assert_tr();
+    set_status ( wdc_status );
 
     while ( isset_info_te() ) {}
 
@@ -105,30 +79,31 @@ void wdc_write_data_to_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status
     while ( !isset_info_wdardy() ) {}
 
     do {
-        unset_info(INFO_ASTB);
+        assert_astb();
         count--;
         while ( isset_info_wdardy() ) {}
         port_data_set ( *buffer++ );
-        set_info(INFO_ASTB);
+        deassert_astb();
         while ( !isset_info_wdardy() ) {}
     } while ( count > 0 );
 
     while ( isset_info_wdardy() ) {}
 
     /* toggle /ASB once more */
-    unset_info(INFO_ASTB);
+    assert_astb();
     nop();
-    set_info(INFO_ASTB);
-
-    configure_port_data_read();
+    deassert_astb();
 
     while ( !isset_info_wdardy() ) {}
 
-    reset_info();
+	deassert_tr();
+    reset_status();
 }
 
 uint8_t wdc_receive_cmd ( uint8_t *buffer )
 {
+    _delay_us ( DELAY_PIO_US );
+
     return wdc_read_data_from_p8k ( buffer
                                   , 9
                                   , INFO_STAT_GCMD
