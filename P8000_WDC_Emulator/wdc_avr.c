@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2012, 2013, 2105 Oliver Lehmann
+ * Copyright (c) 2012, 2013, 2015 Oliver Lehmann
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -86,13 +86,15 @@ void wdc_init_avr ()
 
     enable_p8000com();
 
-#ifdef _OFF
+    /* Jumper configuration */
+    configure_jp_mmc_pata();
+
     /* configure the MMC interface */
     configure_pin_miso();
     configure_pin_sck();
     configure_pin_mosi();
     configure_pin_mmc_cs();
-#endif
+
     /* configure the ATA interface */
     configure_ata_wr();
     configure_ata_rd();
@@ -107,25 +109,17 @@ void wdc_init_avr ()
 
 void wdc_get_sysconf ()
 {
-/*
-    enable_sysconf();
-    nop();
-    nop();
-
-    if ( jumper_pata_set() ) {
- */ drv_init = pata_init;
-    drv_read_block = pata_read_block;
-    drv_write_block = pata_write_block;
-    drv_read_multiblock = pata_read_multiblock;
-    drv_write_multiblock = pata_write_multiblock;
-/*  } else {
+    if ( jp_mmc_pata_set() ) {
+        drv_init = pata_init;
+        drv_read_block = pata_read_block;
+        drv_write_block = pata_write_block;
+        drv_read_multiblock = pata_read_multiblock;
+        drv_write_multiblock = pata_write_multiblock;
+    } else {
         drv_init = mmc_init;
         drv_read_block = mmc_read_sector;
         drv_write_block = mmc_write_sector;
         drv_read_multiblock = mmc_read_multiblock;
         drv_write_multiblock = mmc_write_multiblock;
     }
-
-    disable_sysconf();
- */
 }

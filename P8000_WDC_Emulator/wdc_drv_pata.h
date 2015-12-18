@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2012, 2013, 2105 Oliver Lehmann
+ * Copyright (c) 2012, 2013, 2015 Oliver Lehmann
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,6 +35,13 @@ extern uint8_t pata_write_block ( uint32_t addr, uint8_t *buffer );
 
 extern uint8_t pata_read_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks );
 extern uint8_t pata_write_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks );
+
+#define configure_ata_data_read()   DDR_ATADATA8L = 0x00; DDR_ATADATA8H = 0x00
+#define configure_ata_data_write()  DDR_ATADATA8L = 0xff; DDR_ATADATA8H = 0xff
+#define port_ata_data_8l_set( x )   ( PORT_ATADATA8L = ( x ) )
+#define port_ata_data_8l_get()      PIN_ATADATA8L
+#define port_ata_data_8h_set( x )   ( PORT_ATADATA8H = ( x ) )
+#define port_ata_data_8h_get()      PIN_ATADATA8H
 
 #define ATA_STAT_BSY  0x80  /* ATA busy         */
 #define ATA_STAT_RDY  0x40  /* ATA ready        */

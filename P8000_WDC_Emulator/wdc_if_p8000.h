@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2012, 2013 Oliver Lehmann
+ * Copyright (c) 2012, 2013, 2015 Oliver Lehmann
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without

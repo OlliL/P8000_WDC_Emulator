@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2012, 2013, 2105 Oliver Lehmann
+ * Copyright (c) 2012, 2013, 2015 Oliver Lehmann
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -49,6 +49,10 @@
 #define enable_p8000com()           PORT_P8000_ACT &= ~( 1 << PIN_P8000_COM )
 #define disable_p8000com()          PORT_P8000_ACT |= ( 1 << PIN_P8000_COM )
 
+/* jumper */
+#define configure_jp_mmc_pata()     DDR_JUMPER &= ~( 1 << PIN_JP_MMC_PATA )
+#define jp_mmc_pata_set()           PIN_JUMPER & ( 1 << PIN_JP_MMC_PATA )
+
 /* functions dealing with the MMC interface */
 #define configure_pin_miso()        DDR_MMC &= ~( 1 << PIN_MMC_MISO )
 #define configure_pin_sck()         DDR_MMC |= ( 1 << PIN_MMC_SCK )
@@ -66,27 +70,10 @@
 #define configure_ata_da1()         DDR_ATADA |= ( 1 << PIN_ATADA_DA1 )
 #define configure_ata_da2()         DDR_ATADA |= ( 1 << PIN_ATADA_DA2 )
 
-#define configure_ata_data_read()   DDR_ATADATA8L = 0x00; DDR_ATADATA8H = 0x00
-#define configure_ata_data_write()  DDR_ATADATA8L = 0xff; DDR_ATADATA8H = 0xff
-#define port_ata_data_8l_set( x )   ( PORT_ATADATA8L = ( x ) )
-#define port_ata_data_8l_get()      PIN_ATADATA8L
-#define port_ata_data_8h_set( x )   ( PORT_ATADATA8H = ( x ) )
-#define port_ata_data_8h_get()      PIN_ATADATA8H
-
 #define ata_wr_disable()            PORT_ATARDWR |= ( 1 << PIN_ATARDWR_WR )
 #define ata_wr_enable()             PORT_ATARDWR &= ~( 1 << PIN_ATARDWR_WR )
 #define ata_rd_disable()            PORT_ATARDWR |= ( 1 << PIN_ATARDWR_RD )
 #define ata_rd_enable()             PORT_ATARDWR &= ~( 1 << PIN_ATARDWR_RD )
-#define ata_cs0_disable()           PORT_ATACS |= ( 1 << PIN_ATACS_CS0 )
-#define ata_cs0_enable()            PORT_ATACS &= ~( 1 << PIN_ATACS_CS0 )
-#define ata_cs1_disable()           PORT_ATACS &= ~( 1 << PIN_ATACS_CS0 )
-#define ata_cs1_enable()            PORT_ATACS |= ( 1 << PIN_ATACS_CS0 )
-#define ata_da0_disable()           PORT_ATADA |= ( 1 << PIN_ATADA_DA0 )
-#define ata_da0_enable()            PORT_ATADA &= ~( 1 << PIN_ATADA_DA0 )
-#define ata_da1_disable()           PORT_ATADA |= ( 1 << PIN_ATADA_DA1 )
-#define ata_da1_enable()            PORT_ATADA &= ~( 1 << PIN_ATADA_DA1 )
-#define ata_da2_disable()           PORT_ATADA |= ( 1 << PIN_ATADA_DA2 )
-#define ata_da2_enable()            PORT_ATADA &= ~( 1 << PIN_ATADA_DA2 )
 
 extern void wdc_init_avr ();
 extern void wdc_get_sysconf ();

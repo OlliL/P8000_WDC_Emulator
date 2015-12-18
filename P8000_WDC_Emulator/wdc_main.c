@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2012, 2013, 2105 Oliver Lehmann
+ * Copyright (c) 2012, 2013, 2015 Oliver Lehmann
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -441,7 +441,7 @@ void atmega_setup ( void )
 
     _delay_ms ( 1000 );
 
-    uart_putstring ( PSTR ( "=== P8000 WDC Emulator 0.93 ===" ), true );
+    uart_putstring ( PSTR ( "=== P8000 WDC Emulator 1.00 ===" ), true );
     wdc_get_sysconf();
 
     if ( wdc_init_disk() ) {

@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2012, 2013, 2105 Oliver Lehmann
+ * Copyright (c) 2012, 2013, 2015 Oliver Lehmann
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,8 @@
 #define CONFIG_H_
 
 /*#define F_CPU        8000000UL */
-#define F_CPU       16000000UL
+/*#define F_CPU       16000000UL */
+#define F_CPU       18432000UL
 
 /*
  * P8000 Interface
@@ -66,6 +67,16 @@
 #define DDR_P8000_ACT     DDRD
 
 #define PIN_P8000_COM     PIND4
+
+/*
+ * Jumper
+ */
+#define PORT_JUMPER    PORTD
+#define PIN_JUMPER     PIND
+#define DDR_JUMPER     DDRD
+
+#define PIN_JP_MMC_PATA PIND5
+
 
 /*
  * SD-Card Interface
