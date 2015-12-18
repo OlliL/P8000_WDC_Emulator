@@ -441,7 +441,7 @@ void atmega_setup ( void )
 
     _delay_ms ( 1000 );
 
-    uart_putstring ( PSTR ( "=== P8000 WDC Emulator 1.00 ===" ), true );
+    uart_putstring ( PSTR ( "=== P8000 WDC Emulator 2.00 ===" ), true );
     wdc_get_sysconf();
 
     if ( wdc_init_disk() ) {
