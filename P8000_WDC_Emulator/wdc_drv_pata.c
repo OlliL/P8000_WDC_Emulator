@@ -78,11 +78,6 @@ void deactivate_p8000com ()
 {
     disable_p8000com();
     p8000_info_restore = PORT_INFO;
-/*
-    configure_ata_data_read();
-    port_ata_data_8l_set(0x00);
-    port_ata_data_8h_set(0x00);
- */
 }
 
 void activate_p8000com ()
@@ -94,22 +89,22 @@ void activate_p8000com ()
     enable_p8000com();
 }
 
-uint8_t pata_rdy ()
+uint8_t inline pata_rdy ()
 {
     return ( read_io_register ( PATA_R_STATUS_REGISTER ) & ATA_STAT_RDY ) ? 1 : 0;
 }
 
-uint8_t pata_bsy ()
+uint8_t inline pata_bsy ()
 {
     return ( read_io_register ( PATA_R_STATUS_REGISTER ) & ATA_STAT_BSY ) ? 1 : 0;
 }
 
-uint8_t pata_drq ()
+uint8_t inline pata_drq ()
 {
     return ( read_io_register ( PATA_R_STATUS_REGISTER ) & ATA_STAT_DRQ ) ? 1 : 0;
 }
 
-uint8_t pata_err ()
+uint8_t inline pata_err ()
 {
     if ( read_io_register ( PATA_R_STATUS_REGISTER ) & ATA_STAT_ERR ) {
         return read_io_register ( PATA_R_ERROR_REGISTER );
@@ -117,14 +112,14 @@ uint8_t pata_err ()
     return 0;
 }
 
-void set_io_register ( uint8_t ioreg )
+void inline set_io_register ( uint8_t ioreg )
 {
     /* set the requested signals */
-    PORT_ATADA = PORT_ATADA & 0xf0;             /* Clear previous signals (lower 4 bits of PORT_ATADA) */
+    PORT_ATADA = PORT_ATADA & 0xf0;               /* Clear previous signals (lower 4 bits of PORT_ATADA)  */
     PORT_ATADA = PORT_ATADA | ( ioreg & 0x0f );   /* Assert the signal Lines (lower 4 bits of PORT_ATADA) */
 }
 
-uint8_t read_io_register ( uint8_t ioreg )
+uint8_t inline read_io_register ( uint8_t ioreg )
 {
     uint8_t byte;
 
@@ -140,7 +135,7 @@ uint8_t read_io_register ( uint8_t ioreg )
     return byte;
 }
 
-void write_io_register ( uint8_t ioreg, uint8_t byte )
+void inline write_io_register ( uint8_t ioreg, uint8_t byte )
 {
     configure_ata_data_write();
 

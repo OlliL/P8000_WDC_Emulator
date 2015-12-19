@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2012, 2013 Oliver Lehmann
+ * Copyright (c) 2012, 2013, 2015 Oliver Lehmann
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,10 +25,6 @@
  *
  */
 
-/*
- * $Id: wdc_if_disk.c,v 1.15 2013/05/04 15:40:14 olivleh1 Exp $
- */
-
 #include <stdint.h>
 #include "wdc_if_disk.h"
 #include "wdc_drv_mmc.h"
@@ -43,11 +39,16 @@ uint8_t wdc_init_disk ()
 
 uint32_t wdc_sector2diskblock ( uint16_t req_cylinder, uint8_t req_head, uint8_t req_sector )
 {
-    return ( req_cylinder * wdc_get_hdd_heads() * wdc_get_hdd_sectors() )
-           + ( req_head * wdc_get_hdd_sectors() )
+    uint8_t hdd_sectors = wdc_get_hdd_sectors();
+
+    return ( req_cylinder * wdc_get_hdd_heads() * hdd_sectors )
+           + ( req_head * hdd_sectors )
            + ( req_sector - 1 );
 }
 
+/************************************************************************/
+/* Always ignore the PAR+BTT on the disk (first head * sectors).        */
+/************************************************************************/
 uint32_t wdc_p8kblock2diskblock ( uint32_t blockno )
 {
     return blockno

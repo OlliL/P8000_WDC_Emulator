@@ -31,7 +31,6 @@
 #include "wdc_avr.h"
 #include "wdc_if_p8000.h"
 #include "wdc_par.h"
-#include "uart.h"
 
 void wdc_wait_for_reset ()
 {

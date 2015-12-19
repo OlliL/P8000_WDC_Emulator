@@ -30,7 +30,6 @@
 #include "wdc_main.h"
 #include "wdc_par.h"
 #include "wdc_avr.h"
-#include "uart.h"
 
 /*
  * unformatted ST138

@@ -46,8 +46,9 @@
 
 void atmega_setup ( void );
 
-uint8_t data_buffer[4096];
-uint8_t cmd_buffer[9];
+uint8_t       data_buffer[4096];
+uint8_t       cmd_buffer[9];
+const uint8_t wdc_ver_string[] PROGMEM = { 'W', 'D', 'C', '_', '4', '.', '2' };
 
 #ifdef MEASURE_DISK_PERFORMANCE
 extern void measure_performance ();
@@ -77,16 +78,18 @@ main ( void )
     /* load Parameter Table into RAM if valid */
     if ( wdc_get_disk_valid() ) {
         blockno = 0;
-        data_counter = WDC_BLOCKLEN;
         wdc_read_sector ( blockno, data_buffer );
-        if ( data_buffer[0] == 'W' &&
-             data_buffer[1] == 'D' &&
-             data_buffer[2] == 'C' &&
-             data_buffer[3] == '_' &&
-             data_buffer[4] == '4' &&
-             data_buffer[5] == '.' &&
-             data_buffer[6] == '2' ) {
-            wdc_write_par_table ( data_buffer, data_counter );
+
+        errorcode = 0;
+        for ( i8 = 0; i8 <= 6; i8++ ) {
+            if ( data_buffer[i8] != (uint8_t)pgm_read_byte_near ( wdc_ver_string + i8 )) {
+                errorcode = 1;
+                break;
+            }
+        }
+
+        if ( !errorcode ) {
+            wdc_write_par_table ( data_buffer, WDC_BLOCKLEN );
             uart_putstring ( PSTR ( "INFO: Disk found and ready to use." ), true );
             wdc_set_disk_valid();
 /*
@@ -303,9 +306,7 @@ main ( void )
                             break;
                         }
 
-                        data_counter = WDC_BLOCKLEN;
-
-                        memset ( &data_buffer[0], 0x00, data_counter );
+                        memset ( &data_buffer[0], 0x00, WDC_BLOCKLEN );
                         blockno = wdc_sector2diskblock ( cmd_buffer[2] | ( cmd_buffer[3] << 8 )
                                                        , cmd_buffer[4]
                                                        , cmd_buffer[5]
@@ -341,12 +342,10 @@ main ( void )
                         break;
 
                     case CMD_ST_PARBTT:
-                        data_counter = WDC_BLOCKLEN;
-
                         blockno = 0;
                         wdc_set_disk_valid();
                         wdc_read_par_table ( data_buffer
-                                           , data_counter );
+                                           , WDC_BLOCKLEN );
 
                         errorcode = wdc_write_sector ( blockno, data_buffer );
                         if ( errorcode ) {
@@ -364,8 +363,6 @@ main ( void )
                         break;
 
                     case CMD_VER_TRACK:
-                        data_counter = WDC_BLOCKLEN;
-
                         blockno = wdc_sector2diskblock ( cmd_buffer[2] | ( cmd_buffer[3] << 8 )
                                                        , cmd_buffer[4]
                                                        , cmd_buffer[5]

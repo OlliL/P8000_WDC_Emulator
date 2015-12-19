@@ -28,9 +28,9 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-/*#define F_CPU        8000000UL */
+#define F_CPU        8000000UL
 /*#define F_CPU       16000000UL */
-#define F_CPU       18432000UL
+/*#define F_CPU       18432000UL */
 
 /*
  * P8000 Interface

@@ -38,7 +38,7 @@
 #include "uart.h"
 
 #ifdef MEASURE_DISK_PERFORMANCE
-#define BLOCKNO 900000
+#define BLOCKNO 524288
 
 volatile uint32_t overflow = 0;
 ISR ( TIMER0_OVF_vect ) {
