@@ -92,15 +92,9 @@ main ( void )
             wdc_write_par_table ( data_buffer, WDC_BLOCKLEN );
             uart_putstring ( PSTR ( "INFO: Disk found and ready to use." ), true );
             wdc_set_disk_valid();
-/*
-            wdc_led_on();
- */
         } else {
             uart_putstring ( PSTR ( "INFO: Disk found but Sector 0 is invalid, please execute sa.format to initialize this disk properly." ), true );
             wdc_set_disk_invalid();
-/*
-            wdc_led_off();
- */
         }
     }
 
@@ -427,10 +421,9 @@ main ( void )
 void atmega_setup ( void )
 {
     set_sleep_mode ( SLEEP_MODE_IDLE );
-/*
-    wdc_init_led();
-    wdc_led_off();
- */
+
+	wdc_led_bootup();
+	
     _delay_ms ( 1000 );
 
     wdc_init_avr();

@@ -39,28 +39,30 @@
 #include "wdc_drv_pata.h"
 #include "wdc_if_disk.h"
 
-#ifdef _OFF
-void wdc_init_led ()
+void wdc_led_bootup ()
 {
-    configure_pin_led();
+	/* LED configuration */
+	configure_pin_led1();
+	configure_pin_led2();
+    PORT_LED |= ( 1 << PIN_INFO_LED1 | 1 << PIN_INFO_LED2 );
 }
 
-void wdc_led_on ()
+void wdc_led_no_disk ()
 {
-    PORT_INFO |= ( 1 << PIN_INFO_LED );
+    PORT_LED |= ( 1 << PIN_INFO_LED1 );
+	PORT_LED &= ~( 1 << PIN_INFO_LED2 );
 }
 
-void wdc_led_off ()
+void wdc_led_invalid_disk ()
 {
-    PORT_INFO &= ~( 1 << PIN_INFO_LED );
+    PORT_LED &= ~( 1 << PIN_INFO_LED1 );
+    PORT_LED |= ( 1 << PIN_INFO_LED2 );
 }
 
-void wdc_led_toggle ()
+void wdc_led_all_ok ()
 {
-    PORT_INFO ^= ( 1 << PIN_INFO_LED );
+	PORT_LED &= ~( 1 << PIN_INFO_LED1 | 1 << PIN_INFO_LED2 );
 }
-
-#endif
 
 void wdc_config_p8000_ports ()
 {

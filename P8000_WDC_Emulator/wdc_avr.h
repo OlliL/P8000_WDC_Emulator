@@ -53,6 +53,10 @@
 #define configure_jp_mmc_pata()     DDR_JUMPER &= ~( 1 << PIN_JP_MMC_PATA )
 #define jp_mmc_pata_set()           PIN_JUMPER & ( 1 << PIN_JP_MMC_PATA )
 
+/* led */
+#define configure_pin_led1()		DDR_LED |= ( 1 << PIN_INFO_LED1 )
+#define configure_pin_led2()		DDR_LED |= ( 1 << PIN_INFO_LED2 )
+
 /* functions dealing with the MMC interface */
 #define configure_pin_miso()        DDR_MMC &= ~( 1 << PIN_MMC_MISO )
 #define configure_pin_sck()         DDR_MMC |= ( 1 << PIN_MMC_SCK )
@@ -79,9 +83,9 @@ extern void wdc_init_avr ();
 extern void wdc_get_sysconf ();
 extern void wdc_config_p8000_ports ();
 
-extern void wdc_init_led ();
-extern void wdc_led_on ();
-extern void wdc_led_off ();
-extern void wdc_led_toggle ();
+extern void wdc_led_bootup ();
+extern void wdc_led_no_disk ();
+extern void wdc_led_invalid_disk ();
+extern void wdc_led_all_ok ();
 
 #endif /* WDC_AVR_H_ */
