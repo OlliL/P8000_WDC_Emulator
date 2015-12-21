@@ -41,16 +41,16 @@
 
 void wdc_led_bootup ()
 {
-	/* LED configuration */
-	configure_pin_led1();
-	configure_pin_led2();
+    /* LED configuration */
+    configure_pin_led1();
+    configure_pin_led2();
     PORT_LED |= ( 1 << PIN_INFO_LED1 | 1 << PIN_INFO_LED2 );
 }
 
 void wdc_led_no_disk ()
 {
     PORT_LED |= ( 1 << PIN_INFO_LED1 );
-	PORT_LED &= ~( 1 << PIN_INFO_LED2 );
+    PORT_LED &= ~( 1 << PIN_INFO_LED2 );
 }
 
 void wdc_led_invalid_disk ()
@@ -61,7 +61,7 @@ void wdc_led_invalid_disk ()
 
 void wdc_led_all_ok ()
 {
-	PORT_LED &= ~( 1 << PIN_INFO_LED1 | 1 << PIN_INFO_LED2 );
+    PORT_LED &= ~( 1 << PIN_INFO_LED1 | 1 << PIN_INFO_LED2 );
 }
 
 void wdc_config_p8000_ports ()

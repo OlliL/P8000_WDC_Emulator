@@ -28,8 +28,6 @@
 #ifndef WDC_IF_P8000_H_
 #define WDC_IF_P8000_H_
 
-#define DELAY_PIO_US                500
-
 /* input pin handling */
 #define isset_info_reset()          (( PIN_INFO ) & ( 1 << PIN_INFO_RST ))
 #define isset_info_te()             (( PIN_INFO ) & ( 1 << PIN_INFO_TE ))

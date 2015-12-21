@@ -174,7 +174,6 @@ main ( void )
                     wdc_send_errorcode ( ERR_DRIVE_NOT_READY );
                 }
             } else {
-
                 switch ( cmd_buffer[0] ) {
                     case CMD_WR_BLOCK:
                         data_counter = ( cmd_buffer[7] << 8 ) | cmd_buffer[6];
@@ -422,8 +421,8 @@ void atmega_setup ( void )
 {
     set_sleep_mode ( SLEEP_MODE_IDLE );
 
-	wdc_led_bootup();
-	
+    wdc_led_bootup();
+
     _delay_ms ( 1000 );
 
     wdc_init_avr();

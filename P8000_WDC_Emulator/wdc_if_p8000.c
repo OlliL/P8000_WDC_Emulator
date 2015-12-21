@@ -43,26 +43,27 @@ uint8_t wdc_read_data_from_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_st
 {
     set_status ( wdc_status );
 
+    configure_port_data_read();
+
     while ( !isset_info_te() ) {
         if ( isset_info_reset() ) {
             return 0;
         }
     }
 
-    configure_port_data_read();
-
     while ( !isset_info_wdardy() ) {}
 
     do {
-        assert_astb();
-        count--;
         while ( isset_info_wdardy() ) {}
+        assert_astb();
         *buffer++ = port_data_get();
         deassert_astb();
         while ( !isset_info_wdardy() ) {}
+        count--;
     } while ( count > 0 );
 
     reset_status();
+
     return 1;
 }
 
@@ -78,12 +79,12 @@ void wdc_write_data_to_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status
     while ( !isset_info_wdardy() ) {}
 
     do {
-        assert_astb();
-        count--;
         while ( isset_info_wdardy() ) {}
+        assert_astb();
         port_data_set ( *buffer++ );
         deassert_astb();
         while ( !isset_info_wdardy() ) {}
+        count--;
     } while ( count > 0 );
 
     while ( isset_info_wdardy() ) {}
@@ -101,8 +102,6 @@ void wdc_write_data_to_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status
 
 uint8_t wdc_receive_cmd ( uint8_t *buffer )
 {
-    _delay_us ( DELAY_PIO_US );
-
     return wdc_read_data_from_p8k ( buffer
                                   , 9
                                   , INFO_STAT_GCMD

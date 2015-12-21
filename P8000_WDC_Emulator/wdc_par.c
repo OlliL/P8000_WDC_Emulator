@@ -211,7 +211,7 @@ void wdc_set_disk_invalid ()
         par_table[i] = par_tab_new_dsk[i];
     }
 
-	wdc_led_invalid_disk ();
+    wdc_led_invalid_disk();
 }
 
 void wdc_set_disk_valid ()
@@ -239,8 +239,8 @@ void wdc_set_disk_valid ()
     par_table[73] = 0x6c;
     par_table[91] = 0x33;
     par_table[95] = 0x00;
-	
-	wdc_led_all_ok();
+
+    wdc_led_all_ok();
 }
 
 void wdc_set_no_disk ()
@@ -253,7 +253,7 @@ void wdc_set_no_disk ()
         par_table[i] = par_tab_no_dsk[i];
     }
 
-	wdc_led_no_disk ();
+    wdc_led_no_disk();
 }
 
 uint8_t wdc_get_disk_valid ()

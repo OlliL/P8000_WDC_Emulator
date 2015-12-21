@@ -54,8 +54,8 @@
 #define jp_mmc_pata_set()           PIN_JUMPER & ( 1 << PIN_JP_MMC_PATA )
 
 /* led */
-#define configure_pin_led1()		DDR_LED |= ( 1 << PIN_INFO_LED1 )
-#define configure_pin_led2()		DDR_LED |= ( 1 << PIN_INFO_LED2 )
+#define configure_pin_led1()        DDR_LED |= ( 1 << PIN_INFO_LED1 )
+#define configure_pin_led2()        DDR_LED |= ( 1 << PIN_INFO_LED2 )
 
 /* functions dealing with the MMC interface */
 #define configure_pin_miso()        DDR_MMC &= ~( 1 << PIN_MMC_MISO )
