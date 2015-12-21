@@ -1,4 +1,4 @@
-# EESchema Netlist Version 1.1 created  21.12.2015 20:30:42
+# EESchema Netlist Version 1.1 created  21.12.2015 20:37:38
 (
  ( /4FDF8116 C1 1C1 100n
   ( 1 VCC )
@@ -301,7 +301,7 @@
   ( 9 ? )
   ( 10 VCC )
  )
- ( /4FDF685B 4PIN_MOLEX X6 PATA
+ ( /4FDF685B PIN_ARRAY_20X2 X6 PATA
   ( 1 N-000092 )
   ( 2 GND )
   ( 3 /PA7 )
