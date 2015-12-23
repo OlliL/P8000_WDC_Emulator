@@ -32,7 +32,7 @@
 #include <avr/pgmspace.h>
 #include "wdc_ram.h"
 
-uint8_t wdc_ram[2048];
+static uint8_t wdc_ram[2048];
 
 void wdc_write_data_to_ram ( uint8_t *buffer, uint16_t address, uint16_t count )
 {

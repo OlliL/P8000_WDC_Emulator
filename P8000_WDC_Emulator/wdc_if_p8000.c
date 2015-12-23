@@ -25,6 +25,7 @@
  *
  */
 
+#include <stdbool.h>
 #include "wdc_config.h"
 #include <avr/io.h>
 #include <util/delay.h>
@@ -34,12 +35,12 @@
 
 void wdc_wait_for_reset ()
 {
-    wdc_set_initialized ( 1 );
+    wdc_set_initialized();
 
     while ( isset_info_reset() ) {}
 }
 
-uint8_t wdc_read_data_from_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status )
+static bool wdc_read_data_from_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status )
 {
     set_status ( wdc_status );
 
@@ -47,7 +48,7 @@ uint8_t wdc_read_data_from_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_st
 
     while ( !isset_info_te() ) {
         if ( isset_info_reset() ) {
-            return 0;
+            return false;
         }
     }
 
@@ -64,10 +65,10 @@ uint8_t wdc_read_data_from_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_st
 
     reset_status();
 
-    return 1;
+    return true;
 }
 
-void wdc_write_data_to_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status )
+static void wdc_write_data_to_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status )
 {
     assert_tr();
     set_status ( wdc_status );
@@ -100,7 +101,7 @@ void wdc_write_data_to_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status
     reset_status();
 }
 
-uint8_t wdc_receive_cmd ( uint8_t *buffer )
+bool wdc_receive_cmd ( uint8_t *buffer )
 {
     return wdc_read_data_from_p8k ( buffer
                                   , 9

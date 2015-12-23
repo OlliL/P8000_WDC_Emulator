@@ -40,6 +40,8 @@
 #ifdef MEASURE_DISK_PERFORMANCE
 #define BLOCKNO 524288
 
+static uint8_t    data_buffer[4096];
+
 volatile uint32_t overflow = 0;
 ISR ( TIMER0_OVF_vect ) {
     overflow++;

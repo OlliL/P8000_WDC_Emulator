@@ -1,18 +1,18 @@
-# EESchema Netlist Version 1.1 created  21.12.2015 20:37:38
+# EESchema Netlist Version 1.1 created  22.12.2015 00:21:23
 (
- ( /4FDF8116 C1 1C1 100n
-  ( 1 VCC )
+ ( /563D0314 C1 1C1 100n
+  ( 1 N-000039 )
   ( 2 GND )
  )
  ( /517968F8 C1 1C2 330n
-  ( 1 N-000056 )
-  ( 2 N-000094 )
+  ( 1 N-000051 )
+  ( 2 N-000057 )
  )
- ( /4FDF527D C1 1C4 22p
-  ( 1 N-000057 )
+ ( /4FDF527D C1 1C6 22p
+  ( 1 N-000103 )
   ( 2 GND )
  )
- ( /4FDE250D DIP-20__300 1D4 74HCT245
+ ( /4FDE250D DIP-20__300 1D5 74HCT245
   ( 1 //TR )
   ( 2 /D0 )
   ( 3 /D1 )
@@ -31,30 +31,37 @@
   ( 16 /PA2 )
   ( 17 /PA1 )
   ( 18 /PA0 )
-  ( 19 N-000048 )
+  ( 19 N-000108 )
   ( 20 VCC )
  )
  ( /566C0A24 LED-5MM 1L1 LED
-  ( 1 N-000110 )
-  ( 2 N-000111 )
+  ( 1 N-000064 )
+  ( 2 N-000107 )
  )
- ( /566C0A25 R1 1R2 200
-  ( 1 N-000111 )
+ ( /566C0A25 R1 1R4 220
+  ( 1 N-000107 )
   ( 2 GND )
  )
- ( /4FDF8149 C1 2C1 100n
+ ( /566B8865 PIN_ARRAY_5x1 1R5 4k7
+  ( 1 VCC )
+  ( 2 //RST2 )
+  ( 3 //TR )
+  ( 4 //ASTB )
+  ( 5 N-000021 )
+ )
+ ( /4FDF60BB C1 2C1 100n
   ( 1 VCC )
   ( 2 GND )
  )
  ( /5179694E C1 2C2 330n
-  ( 1 N-000038 )
+  ( 1 N-000059 )
   ( 2 GND )
  )
- ( /4FDF52C6 C1 2C4 22p
+ ( /4FDF52C6 C1 2C6 22p
   ( 1 GND )
-  ( 2 N-000061 )
+  ( 2 N-000063 )
  )
- ( /566B7FDE DIP-20__300 2D4 74HCT245
+ ( /566B7FDE DIP-20__300 2D5 74HCT245
   ( 1 VCC )
   ( 2 /PC0 )
   ( 3 /PC1 )
@@ -73,63 +80,86 @@
   ( 16 /STATUS2 )
   ( 17 /STATUS1 )
   ( 18 /STATUS0 )
-  ( 19 N-000048 )
+  ( 19 N-000108 )
   ( 20 VCC )
  )
  ( /4FDF6D8E LED-5MM 2L1 LED
-  ( 1 N-000062 )
-  ( 2 N-000084 )
+  ( 1 N-000091 )
+  ( 2 N-000092 )
  )
- ( /4FDF6D7E R1 2R2 200
-  ( 1 N-000084 )
+ ( /4FDF6D7E R1 2R4 220
+  ( 1 N-000092 )
   ( 2 GND )
  )
- ( /4FDF743F C1 3C1 100n
-  ( 1 VCC )
+ ( /566B8B18 PIN_ARRAY_5x1 2R5 4k7
+  ( 1 GND )
+  ( 2 N-000110 )
+  ( 3 /STATUS0 )
+  ( 4 /STATUS1 )
+  ( 5 /STATUS2 )
+ )
+ ( /4FDF5FEF C1 3C1 100n
+  ( 1 +3.3V )
   ( 2 GND )
  )
  ( /5179691C C1 3C2 330n
   ( 1 GND )
-  ( 2 N-000101 )
+  ( 2 N-000008 )
  )
- ( /4FDF744A C1 4C1 100n
+ ( /4FDF60A7 R1 3R4 220
+  ( 1 +3.3V )
+  ( 2 N-000035 )
+ )
+ ( /4FDF8116 C1 4C1 100n
   ( 1 VCC )
   ( 2 GND )
  )
- ( /4FDF744C C1 5C1 100n
+ ( /4FDF8149 C1 5C1 100n
   ( 1 VCC )
   ( 2 GND )
  )
- ( /563D0314 C1 6C1 100n
-  ( 1 N-000102 )
+ ( /4FDF743F C1 6C1 100n
+  ( 1 VCC )
+  ( 2 GND )
+ )
+ ( /4FDF744A C1 7C1 100n
+  ( 1 VCC )
   ( 2 GND )
  )
  ( /517968CB C1 C3 100n
-  ( 1 N-000058 )
-  ( 2 N-000039 )
+  ( 1 N-000060 )
+  ( 2 N-000009 )
+ )
+ ( /4FDF5FE6 C1V5 C4 47u
+  ( 1 +3.3V )
+  ( 2 GND )
+ )
+ ( /4FDF60B2 C1V5 C5 1u
+  ( 1 +3.3V )
+  ( 2 GND )
  )
  ( /4FDE10FA DIP-40__600 D1 ATMEGA1284-P
   ( 1 //CS0 )
   ( 2 /DA0 )
   ( 3 /DA1 )
   ( 4 /DA2 )
-  ( 5 //SS )
-  ( 6 /MOSI )
-  ( 7 /MISO )
-  ( 8 /SCK )
-  ( 9 N-000102 )
+  ( 5 N-000097 )
+  ( 6 N-000074 )
+  ( 7 N-000101 )
+  ( 8 N-000034 )
+  ( 9 N-000039 )
   ( 10 VCC )
   ( 11 GND )
-  ( 12 N-000057 )
-  ( 13 N-000061 )
-  ( 14 N-000098 )
-  ( 15 N-000059 )
+  ( 12 N-000103 )
+  ( 13 N-000063 )
+  ( 14 N-000065 )
+  ( 15 N-000052 )
   ( 16 //WR )
   ( 17 //RD )
-  ( 18 N-000048 )
-  ( 19 N-000109 )
-  ( 20 N-000062 )
-  ( 21 N-000110 )
+  ( 18 N-000108 )
+  ( 19 N-000110 )
+  ( 20 N-000091 )
+  ( 21 N-000064 )
   ( 22 /PC0 )
   ( 23 /PC1 )
   ( 24 /PC2 )
@@ -151,89 +181,98 @@
   ( 40 /PA0 )
  )
  ( /4FDE2C78 DIP-16__300 D2 MAX3232
-  ( 1 N-000058 )
-  ( 2 N-000038 )
-  ( 3 N-000039 )
-  ( 4 N-000056 )
-  ( 5 N-000094 )
-  ( 6 N-000101 )
+  ( 1 N-000060 )
+  ( 2 N-000059 )
+  ( 3 N-000009 )
+  ( 4 N-000051 )
+  ( 5 N-000057 )
+  ( 6 N-000008 )
   ( 7 ? )
   ( 8 ? )
   ( 9 ? )
   ( 10 ? )
-  ( 11 N-000059 )
-  ( 12 N-000098 )
-  ( 13 N-000089 )
-  ( 14 N-000090 )
+  ( 11 N-000052 )
+  ( 12 N-000065 )
+  ( 13 N-000058 )
+  ( 14 N-000061 )
   ( 15 GND )
   ( 16 VCC )
  )
- ( /566C0A7C DIP-14__300 D3 74HCT03
+ ( /4FE371A3 TO92-LM317 D3 LM317
+  ( 1 N-000035 )
+  ( 2 +3.3V )
+  ( 3 VCC )
+ )
+ ( /566C0A7C DIP-14__300 D4 74HCT03
   ( 1 /RST1 )
   ( 2 /RST1 )
-  ( 3 N-000100 )
-  ( 4 N-000100 )
+  ( 3 N-000109 )
+  ( 4 N-000109 )
   ( 5 //RST2 )
   ( 6 /RST )
   ( 7 GND )
-  ( 8 N-000091 )
+  ( 8 N-000106 )
   ( 9 //CS0 )
   ( 10 //CS0 )
   ( 11 ? )
-  ( 12 N-000095 )
-  ( 13 N-000095 )
+  ( 12 N-000021 )
+  ( 13 N-000021 )
   ( 14 VCC )
  )
  ( /566B840C PIN_ARRAY_2X1 JP1 JUMPER
-  ( 1 N-000109 )
+  ( 1 N-000110 )
   ( 2 VCC )
  )
  ( /4FDF5237 crystal_hc-49s Q1 CRYSTAL
-  ( 1 N-000061 )
-  ( 2 N-000057 )
+  ( 1 N-000063 )
+  ( 2 N-000103 )
  )
- ( /4FDF534E R1 R1 10k
-  ( 1 N-000102 )
+ ( /4FDF5E46 pin_strip_8 R1 1k8
+  ( 1 N-000034 )
+  ( 2 N-000096 )
+  ( 3 N-000074 )
+  ( 4 N-000102 )
+  ( 5 N-000097 )
+  ( 6 N-000098 )
+  ( 7 /RST1 )
+  ( 8 GND )
+ )
+ ( /4FDF61F0 PIN_ARRAY_5x1 R2 3k3
+  ( 1 GND )
+  ( 2 N-000098 )
+  ( 3 N-000102 )
+  ( 4 N-000096 )
+  ( 5 ? )
+ )
+ ( /4FDF534E R1 R3 10k
+  ( 1 N-000039 )
   ( 2 VCC )
  )
- ( /566B8865 PIN_ARRAY_5x1 R3 4k7
-  ( 1 VCC )
-  ( 2 //RST2 )
-  ( 3 //TR )
-  ( 4 //ASTB )
-  ( 5 N-000095 )
- )
- ( /56784638 pin_strip_6 R4 4k7
-  ( 1 GND )
-  ( 2 N-000109 )
-  ( 3 /STATUS0 )
-  ( 4 /STATUS1 )
-  ( 5 /STATUS2 )
-  ( 6 /RST1 )
+ ( /4FDF60AB R1 R6 330
+  ( 1 N-000035 )
+  ( 2 GND )
  )
  ( /4FDF540D SW_6x6 SW1 SW_PUSH
-  ( 1 N-000102 )
+  ( 1 N-000039 )
   ( 2 GND )
  )
  ( /563D023E R3 VD1 1N4148
-  ( 1 N-000102 )
+  ( 1 N-000039 )
   ( 2 VCC )
  )
- ( /517569F9 4PIN_MOLEX X1 4_PIN_MOLEX
-  ( 1 VCC )
-  ( 2 GND )
-  ( 3 GND )
+ ( /4FE36B44 PIN_ARRAY_5x2 X1 CONN_5X2
+  ( 1 ? )
+  ( 2 N-000058 )
+  ( 3 N-000061 )
   ( 4 ? )
+  ( 5 GND )
+  ( 6 ? )
+  ( 7 ? )
+  ( 8 ? )
+  ( 9 ? )
+  ( 10 ? )
  )
- ( /4FE5DEFA pin_array_3x2 X2 ISP
-  ( 1 /MISO )
-  ( 2 VCC )
-  ( 3 /SCK )
-  ( 4 /MOSI )
-  ( 5 N-000102 )
-  ( 6 GND )
- )
- ( /51973111 pin_array_13x2 X3 CONN_13X2
+ ( /51973111 pin_array_13x2 X2 CONN_13X2
   ( 1 //RDY )
   ( 2 /D0 )
   ( 3 /D1 )
@@ -261,48 +300,19 @@
   ( 25 ? )
   ( 26 ? )
  )
- ( /51972B4B pin_array_13x2 X4 CONN_13X2
-  ( 1 //RDY )
-  ( 2 ? )
-  ( 3 /D4 )
-  ( 4 //ASTB )
-  ( 5 /D2 )
-  ( 6 /STATUS1 )
-  ( 7 GND )
-  ( 8 /D5 )
-  ( 9 /D3 )
-  ( 10 /RST1 )
-  ( 11 /STATUS2 )
-  ( 12 //TE )
-  ( 13 /D0 )
-  ( 14 /D6 )
-  ( 15 GND )
-  ( 16 /D7 )
-  ( 17 /STATUS0 )
-  ( 18 /D1 )
-  ( 19 ? )
-  ( 20 ? )
-  ( 21 //TR )
-  ( 22 ? )
-  ( 23 ? )
-  ( 24 ? )
-  ( 25 ? )
-  ( 26 ? )
- )
- ( /5678476D PIN_ARRAY_5x2 X5 SD_Module
-  ( 1 ? )
-  ( 2 ? )
-  ( 3 ? )
-  ( 4 GND )
-  ( 5 //SS )
-  ( 6 /SCK )
-  ( 7 /MOSI )
-  ( 8 /MISO )
+ ( /4FDF5E6E sd_cocket_yamaichi_fps009_3001 X3 SD-CON
+  ( 1 N-000098 )
+  ( 2 N-000102 )
+  ( 3 GND )
+  ( 4 +3.3V )
+  ( 5 N-000096 )
+  ( 6 GND )
+  ( 7 N-000101 )
+  ( 8 ? )
   ( 9 ? )
-  ( 10 VCC )
  )
- ( /4FDF685B PIN_ARRAY_20X2 X6 PATA
-  ( 1 N-000092 )
+ ( /4FDF685B PIN_ARRAY_20X2 X4 PATA
+  ( 1 N-000039 )
   ( 2 GND )
   ( 3 /PA7 )
   ( 4 /PC0 )
@@ -330,7 +340,7 @@
   ( 26 GND )
   ( 27 ? )
   ( 28 ? )
-  ( 29 N-000092 )
+  ( 29 N-000039 )
   ( 30 GND )
   ( 31 ? )
   ( 32 ? )
@@ -339,21 +349,51 @@
   ( 35 /DA0 )
   ( 36 /DA2 )
   ( 37 //CS0 )
-  ( 38 N-000091 )
+  ( 38 N-000106 )
   ( 39 ? )
   ( 40 GND )
  )
- ( /4FE36B44 PIN_ARRAY_5x2 X7 CONN_5X2
-  ( 1 ? )
-  ( 2 N-000089 )
-  ( 3 N-000090 )
+ ( /517569F9 4PIN_MOLEX X5 4_PIN_MOLEX
+  ( 1 VCC )
+  ( 2 GND )
+  ( 3 GND )
   ( 4 ? )
-  ( 5 GND )
-  ( 6 ? )
-  ( 7 ? )
-  ( 8 ? )
-  ( 9 ? )
-  ( 10 ? )
+ )
+ ( /51972B4B pin_array_13x2 X6 CONN_13X2
+  ( 1 //RDY )
+  ( 2 ? )
+  ( 3 /D4 )
+  ( 4 //ASTB )
+  ( 5 /D2 )
+  ( 6 /STATUS1 )
+  ( 7 GND )
+  ( 8 /D5 )
+  ( 9 /D3 )
+  ( 10 /RST1 )
+  ( 11 /STATUS2 )
+  ( 12 //TE )
+  ( 13 /D0 )
+  ( 14 /D6 )
+  ( 15 GND )
+  ( 16 /D7 )
+  ( 17 /STATUS0 )
+  ( 18 /D1 )
+  ( 19 ? )
+  ( 20 ? )
+  ( 21 //TR )
+  ( 22 ? )
+  ( 23 ? )
+  ( 24 ? )
+  ( 25 ? )
+  ( 26 ? )
+ )
+ ( /4FE5DEFA pin_array_3x2 X7 ISP
+  ( 1 N-000101 )
+  ( 2 VCC )
+  ( 3 N-000034 )
+  ( 4 N-000074 )
+  ( 5 N-000039 )
+  ( 6 GND )
  )
 )
 *
@@ -367,7 +407,7 @@ $component 1C2
  CP*
  SM*
 $endlist
-$component 1C4
+$component 1C6
  SM*
  C?
  C1-1
@@ -381,12 +421,17 @@ $component 1L1
  LED-1206
  LEDV
 $endlist
-$component 1R2
+$component 1R4
  R?
  SM0603
  SM0805
  R?-*
  SM1206
+$endlist
+$component 1R5
+ R?
+ SM0603
+ SM0805
 $endlist
 $component 2C1
  SM*
@@ -397,7 +442,7 @@ $component 2C2
  CP*
  SM*
 $endlist
-$component 2C4
+$component 2C6
  SM*
  C?
  C1-1
@@ -411,12 +456,17 @@ $component 2L1
  LED-1206
  LEDV
 $endlist
-$component 2R2
+$component 2R4
  R?
  SM0603
  SM0805
  R?-*
  SM1206
+$endlist
+$component 2R5
+ R?
+ SM0603
+ SM0805
 $endlist
 $component 3C1
  SM*
@@ -426,6 +476,13 @@ $endlist
 $component 3C2
  CP*
  SM*
+$endlist
+$component 3R4
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
 $endlist
 $component 4C1
  SM*
@@ -442,7 +499,20 @@ $component 6C1
  C?
  C1-1
 $endlist
+$component 7C1
+ SM*
+ C?
+ C1-1
+$endlist
 $component C3
+ CP*
+ SM*
+$endlist
+$component C4
+ CP*
+ SM*
+$endlist
+$component C5
  CP*
  SM*
 $endlist
@@ -450,22 +520,24 @@ $component D1
  40DIP-ELL600
  40dip600
 $endlist
-$component R1
+$component R2
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R3
  R?
  SM0603
  SM0805
  R?-*
  SM1206
 $endlist
-$component R3
+$component R6
  R?
  SM0603
  SM0805
-$endlist
-$component R4
- R?
- SM0603
- SM0805
+ R?-*
+ SM1206
 $endlist
 $component VD1
  D?

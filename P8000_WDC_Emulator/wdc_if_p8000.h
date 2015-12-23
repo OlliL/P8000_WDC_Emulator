@@ -29,29 +29,29 @@
 #define WDC_IF_P8000_H_
 
 /* input pin handling */
-#define isset_info_reset()          (( PIN_INFO ) & ( 1 << PIN_INFO_RST ))
-#define isset_info_te()             (( PIN_INFO ) & ( 1 << PIN_INFO_TE ))
-#define isset_info_wdardy()         (( PIN_INFO ) & ( 1 << PIN_INFO_WDARDY ))
+#define isset_info_reset()          ((( PIN_INFO ) & ( 1 << PIN_INFO_RST )) != 0 )
+#define isset_info_te()             ((( PIN_INFO ) & ( 1 << PIN_INFO_TE )) != 0 )
+#define isset_info_wdardy()         ((( PIN_INFO ) & ( 1 << PIN_INFO_WDARDY )) != 0 )
 
 #define port_data_set( x )          ( PORT_DATA = ( x ) )
 #define port_data_get()             PIN_DATA
 
 /* output pin handling */
 
-#define INFO_STAT_GCMD      (( 1 << PIN_INFO_STATUS0 )                                                        )  /* 0x01 */
-#define INFO_STAT_RDATA     (                            ( 1 << PIN_INFO_STATUS1 )                            )  /* 0x02 */
-#define INFO_STAT_WDATA     (( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 )                            )  /* 0x03 */
-#define _INFO_STAT_CRCERR   (                            ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ))  /* 0x06 */
-#define INFO_STAT_ERROR     (( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ))  /* 0x07 */
+#define INFO_STAT_GCMD      (uint8_t)(( 1 << PIN_INFO_STATUS0 )                                                        )  /* 0x01 */
+#define INFO_STAT_RDATA     (uint8_t)(                            ( 1 << PIN_INFO_STATUS1 )                            )  /* 0x02 */
+#define INFO_STAT_WDATA     (uint8_t)(( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 )                            )  /* 0x03 */
+#define _INFO_STAT_CRCERR   (uint8_t)(                            ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ))  /* 0x06 */
+#define INFO_STAT_ERROR     (uint8_t)(( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ))  /* 0x07 */
 
 #define set_status( x )             ( PORT_INFO |= ( x ) )
 #define reset_status()              PORT_INFO &= ~(( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ))
 
-extern void    wdc_wait_for_reset ();
-extern uint8_t wdc_receive_cmd ( uint8_t *buffer );
-extern void    wdc_receive_data ( uint8_t *buffer, uint16_t count );
-extern void    wdc_send_data ( uint8_t *buffer, uint16_t count );
-extern void    wdc_send_error ();
-extern void    wdc_send_errorcode ( uint8_t error );
+extern void wdc_wait_for_reset ();
+extern bool wdc_receive_cmd ( uint8_t *buffer );
+extern void wdc_receive_data ( uint8_t *buffer, uint16_t count );
+extern void wdc_send_data ( uint8_t *buffer, uint16_t count );
+extern void wdc_send_error ();
+extern void wdc_send_errorcode ( uint8_t error );
 
 #endif /* WDC_IF_P8000_H_ */

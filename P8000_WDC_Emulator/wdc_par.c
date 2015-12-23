@@ -25,6 +25,7 @@
  *
  */
 
+#include <stdbool.h>
 #include <avr/pgmspace.h>
 #include <avr/interrupt.h>
 #include "wdc_main.h"
@@ -70,9 +71,9 @@
  */
 
 
-uint8_t par_table[512];
-const uint8_t
-        par_tab_new_dsk[128] =
+static uint8_t par_table[512];
+static const uint8_t
+               par_tab_new_dsk[128] =
 {
     'W', 'D', 'C', '_', '4', '.', '2', 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81,
     0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x64, 0x00, 0x02, 0x12, 0x64, 0x00, 0x01, 0x81, 0x81,
@@ -85,8 +86,8 @@ const uint8_t
     0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81,
 };
 
-const uint8_t
-        par_tab_no_dsk[128] =
+static const uint8_t
+            par_tab_no_dsk[128] =
 {
     'W', 'D', 'C', '_', '4', '.', '2', 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81,
     0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x64, 0x00, 0x02, 0x12, 0x64, 0x00, 0x01, 0x81, 0x81,
@@ -99,9 +100,9 @@ const uint8_t
     0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81,
 };
 
-uint8_t valid_disk = 1;
-uint8_t initialized;
-uint8_t btt_cleared = 0;
+static bool valid_disk = true;
+static bool initialized = false;
+static bool btt_cleared = false;
 
 void wdc_read_par_table ( uint8_t *buffer, uint16_t count )
 {
@@ -136,7 +137,7 @@ void wdc_del_wdc_btt ()
     }
 
     par_table[122 + POS_PAR_WDC_BTT] = 0xff;
-    btt_cleared = 1;
+    btt_cleared = true;
 }
 
 void wdc_read_wdc_btt ( uint8_t *buffer, uint16_t count )
@@ -155,12 +156,12 @@ void wdc_write_wdc_btt ( uint8_t *buffer, uint16_t count )
     } while ( count > 0 );
 }
 
-uint16_t wdc_get_btt_count ()
+static uint16_t wdc_get_btt_count ()
 {
     return par_table[0 + POS_PAR_WDC_BTT] | ( par_table[1 + POS_PAR_WDC_BTT] << 8 );
 }
 
-void wdc_set_btt_count ( uint16_t btt_count )
+static void wdc_set_btt_count ( uint16_t btt_count )
 {
     par_table[0 + POS_PAR_WDC_BTT] = (uint8_t)btt_count;
     par_table[1 + POS_PAR_WDC_BTT] = ( btt_count >> 8 );
@@ -196,7 +197,7 @@ uint8_t wdc_get_hdd_heads ()
     return par_table[17 + POS_PAR_WDC_PAR];
 }
 
-uint16_t wdc_get_hdd_cylinder ()
+static uint16_t wdc_get_hdd_cylinder ()
 {
     return ( par_table[16 + POS_PAR_WDC_PAR] << 8 ) | par_table[15 + POS_PAR_WDC_PAR];
 }
@@ -205,7 +206,7 @@ void wdc_set_disk_invalid ()
 {
     uint8_t i;
 
-    valid_disk = 0;
+    valid_disk = false;
 
     for ( i = 0; i < 128; i++ ) {
         par_table[i] = par_tab_new_dsk[i];
@@ -225,7 +226,7 @@ void wdc_set_disk_valid ()
     zw0 = blocks / 65536;
     zw1 = ( blocks % 65536 ) - 1;
 
-    valid_disk = 1;
+    valid_disk = true;
     par_table[42] = zw1;
     par_table[43] = zw1 >> 8;
     par_table[44] = zw0;
@@ -247,7 +248,7 @@ void wdc_set_no_disk ()
 {
     uint8_t i;
 
-    valid_disk = 0;
+    valid_disk = false;
 
     for ( i = 0; i < 128; i++ ) {
         par_table[i] = par_tab_no_dsk[i];
@@ -256,7 +257,7 @@ void wdc_set_no_disk ()
     wdc_led_no_disk();
 }
 
-uint8_t wdc_get_disk_valid ()
+bool wdc_get_disk_valid ()
 {
     return valid_disk;
 }
@@ -266,17 +267,22 @@ uint8_t wdc_get_num_of_drvs ()
     return par_table[49];
 }
 
-void wdc_set_initialized ( uint8_t num )
+void wdc_unset_initialized ()
 {
-    initialized = num;
+    initialized = false;
 }
 
-uint8_t wdc_get_initialized ()
+void inline wdc_set_initialized ()
+{
+    initialized = true;
+}
+
+bool wdc_get_initialized ()
 {
     return initialized;
 }
 
-uint8_t wdc_get_btt_cleared ()
+bool wdc_get_btt_cleared ()
 {
     return btt_cleared;
 }

@@ -63,13 +63,4 @@ extern uint8_t pata_write_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t n
 
 #define PATA_BLOCKLEN 512
 
-typedef struct {
-    uint16_t cylinders;
-    uint16_t heads;
-    uint16_t sectors;
-    uint32_t sizeinsectors;
-    uint8_t LBAsupport;
-} typeDriveInfo;
-
-
 #endif /* WDC_DRV_PATA_H_ */

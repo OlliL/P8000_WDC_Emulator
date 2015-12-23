@@ -32,27 +32,27 @@
 #ifndef WDC_PAR_H_
 #define WDC_PAR_H_
 
-extern void     wdc_read_par_table ( uint8_t *buffer, uint16_t count );
-extern void     wdc_write_par_table ( uint8_t *buffer, uint16_t count );
+extern void    wdc_read_par_table ( uint8_t *buffer, uint16_t count );
+extern void    wdc_write_par_table ( uint8_t *buffer, uint16_t count );
 
-extern void     wdc_read_wdc_par ( uint8_t *buffer, uint16_t count );
-extern void     wdc_write_wdc_par ( uint8_t *buffer, uint16_t count );
+extern void    wdc_read_wdc_par ( uint8_t *buffer, uint16_t count );
+extern void    wdc_write_wdc_par ( uint8_t *buffer, uint16_t count );
 
-extern void     wdc_del_wdc_btt ();
-extern void     wdc_read_wdc_btt ( uint8_t *buffer, uint16_t count );
-extern void     wdc_write_wdc_btt ( uint8_t *buffer, uint16_t count );
-extern uint16_t wdc_get_btt_count ();
-extern uint8_t  wdc_add_btt_entry ( uint16_t cylinder, uint8_t head );
-extern uint8_t  wdc_get_hdd_sectors ();
-extern uint8_t  wdc_get_hdd_heads ();
-extern void     wdc_set_disk_invalid ();
-extern void     wdc_set_disk_valid ();
-extern uint8_t  wdc_get_disk_valid ();
-extern void     wdc_set_no_disk ();
-extern uint8_t  wdc_get_num_of_drvs ();
-extern void     wdc_set_initialized ( uint8_t num );
-extern uint8_t  wdc_get_initialized ();
-extern uint8_t  wdc_get_btt_cleared ();
+extern void    wdc_del_wdc_btt ();
+extern void    wdc_read_wdc_btt ( uint8_t *buffer, uint16_t count );
+extern void    wdc_write_wdc_btt ( uint8_t *buffer, uint16_t count );
+extern uint8_t wdc_add_btt_entry ( uint16_t cylinder, uint8_t head );
+extern uint8_t wdc_get_hdd_sectors ();
+extern uint8_t wdc_get_hdd_heads ();
+extern void    wdc_set_disk_invalid ();
+extern void    wdc_set_disk_valid ();
+extern bool    wdc_get_disk_valid ();
+extern void    wdc_set_no_disk ();
+extern uint8_t wdc_get_num_of_drvs ();
+extern void    wdc_unset_initialized ();
+extern void    wdc_set_initialized ();
+extern bool    wdc_get_initialized ();
+extern bool    wdc_get_btt_cleared ();
 
 #define POS_PAR_VERSION     0           /* defines at which position in the PAR table the WDC version string starts */
 #define POS_PAR_WDC_PAR     8           /* defines at which position in the PAR table the WDC parameter section starts */

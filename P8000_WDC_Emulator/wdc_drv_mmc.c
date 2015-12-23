@@ -25,10 +25,11 @@
  *
  */
 
-#include <avr/io.h>
 #include "wdc_config.h"
+#include <avr/io.h>
 #include "wdc_avr.h"
 #include "wdc_drv_mmc.h"
+#include "wdc_types.h"
 #include "uart.h"
 
 #define wait_till_send_done() while ( !( SPSR & ( 1 << SPIF ) ) )
@@ -54,24 +55,14 @@
 #define MB_START 0xFC
 #define MB_STOP  0xFD
 
-uint8_t mmc_read_block ( uint8_t *, uint8_t *, uint16_t );
-uint8_t mmc_cmd ( uint8_t * );
-uint8_t mmc_do_init ();
+static uint8_t mmc_read_block ( uint8_t *, uint8_t *, uint16_t );
+static uint8_t mmc_cmd ( uint8_t * );
+static uint8_t mmc_do_init ();
 
-uint8_t is_block_addressing = 0;
-
-typedef union {
-    uint32_t value32;
-    struct {
-        uint8_t ll;
-        uint8_t lh;
-        uint8_t hl;
-        uint8_t hh;
-    } value8;
-} sint32;
+static uint8_t        is_block_addressing = 0;
 
 #ifdef SPI_CRC
-const uint16_t crc16_table[256] = {
+static const uint16_t crc16_table[256] = {
     0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7,
     0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef,
     0x1231, 0x0210, 0x3273, 0x2252, 0x52b5, 0x4294, 0x72f7, 0x62d6,
@@ -106,7 +97,7 @@ const uint16_t crc16_table[256] = {
     0x6e17, 0x7e36, 0x4e55, 0x5e74, 0x2e93, 0x3eb2, 0x0ed1, 0x1ef0
 };
 
-const uint8_t  crc7_table[256] = {
+static const uint8_t  crc7_table[256] = {
     0x00, 0x09, 0x12, 0x1b, 0x24, 0x2d, 0x36, 0x3f,
     0x48, 0x41, 0x5a, 0x53, 0x6c, 0x65, 0x7e, 0x77,
     0x19, 0x10, 0x0b, 0x02, 0x3d, 0x34, 0x2f, 0x26,
@@ -142,7 +133,7 @@ const uint8_t  crc7_table[256] = {
 };
 
 
-uint8_t crc7 ( const uint8_t *buffer, uint8_t len )
+static uint8_t crc7 ( const uint8_t *buffer, uint8_t len )
 {
     uint8_t crc = 0x00;
 
@@ -152,7 +143,7 @@ uint8_t crc7 ( const uint8_t *buffer, uint8_t len )
     return crc;
 }
 
-uint16_t crc16 ( const uint8_t *buffer, uint16_t len )
+static uint16_t crc16 ( const uint8_t *buffer, uint16_t len )
 {
     uint16_t crc = 0x0000;
 
@@ -162,7 +153,7 @@ uint16_t crc16 ( const uint8_t *buffer, uint16_t len )
     return crc;
 }
 
-uint8_t mmc_enable_crc ( uint8_t on_off )
+static uint8_t mmc_enable_crc ( uint8_t on_off )
 {
     uint8_t cmd[] = { CMD59, 0x00, 0x00, 0x00, 0x00, 0xFF };
 
@@ -194,7 +185,7 @@ uint8_t mmc_init ()
     return ret;
 }
 
-uint8_t mmc_do_init ()
+static uint8_t mmc_do_init ()
 {
     uint16_t t16 = 0;
     uint8_t  a;
@@ -322,7 +313,7 @@ uint8_t mmc_do_init ()
     return 0;
 }
 
-uint8_t mmc_cmd ( uint8_t *cmd )
+static uint8_t mmc_cmd ( uint8_t *cmd )
 {
     uint8_t tmp = 0x80;
     uint8_t i = 10;
@@ -432,7 +423,7 @@ uint8_t mmc_write_sector ( uint32_t addr, uint8_t *buffer )
     return 0;
 }
 
-uint8_t mmc_read_block ( uint8_t *cmd, uint8_t *buffer, uint16_t bytes )
+static uint8_t mmc_read_block ( uint8_t *cmd, uint8_t *buffer, uint16_t bytes )
 {
     uint16_t i = 1;
     uint8_t  by;

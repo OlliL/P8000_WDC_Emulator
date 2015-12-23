@@ -29,6 +29,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "wdc_config.h"
 #include <avr/pgmspace.h>
 #include <avr/sleep.h>
@@ -44,18 +45,17 @@
 #include "wdc_if_p8000.h"
 #include "wdc_if_disk.h"
 
-void atmega_setup ( void );
-
-uint8_t       data_buffer[4096];
-uint8_t       cmd_buffer[9];
-const uint8_t wdc_ver_string[] PROGMEM = { 'W', 'D', 'C', '_', '4', '.', '2' };
+static void atmega_setup ( void );
 
 #ifdef MEASURE_DISK_PERFORMANCE
 extern void measure_performance ();
 #else
+static uint8_t       data_buffer[4096];
+static uint8_t       cmd_buffer[9];
+static const uint8_t wdc_ver_string[] PROGMEM = { 'W', 'D', 'C', '_', '4', '.', '2' };
 
 /* switched from local to global for keeping an eye on memory usage */
-extern uint8_t valid_disk;
+extern uint8_t       valid_disk;
 
 #endif
 
@@ -78,27 +78,31 @@ main ( void )
     /* load Parameter Table into RAM if valid */
     if ( wdc_get_disk_valid() ) {
         blockno = 0;
-        wdc_read_sector ( blockno, data_buffer );
+        errorcode = wdc_read_sector ( blockno, data_buffer );
 
-        errorcode = 0;
-        for ( i8 = 0; i8 <= 6; i8++ ) {
-            if ( data_buffer[i8] != (uint8_t)pgm_read_byte_near ( wdc_ver_string + i8 )) {
-                errorcode = 1;
-                break;
+        if ( errorcode == 0 ) {
+            for ( i8 = 0; i8 <= 6; i8++ ) {
+                if ( data_buffer[i8] != (uint8_t)pgm_read_byte_near ( wdc_ver_string + i8 )) {
+                    errorcode = 1;
+                    break;
+                }
             }
-        }
 
-        if ( !errorcode ) {
-            wdc_write_par_table ( data_buffer, WDC_BLOCKLEN );
-            uart_putstring ( PSTR ( "INFO: Disk found and ready to use." ), true );
-            wdc_set_disk_valid();
+            if ( errorcode == 0 ) {
+                wdc_write_par_table ( data_buffer, WDC_BLOCKLEN );
+                uart_putstring ( PSTR ( "INFO: Disk found and ready to use." ), true );
+                wdc_set_disk_valid();
+            } else {
+                uart_putstring ( PSTR ( "INFO: Disk found but Sector 0 is invalid, please execute sa.format to initialize this disk properly." ), true );
+                wdc_set_disk_invalid();
+            }
         } else {
-            uart_putstring ( PSTR ( "INFO: Disk found but Sector 0 is invalid, please execute sa.format to initialize this disk properly." ), true );
-            wdc_set_disk_invalid();
+            uart_putstring ( PSTR ( "INFO: Disk found but Sector 0 can not be read!" ), true );
+            wdc_set_no_disk();
         }
     }
 
-    while ( 1 ) {
+    while ( true ) {
 
         wdc_wait_for_reset();
 
@@ -129,14 +133,14 @@ main ( void )
                     wdc_send_errorcode ( 0xc1 );
                 } else if ( cmd_buffer[0] == CMD_RD_WDC_RAM ) {
                     wdc_send_errorcode ( ERR_NO_DRIVE_READY );
-                    wdc_set_initialized ( 0 );
+                    wdc_unset_initialized();
                 }
                 /* WDC freshly initialized after RESET, the disk is not valid */
             } else if ( wdc_get_initialized()
                         && !wdc_get_disk_valid()
                         && ( cmd_buffer[0] == CMD_WR_WDC_RAM || cmd_buffer[0] == CMD_RD_BLOCK ) ) {
                 wdc_send_errorcode ( ERR_CYL0_NOT_READABLE );
-                wdc_set_initialized ( 0 );
+                wdc_unset_initialized();
                 /* if the disk is not valid, only maintenance commands are allowed */
             } else if ( !wdc_get_disk_valid()
                         && cmd_buffer[0] != CMD_RD_WDC_RAM
@@ -189,7 +193,7 @@ main ( void )
                             errorcode = wdc_write_multiblock ( blockno, data_buffer, data_counter / WDC_BLOCKLEN );
                         }
 
-                        if ( errorcode ) {
+                        if ( errorcode > 0 ) {
                             wdc_send_error();
                         }
                         break;
@@ -206,7 +210,7 @@ main ( void )
                             errorcode = wdc_read_multiblock ( blockno, data_buffer, data_counter / WDC_BLOCKLEN );
                         }
 
-                        if ( errorcode ) {
+                        if ( errorcode > 0 ) {
                             wdc_send_error();
                         } else {
                             wdc_send_data ( data_buffer
@@ -240,7 +244,7 @@ main ( void )
                                       , data_counter
                                       );
 
-                        wdc_set_initialized ( 0 );
+                        wdc_unset_initialized();
                         break;
 
                     case CMD_RD_PARTAB:
@@ -308,18 +312,18 @@ main ( void )
                         errorcode = 1;
                         for ( i8 = 0; i8 < wdc_get_hdd_sectors(); i8++ ) {
                             errorcode = wdc_write_sector ( blockno, data_buffer );
-                            if ( errorcode ) {
+                            if ( errorcode > 0 ) {
                                 break;
                             }
                             blockno++;
                         }
 
-                        if ( errorcode ) {
+                        if ( errorcode > 0 ) {
                             if ( cmd_buffer[0] == CMD_FMTRD_TRACK ) {
                                 wdc_send_error();
                             } else {
                                 errorcode = wdc_add_btt_entry ( cmd_buffer[2] | ( cmd_buffer[3] << 8 ), cmd_buffer[4] );
-                                if ( errorcode ) {
+                                if ( errorcode > 0 ) {
                                     wdc_send_errorcode ( errorcode );
                                 } else {
                                     data_buffer[0] = cmd_buffer[2]; /* Track Low */
@@ -341,7 +345,7 @@ main ( void )
                                            , WDC_BLOCKLEN );
 
                         errorcode = wdc_write_sector ( blockno, data_buffer );
-                        if ( errorcode ) {
+                        if ( errorcode > 0 ) {
                             wdc_send_error();
                         }
                         break;
@@ -363,12 +367,12 @@ main ( void )
                         errorcode = 1;
                         for ( i8 = 0; i8 < wdc_get_hdd_sectors(); i8++ ) {
                             errorcode = wdc_read_sector ( blockno, data_buffer );
-                            if ( errorcode ) {
+                            if ( errorcode > 0 ) {
                                 break;
                             }
                             blockno++;
                         }
-                        if ( errorcode ) {
+                        if ( errorcode > 0 ) {
                             wdc_send_error();
                         }
                         break;
@@ -388,7 +392,7 @@ main ( void )
                             errorcode = wdc_write_multiblock ( blockno, data_buffer, data_counter / WDC_BLOCKLEN );
                         }
 
-                        if ( errorcode ) {
+                        if ( errorcode > 0 ) {
                             wdc_send_error();
                         }
                         break;
@@ -417,7 +421,7 @@ main ( void )
     return 0;
 }
 
-void atmega_setup ( void )
+static void atmega_setup ( void )
 {
     set_sleep_mode ( SLEEP_MODE_IDLE );
 
@@ -433,7 +437,7 @@ void atmega_setup ( void )
     uart_putstring ( PSTR ( "=== P8000 WDC Emulator 2.00 ===" ), true );
     wdc_get_sysconf();
 
-    if ( wdc_init_disk() ) {
+    if ( wdc_init_disk() != 0 ) {
         uart_putstring ( PSTR ( "ERROR: No disk found!" ), true );
         wdc_set_no_disk();
     }
