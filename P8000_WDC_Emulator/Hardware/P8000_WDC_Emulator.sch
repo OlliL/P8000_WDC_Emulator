@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date 22.12.2015 01:11:42
+EESchema Schematic File Version 2  date 29.12.2015 10:23:07
 LIBS:P8000_WDC_Emulator
 LIBS:power
 LIBS:device
@@ -37,7 +37,7 @@ $Descr A3 16535 11700
 encoding utf-8
 Sheet 1 1
 Title "P8000 WDC Emulator"
-Date "21 dec 2015"
+Date "29 dec 2015"
 Rev "2.0"
 Comp ""
 Comment1 ""

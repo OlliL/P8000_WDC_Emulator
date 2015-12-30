@@ -1,4 +1,4 @@
-Cmp-Mod V01 Genere par PcbNew le 22.12.2015 08:13:36
+Cmp-Mod V01 Created by CvPcb (2012-01-19 BZR 3256)-stable date = 29.12.2015 20:12:41
 
 BeginCmp
 TimeStamp = /563D0314;
@@ -11,7 +11,7 @@ BeginCmp
 TimeStamp = /517968F8;
 Reference = 1C2;
 ValeurCmp = 330n;
-IdModule  = C1;
+IdModule  = C1V5;
 EndCmp
 
 BeginCmp
@@ -60,7 +60,7 @@ BeginCmp
 TimeStamp = /5179694E;
 Reference = 2C2;
 ValeurCmp = 330n;
-IdModule  = C1;
+IdModule  = C1V5;
 EndCmp
 
 BeginCmp
@@ -109,7 +109,7 @@ BeginCmp
 TimeStamp = /5179691C;
 Reference = 3C2;
 ValeurCmp = 330n;
-IdModule  = C1;
+IdModule  = C1V5;
 EndCmp
 
 BeginCmp
@@ -151,7 +151,7 @@ BeginCmp
 TimeStamp = /517968CB;
 Reference = C3;
 ValeurCmp = 100n;
-IdModule  = C1;
+IdModule  = C1V5;
 EndCmp
 
 BeginCmp

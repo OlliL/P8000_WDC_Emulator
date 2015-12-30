@@ -61,7 +61,7 @@ uint8_t wdc_write_sector ( uint32_t addr, uint8_t *sector )
 
     errorcode = drv_write_block ( addr, sector );
 
-    if ( errorcode ) {
+    if ( errorcode > 0 ) {
         uart_putstring ( PSTR ( "ERROR: write error at address: " ), false );
         uart_putdw_dec ( addr );
         uart_putstring ( PSTR ( " / errorcode is: " ), false );
@@ -79,7 +79,7 @@ uint8_t wdc_read_sector ( uint32_t addr, uint8_t *sector )
 
     errorcode = drv_read_block ( addr, sector );
 
-    if ( errorcode ) {
+    if ( errorcode > 0 ) {
         uart_putstring ( PSTR ( "ERROR: read error at address: " ), false );
         uart_putdw_dec ( addr );
         uart_putstring ( PSTR ( " / errorcode is: " ), false );
@@ -97,7 +97,7 @@ uint8_t wdc_read_multiblock ( uint32_t addr, uint8_t *sector, uint8_t numblocks 
 
     errorcode = drv_read_multiblock ( addr, sector, numblocks );
 
-    if ( errorcode ) {
+    if ( errorcode > 0 ) {
         uart_putstring ( PSTR ( "ERROR: read error at address: " ), false );
         uart_putdw_dec ( addr );
         uart_putstring ( PSTR ( " / errorcode is: " ), false );
@@ -115,7 +115,7 @@ uint8_t wdc_write_multiblock ( uint32_t addr, uint8_t *sector, uint8_t numblocks
 
     errorcode = drv_write_multiblock ( addr, sector, numblocks );
 
-    if ( errorcode ) {
+    if ( errorcode > 0 ) {
         uart_putstring ( PSTR ( "ERROR: write error at address: " ), false );
         uart_putdw_dec ( addr );
         uart_putstring ( PSTR ( " / errorcode is: " ), false );

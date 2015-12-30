@@ -25,6 +25,7 @@
  *
  */
 
+#include <stdbool.h>
 #include "wdc_config.h"
 #include <avr/io.h>
 #include <util/delay.h>
@@ -35,9 +36,9 @@
 
 static void    deactivate_p8000com();
 static void    activate_p8000com();
-static uint8_t pata_bsy ();
-static uint8_t pata_rdy ();
-static uint8_t pata_drq ();
+static bool pata_bsy ();
+static bool pata_rdy ();
+static bool pata_drq ();
 static uint8_t pata_err ();
 static uint8_t ata_identify ();
 static void    set_io_register ( uint8_t ioreg );
@@ -73,7 +74,7 @@ typedef struct {
     uint16_t heads;
     uint16_t sectors;
     uint32_t sizeinsectors;
-    uint8_t LBAsupport;
+    bool LBAsupport;
 } typeDriveInfo;
 
 static typeDriveInfo ataDriveInfo;
@@ -94,24 +95,24 @@ static void activate_p8000com ()
     enable_p8000com();
 }
 
-static uint8_t inline pata_rdy ()
+static bool inline pata_rdy ()
 {
-    return ( read_io_register ( PATA_R_STATUS_REGISTER ) & ATA_STAT_RDY ) ? (uint8_t)1 : (uint8_t)0;
+    return (( read_io_register ( PATA_R_STATUS_REGISTER ) & ATA_STAT_RDY) == ATA_STAT_RDY) ? true : false;
 }
 
-static uint8_t inline pata_bsy ()
+static bool inline pata_bsy ()
 {
-    return ( read_io_register ( PATA_R_STATUS_REGISTER ) & ATA_STAT_BSY ) ? (uint8_t)1 : (uint8_t)0;
+    return ( ( read_io_register ( PATA_R_STATUS_REGISTER ) & ATA_STAT_BSY)  ==  ATA_STAT_BSY) ? true : false;
 }
 
-static uint8_t inline pata_drq ()
+static bool inline pata_drq ()
 {
-    return ( read_io_register ( PATA_R_STATUS_REGISTER ) & ATA_STAT_DRQ ) ? (uint8_t)1 : (uint8_t)0;
+    return ((  read_io_register ( PATA_R_STATUS_REGISTER ) & ATA_STAT_DRQ) == ATA_STAT_DRQ)  ? true : false;
 }
 
 static uint8_t inline pata_err ()
 {
-    if ( read_io_register ( PATA_R_STATUS_REGISTER ) & ATA_STAT_ERR ) {
+    if ( ( read_io_register ( PATA_R_STATUS_REGISTER ) & ATA_STAT_ERR) == ATA_STAT_ERR) {
         return read_io_register ( PATA_R_ERROR_REGISTER );
     }
     return (uint8_t)0;
@@ -160,7 +161,7 @@ static void pata_read_bytes ( uint8_t *buffer, uint8_t numblocks )
 
     do {
         while ( pata_bsy() ) {}
-        if ( pata_err() ) {
+        if ( pata_err() > 0 ) {
             return;
         }
         while ( !pata_drq() ) {}
@@ -175,7 +176,7 @@ static void pata_read_bytes ( uint8_t *buffer, uint8_t numblocks )
             *buffer++ = port_ata_data_8h_get();
             ata_rd_disable();
         } while ( ++i != 0 ); /* overflow, 512 bytes read */
-    } while ( --numblocks );
+    } while ( --numblocks > 0 );
 }
 
 static void pata_write_bytes ( uint8_t *buffer, uint8_t numblocks )
@@ -184,7 +185,7 @@ static void pata_write_bytes ( uint8_t *buffer, uint8_t numblocks )
 
     do {
         while ( pata_bsy() ) {}
-        if ( pata_err() ) {
+        if ( pata_err() > 0 ) {
             return;
         }
         while ( !pata_drq() ) {}
@@ -201,7 +202,7 @@ static void pata_write_bytes ( uint8_t *buffer, uint8_t numblocks )
             nop();
             ata_wr_disable();
         } while ( ++i != 0 );  /* overflow, 512 bytes written */
-    } while ( --numblocks );
+    } while ( --numblocks > 0 );
 }
 
 static uint8_t ata_identify ()
@@ -228,7 +229,7 @@ static uint8_t ata_identify ()
     ataDriveInfo.cylinders = word[1];
     ataDriveInfo.heads = word[3];
     ataDriveInfo.sectors = word[6];
-    ataDriveInfo.LBAsupport = word[53] & ( 1 << 0 );
+    ataDriveInfo.LBAsupport = (word[53] & ( 1 << 0 )) == 1 ? true : false;
     ataDriveInfo.sizeinsectors = word[60] | (uint32_t)word[61] << 16;
 
     if ( !ataDriveInfo.LBAsupport ) {
@@ -264,24 +265,24 @@ static uint8_t ata_identify ()
     }
     uart_put_nl();
     uart_putstring ( PSTR ( "INFO: Capabilities: " ), false );
-    if ( word[49] & ( 1 << 8 )) {
+    if ( (word[49] & ( 1 << 8 )) > 0) {
         uart_putstring ( PSTR ( "DMA, " ), false );
     }
-    if ( word[49] & ( 1 << 9 )) {
+    if ( (word[49] & ( 1 << 9 )) > 0) {
         uart_putstring ( PSTR ( "LBA, " ), false );
     }
-    if ( word[49] & ( 1 << 10 )) {
+    if ( (word[49] & ( 1 << 10 )) > 0) {
         uart_putstring ( PSTR ( "IORDY may be disabled, " ), false );
     }
-    if ( word[49] & ( 1 << 11 )) {
+    if ( (word[49] & ( 1 << 11 )) > 0) {
         uart_putstring ( PSTR ( "IORDY, " ), false );
     }
-    if ( word[49] & ( 1 << 13 )) {
+    if ( (word[49] & ( 1 << 13 )) > 0) {
         uart_putstring ( PSTR ( "Standard standby timer values, " ), false );
     }
     uart_put_nl();
 
-    if ( word[53] & ( 1 << 0 )) {
+    if ( (word[53] & ( 1 << 0 )) > 0) {
         uart_putstring ( PSTR ( "INFO: Number of current logical cylinders: " ), false );
         uart_putw_dec ( word[54] );
         uart_put_nl();
@@ -295,7 +296,7 @@ static uint8_t ata_identify ()
         uart_putdw_dec ( word[57] | (uint32_t)word[58] << 16 );
         uart_put_nl();
     }
-    if ( word[53] & ( 1 << 1 )) {
+    if ( (word[53] & ( 1 << 1 ))  > 0 ) {
         uart_putstring ( PSTR ( "INFO: User addressable sectors for 28-bit commands: " ), false );
         uart_putdw_dec ( word[60] | (uint32_t)word[61] << 16 );
         uart_put_nl();
@@ -324,7 +325,7 @@ static uint8_t ata_identify ()
         uart_putw_dec ( word[69] );
         uart_put_nl();
     }
-    if ( word[53] & ( 1 << 2 )) {
+    if ( (word[53] & ( 1 << 2 )) > 0 ) {
         uart_putstring ( PSTR ( "INFO: Ultra DMA modes: " ), false );
         uart_putw_dec ( word[88] );
         uart_put_nl();
