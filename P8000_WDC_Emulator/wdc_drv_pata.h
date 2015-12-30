@@ -52,14 +52,11 @@ extern uint8_t pata_write_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t n
 #define ATA_CHS_DRIVE_0 0xA0
 
 /* implemented ATA commands */
-#define CMD_IDENTIFY_DEVICE              0xEC
-#define CMD_READ_SECTORS                 0x20
 #define CMD_RECALIBRATE                  0x10
-#define CMD_READ_BUFFER                  0xE4
-#define CMD_WRITE_BUFFER                 0xE8
-#define CMD_SET_FEATURES                 0xEF
+#define CMD_READ_SECTORS                 0x20
 #define CMD_WRITE_SECTORS                0x30
-#define CMD_FORMAT_TRACK                 0x50
+#define CMD_INITIALIZE_DRIVE             0x91
+#define CMD_IDENTIFY_DEVICE              0xEC
 
 #define PATA_BLOCKLEN 512
 

@@ -103,6 +103,9 @@ static void wdc_write_data_to_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc
 
 bool wdc_receive_cmd ( uint8_t *buffer )
 {
+    /* needed for at least sa.format when issuing command 0x28 */
+    _delay_us ( 100 );
+
     return wdc_read_data_from_p8k ( buffer
                                   , 9
                                   , INFO_STAT_GCMD

@@ -51,7 +51,7 @@
 
 /* jumper */
 #define configure_jp_mmc_pata()     DDR_JUMPER &= ~( 1 << PIN_JP_MMC_PATA )
-#define jp_mmc_pata_set()           ((PIN_JUMPER & ( 1 << PIN_JP_MMC_PATA )) > 0 )
+#define jp_mmc_pata_set()           (( PIN_JUMPER & ( 1 << PIN_JP_MMC_PATA )) > 0 )
 
 /* led */
 #define configure_pin_led1()        DDR_LED |= ( 1 << PIN_INFO_LED1 )
