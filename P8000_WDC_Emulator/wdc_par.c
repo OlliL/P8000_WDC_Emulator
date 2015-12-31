@@ -87,7 +87,7 @@ static const uint8_t
 };
 
 static const uint8_t
-            par_tab_no_dsk[128] =
+                par_tab_no_dsk[128] =
 {
     'W', 'D', 'C', '_', '4', '.', '2', 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81,
     0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x64, 0x00, 0x02, 0x12, 0x64, 0x00, 0x01, 0x81, 0x81,
@@ -100,9 +100,11 @@ static const uint8_t
     0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81,
 };
 
-static bool valid_disk = true;
-static bool initialized = false;
-static bool btt_cleared = false;
+static bool     valid_disk = true;
+static bool     initialized = false;
+static bool     btt_cleared = false;
+static uint32_t blocks;
+
 
 void wdc_read_par_table ( uint8_t *buffer, uint16_t count )
 {
@@ -202,6 +204,26 @@ static uint16_t wdc_get_hdd_cylinder ()
     return ( par_table[16 + POS_PAR_WDC_PAR] << 8 ) | par_table[15 + POS_PAR_WDC_PAR];
 }
 
+uint8_t wdc_validate_blockno ( uint32_t blockno )
+{
+    if ( valid_disk == true && blockno > blocks ) {
+        return ERR_PAR_BLOCK_TO_HIGH;
+    }
+    return 0;
+}
+
+uint8_t wdc_validate_cylhead ( uint16_t req_cylinder, uint8_t req_head, uint32_t blockno )
+{
+    if ( valid_disk == true ) {
+        if ( req_cylinder > wdc_get_hdd_cylinder()) {
+            return ERR_PAR_BLOCK_TO_HIGH;
+        } else if ( req_head > wdc_get_hdd_heads() ) {
+            return ERR_PAR_BLOCK_TO_HIGH;
+        }
+    }
+    return wdc_validate_blockno ( blockno );
+}
+
 void wdc_set_disk_invalid ()
 {
     uint8_t i;
@@ -217,7 +239,6 @@ void wdc_set_disk_invalid ()
 
 void wdc_set_disk_valid ()
 {
-    uint32_t blocks;
     uint16_t zw0, zw1;
 
     blocks = (uint32_t)wdc_get_hdd_sectors() * (uint32_t)wdc_get_hdd_heads() * (uint32_t)wdc_get_hdd_cylinder()

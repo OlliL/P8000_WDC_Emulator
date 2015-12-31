@@ -55,7 +55,10 @@
 #define CMD_ST_PARBTT         0xc2              /* store Parameter block and BTT on hard disk       */
 
 #define ERR_STANDARD          0x01
+#define ERR_PAR_HEAD_TO_HIGH  0x02
 #define ERR_DRIVE_NOT_READY   0x03
+#define ERR_PAR_CYL_TO_HIGH   0x04
+#define ERR_PAR_BLOCK_TO_HIGH 0x05
 #define ERR_SECT_N_ON_SURFACE 0x0A
 #define ERR_BTT_FULL          0x16
 #define ERR_BTT_INVALID       0x18

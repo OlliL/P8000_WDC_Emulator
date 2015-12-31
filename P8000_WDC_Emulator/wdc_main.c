@@ -183,10 +183,16 @@ main ( void )
                         data_counter = ( cmd_buffer[7] << 8 ) | cmd_buffer[6];
 
                         blockno = wdc_p8kblock2diskblock ( ( (uint32_t)cmd_buffer[5] << 24 ) | ( (uint32_t)cmd_buffer[4] << 16 ) | ( (uint16_t)cmd_buffer[3] << 8 ) | cmd_buffer[2] );
+
+                        errorcode = wdc_validate_blockno ( blockno );
+                        if ( errorcode != 0 ) {
+                            wdc_send_errorcode ( errorcode );
+                            break;
+                        }
+
                         wdc_receive_data ( data_buffer
                                          , data_counter
                                          );
-                        errorcode = 1;
                         if ( data_counter == WDC_BLOCKLEN ) {
                             errorcode = wdc_write_sector ( blockno, data_buffer );
                         } else {
@@ -203,7 +209,12 @@ main ( void )
 
                         blockno = wdc_p8kblock2diskblock ( ( (uint32_t)cmd_buffer[5] << 24 ) | ( (uint32_t)cmd_buffer[4] << 16 ) | ( (uint16_t)cmd_buffer[3] << 8 ) | cmd_buffer[2] );
 
-                        errorcode = 1;
+                        errorcode = wdc_validate_blockno ( blockno );
+                        if ( errorcode != 0 ) {
+                            wdc_send_errorcode ( errorcode );
+                            break;
+                        }
+
                         if ( data_counter == WDC_BLOCKLEN ) {
                             errorcode = wdc_read_sector ( blockno, data_buffer );
                         } else {
@@ -308,6 +319,11 @@ main ( void )
                                                        , cmd_buffer[4]
                                                        , cmd_buffer[5]
                                                        );
+                        errorcode = wdc_validate_cylhead ( cmd_buffer[2] | ( cmd_buffer[3] << 8 ), cmd_buffer[4], blockno );
+                        if ( errorcode != 0 ) {
+                            wdc_send_errorcode ( errorcode );
+                            break;
+                        }
 
                         errorcode = 1;
                         for ( i8 = 0; i8 < wdc_get_hdd_sectors(); i8++ ) {
@@ -364,6 +380,13 @@ main ( void )
                                                        , cmd_buffer[4]
                                                        , cmd_buffer[5]
                                                        );
+
+                        errorcode = wdc_validate_cylhead ( cmd_buffer[2] | ( cmd_buffer[3] << 8 ), cmd_buffer[4], blockno );
+                        if ( errorcode != 0 ) {
+                            wdc_send_errorcode ( errorcode );
+                            break;
+                        }
+
                         errorcode = 1;
                         for ( i8 = 0; i8 < wdc_get_hdd_sectors(); i8++ ) {
                             errorcode = wdc_read_sector ( blockno, data_buffer );
@@ -372,6 +395,7 @@ main ( void )
                             }
                             blockno++;
                         }
+
                         if ( errorcode > 0 ) {
                             wdc_send_error();
                         }
@@ -384,7 +408,12 @@ main ( void )
                                                        , cmd_buffer[4]
                                                        , cmd_buffer[5]
                                                        );
-                        errorcode = 1;
+
+                        errorcode = wdc_validate_cylhead ( cmd_buffer[2] | ( cmd_buffer[3] << 8 ), cmd_buffer[4], blockno );
+                        if ( errorcode != 0 ) {
+                            wdc_send_errorcode ( errorcode );
+                            break;
+                        }
 
                         if ( data_counter == WDC_BLOCKLEN ) {
                             errorcode = wdc_write_sector ( blockno, data_buffer );

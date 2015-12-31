@@ -54,6 +54,10 @@ extern void    wdc_set_initialized ();
 extern bool    wdc_get_initialized ();
 extern bool    wdc_get_btt_cleared ();
 
+extern uint8_t wdc_validate_blockno ( uint32_t blockno );
+extern uint8_t wdc_validate_cylhead ( uint16_t req_cylinder, uint8_t req_head, uint32_t blockno );
+
+
 #define POS_PAR_VERSION     0           /* defines at which position in the PAR table the WDC version string starts */
 #define POS_PAR_WDC_PAR     8           /* defines at which position in the PAR table the WDC parameter section starts */
 #define POS_PAR_WDC_BTT     0x88        /* defines at which position in the PAR table the BTT section starts */
