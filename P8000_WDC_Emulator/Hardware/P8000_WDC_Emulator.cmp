@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2012-01-19 BZR 3256)-stable date = 29.12.2015 20:12:41
+Cmp-Mod V01 Created by CvPcb (2012-01-19 BZR 3256)-stable date = 31.12.2015 15:11:39
 
 BeginCmp
 TimeStamp = /563D0314;
@@ -8,9 +8,9 @@ IdModule  = C1;
 EndCmp
 
 BeginCmp
-TimeStamp = /517968F8;
-Reference = 1C2;
-ValeurCmp = 330n;
+TimeStamp = /4FDF60B2;
+Reference = 1C5;
+ValeurCmp = 1u;
 IdModule  = C1V5;
 EndCmp
 
@@ -57,9 +57,9 @@ IdModule  = C1;
 EndCmp
 
 BeginCmp
-TimeStamp = /5179694E;
-Reference = 2C2;
-ValeurCmp = 330n;
+TimeStamp = /56852A5E;
+Reference = 2C5;
+ValeurCmp = 1u;
 IdModule  = C1V5;
 EndCmp
 
@@ -106,9 +106,9 @@ IdModule  = C1;
 EndCmp
 
 BeginCmp
-TimeStamp = /5179691C;
-Reference = 3C2;
-ValeurCmp = 330n;
+TimeStamp = /56852A5F;
+Reference = 3C5;
+ValeurCmp = 1u;
 IdModule  = C1V5;
 EndCmp
 
@@ -127,10 +127,24 @@ IdModule  = C1;
 EndCmp
 
 BeginCmp
+TimeStamp = /568529DF;
+Reference = 4C5;
+ValeurCmp = 1u;
+IdModule  = C1V5;
+EndCmp
+
+BeginCmp
 TimeStamp = /4FDF8149;
 Reference = 5C1;
 ValeurCmp = 100n;
 IdModule  = C1;
+EndCmp
+
+BeginCmp
+TimeStamp = /568529DE;
+Reference = 5C5;
+ValeurCmp = 1u;
+IdModule  = C1V5;
 EndCmp
 
 BeginCmp
@@ -141,16 +155,9 @@ IdModule  = C1;
 EndCmp
 
 BeginCmp
-TimeStamp = /4FDF744A;
-Reference = 7C1;
-ValeurCmp = 100n;
-IdModule  = C1;
-EndCmp
-
-BeginCmp
-TimeStamp = /517968CB;
-Reference = C3;
-ValeurCmp = 100n;
+TimeStamp = /56852F4E;
+Reference = 6C5;
+ValeurCmp = 1u;
 IdModule  = C1V5;
 EndCmp
 
@@ -162,13 +169,6 @@ IdModule  = C1V5;
 EndCmp
 
 BeginCmp
-TimeStamp = /4FDF60B2;
-Reference = C5;
-ValeurCmp = 1u;
-IdModule  = C1V5;
-EndCmp
-
-BeginCmp
 TimeStamp = /4FDE10FA;
 Reference = D1;
 ValeurCmp = ATMEGA1284-P;
@@ -176,9 +176,9 @@ IdModule  = DIP-40__600;
 EndCmp
 
 BeginCmp
-TimeStamp = /4FDE2C78;
+TimeStamp = /56852925;
 Reference = D2;
-ValeurCmp = MAX3232;
+ValeurCmp = MAX232;
 IdModule  = DIP-16__300;
 EndCmp
 
@@ -253,7 +253,7 @@ IdModule  = R3;
 EndCmp
 
 BeginCmp
-TimeStamp = /4FE36B44;
+TimeStamp = /56852966;
 Reference = X1;
 ValeurCmp = CONN_5X2;
 IdModule  = PIN_ARRAY_5x2;
