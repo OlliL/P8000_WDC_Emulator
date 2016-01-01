@@ -56,11 +56,10 @@
 #define MB_START 0xFC
 #define MB_STOP  0xFD
 
-static uint8_t mmc_read_block ( uint8_t *, uint8_t *, uint16_t );
 static uint8_t mmc_cmd ( uint8_t * );
 static uint8_t mmc_do_init ();
 
-static bool           is_block_addressing = false;
+static bool is_block_addressing = false;
 
 uint8_t mmc_init ()
 {
@@ -290,19 +289,35 @@ uint8_t mmc_write_sector ( uint32_t addr, uint8_t *buffer )
     return 0;
 }
 
-static uint8_t mmc_read_block ( uint8_t *cmd, uint8_t *buffer, uint16_t bytes )
+uint8_t mmc_read_sector ( uint32_t addr, uint8_t *buffer )
 {
+    sint32   x;
     uint8_t  resp;
     uint16_t i = 1;
+    uint8_t  cmd[] = { CMD17, 0x00, 0x00, 0x00, 0x00, 0xFF };
 
     enable_mmc();
+
+    /* convert blocks to bytes */
+    if ( !is_block_addressing ) {
+        addr = addr * MMC_BLOCKLEN;
+    }
+    x.value32 = addr;
+
+    cmd[1] = x.value8.hh;
+    cmd[2] = x.value8.hl;
+    cmd[3] = x.value8.lh;
+    cmd[4] = x.value8.ll;
+
     wait_till_card_ready();
 
-    /* send command */
+    /*
+     * send CMD17
+     */
     resp = mmc_cmd ( cmd );
     if ( resp != 0 ) {
-	    disable_mmc();
-	    return resp;
+        disable_mmc();
+        return resp;
     }
 
     /* wait for startbyte */
@@ -325,7 +340,7 @@ static uint8_t mmc_read_block ( uint8_t *cmd, uint8_t *buffer, uint16_t bytes )
         wait_till_send_done();
         *buffer = recv_byte();
         xmit_byte ( 0xff );
-    } while ( i < bytes );
+    } while ( i < MMC_BLOCKLEN );
 
     /* handle CRC */
     wait_till_send_done();
@@ -336,32 +351,11 @@ static uint8_t mmc_read_block ( uint8_t *cmd, uint8_t *buffer, uint16_t bytes )
     return 0;
 }
 
-uint8_t mmc_read_sector ( uint32_t addr, uint8_t *buffer )
-{
-    sint32 x;
-    /*
-     * send CMD17
-     */
-    uint8_t cmd[] = { CMD17, 0x00, 0x00, 0x00, 0x00, 0xFF };
-
-    /* convert blocks to bytes */
-    if ( !is_block_addressing ) {
-        addr = addr * MMC_BLOCKLEN;
-    }
-    x.value32 = addr;
-    cmd[1] = x.value8.hh;
-    cmd[2] = x.value8.hl;
-    cmd[3] = x.value8.lh;
-    cmd[4] = x.value8.ll;
-
-    return mmc_read_block ( cmd, buffer, MMC_BLOCKLEN );
-}
-
 uint8_t mmc_read_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks )
 {
     sint32  x;
     uint8_t resp;
-    uint8_t cmd[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF };
+    uint8_t cmd[] = { CMD18, 0x00, 0x00, 0x00, 0x00, 0xFF };
 
     enable_mmc();
 
@@ -371,7 +365,6 @@ uint8_t mmc_read_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks 
     }
     x.value32 = addr;
 
-    cmd[0] = CMD18;
     cmd[1] = x.value8.hh;
     cmd[2] = x.value8.hl;
     cmd[3] = x.value8.lh;
@@ -390,10 +383,10 @@ uint8_t mmc_read_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks 
 
     /* read the number of requested blocks */
     do {
-        uint16_t i;
+        uint16_t i = 1;
 
         numblocks--;
-        i = MMC_BLOCKLEN - 1;
+
         /* wait for startbyte */
         while ( true ) {
             send_dummy_byte();
@@ -404,17 +397,21 @@ uint8_t mmc_read_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks 
 
         send_dummy_byte();
         *buffer = recv_byte();
+        xmit_byte ( 0xff );
+
         /* receive the block */
         do {
-            xmit_byte ( 0xff );
             buffer++;
-            i--;
+            i++;
             wait_till_send_done();
             *buffer = recv_byte();
-        } while ( i > 0 );
+            xmit_byte ( 0xff );
+        } while ( i < MMC_BLOCKLEN );
+
         /* handle CRC */
+        wait_till_send_done();
         send_dummy_byte();
-        send_dummy_byte();
+
         buffer++;
 
     } while ( numblocks > 0 );
@@ -450,7 +447,7 @@ uint8_t mmc_write_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks
     enable_mmc();
     wait_till_card_ready();
 
-   /* convert blocks to bytes */
+    /* convert blocks to bytes */
     if ( !is_block_addressing ) {
         addr = addr * MMC_BLOCKLEN;
     }
@@ -488,12 +485,10 @@ uint8_t mmc_write_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks
         numblocks--;
         wait_till_send_done();
         /* handle CRC */
-        xmit_byte ( 0xff );
-        wait_till_send_done();
-        xmit_byte ( 0xff );
+        send_dummy_byte();
+        send_dummy_byte();
 
-        wait_till_send_done();
-
+        /* check for errors */
         send_dummy_byte();
         if ( ( recv_byte() & 0x1F ) != 0x05 ) {
             disable_mmc();
