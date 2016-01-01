@@ -30,6 +30,7 @@
  */
 
 #include <stdio.h>
+#include <stdbool.h>
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <avr/sfr_defs.h>
@@ -49,9 +50,9 @@ void uart_init ()
     UBRR0H = (uint8_t)( UBBR_VALUE >> 8 );
     UBRR0L = (uint8_t)UBBR_VALUE;
     /* Set frame format to 8 data bits, no parity, 1 stop bit */
-    UCSR0C = ( 0 << USBS0 ) | ( 1 << UCSZ01 ) | ( 1 << UCSZ00 );
+    UCSR0C = (uint8_t)( 0 << USBS0 ) | ( 1 << UCSZ01 ) | ( 1 << UCSZ00 );
     /* Enable receiver and transmitter */
-    UCSR0B = ( 1 << RXEN0 ) | ( 1 << TXEN0 );
+    UCSR0B = (uint8_t)( 1 << RXEN0 ) | ( 1 << TXEN0 );
 }
 
 void uart_putc ( uint8_t data )
@@ -88,7 +89,7 @@ void uart_putw_dec ( uint16_t w )
     while ( num > 0 ) {
         uint8_t b = w / num;
 
-        if ( b > 0 || started || num == 1 ) {
+        if ( b > 0 || started == 0 || num == 1 ) {
             uart_putc ( '0' + b );
             started = 1;
         }
@@ -106,7 +107,7 @@ void uart_putdw_dec ( uint32_t dw )
     while ( num > 0 ) {
         uint8_t b = dw / num;
 
-        if ( b > 0 || started || num == 1 ) {
+        if ( b > 0 || started == 0 || num == 1 ) {
             uart_putc ( '0' + b );
             started = 1;
         }
@@ -126,7 +127,7 @@ void uart_putstring ( PGM_P str, bool newline )
 {
     uint8_t i = 0;
 
-    while ( 1 ) {
+    while ( true ) {
         char c = pgm_read_byte ( &str[i] );
 
         if ( c != '\0' ) {

@@ -50,13 +50,10 @@ static void atmega_setup ( void );
 #ifdef MEASURE_DISK_PERFORMANCE
 extern void measure_performance ();
 #else
+/* switched from local to global for keeping an eye on memory usage */
 static uint8_t       data_buffer[4096];
 static uint8_t       cmd_buffer[9];
 static const uint8_t wdc_ver_string[] PROGMEM = { 'W', 'D', 'C', '_', '4', '.', '2' };
-
-/* switched from local to global for keeping an eye on memory usage */
-extern uint8_t       valid_disk;
-
 #endif
 
 int __attribute__( ( OS_main ) )

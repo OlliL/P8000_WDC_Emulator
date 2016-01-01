@@ -206,7 +206,7 @@ static uint16_t wdc_get_hdd_cylinder ()
 
 uint8_t wdc_validate_blockno ( uint32_t blockno )
 {
-    if ( valid_disk == true && blockno > blocks ) {
+    if ( valid_disk && blockno > blocks ) {
         return ERR_PAR_BLOCK_TO_HIGH;
     }
     return 0;
@@ -214,7 +214,7 @@ uint8_t wdc_validate_blockno ( uint32_t blockno )
 
 uint8_t wdc_validate_cylhead ( uint16_t req_cylinder, uint8_t req_head, uint32_t blockno )
 {
-    if ( valid_disk == true ) {
+    if ( valid_disk ) {
         if ( req_cylinder > wdc_get_hdd_cylinder()) {
             return ERR_PAR_BLOCK_TO_HIGH;
         } else if ( req_head > wdc_get_hdd_heads() ) {

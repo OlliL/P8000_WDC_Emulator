@@ -25,6 +25,7 @@
  *
  */
 
+#include <stdbool.h>
 #include "wdc_config.h"
 #include <avr/io.h>
 #include "wdc_avr.h"
@@ -32,8 +33,8 @@
 #include "wdc_types.h"
 #include "uart.h"
 
-#define wait_till_send_done() while ( !( SPSR & ( 1 << SPIF ) ) )
-#define wait_till_card_ready() do { send_dummy_byte(); } while ( !recv_byte() )
+#define wait_till_send_done() while ( ( SPSR & ( 1 << SPIF ) ) == 0 )
+#define wait_till_card_ready() do { send_dummy_byte(); } while ( recv_byte() == 0 )
 #define send_dummy_byte() SPDR = 0xFF; wait_till_send_done()
 #define recv_byte() SPDR
 #define xmit_byte( x ) SPDR = x
@@ -59,7 +60,7 @@ static uint8_t mmc_read_block ( uint8_t *, uint8_t *, uint16_t );
 static uint8_t mmc_cmd ( uint8_t * );
 static uint8_t mmc_do_init ();
 
-static uint8_t        is_block_addressing = 0;
+static bool           is_block_addressing = false;
 
 #ifdef SPI_CRC
 static const uint16_t crc16_table[256] = {
@@ -252,7 +253,7 @@ static uint8_t mmc_do_init ()
     } else {
 
         send_dummy_byte();
-        is_block_addressing = 0;
+        is_block_addressing = false;
 
         /* prepare next cmd */
         cmd[0] = CMD1;
@@ -285,8 +286,8 @@ static uint8_t mmc_do_init ()
         if ( mmc_cmd ( cmd ) == 0 ) {
             send_dummy_byte();
             a = recv_byte();
-            if ( a & 0x40 ) {
-                is_block_addressing = 1;
+            if ( ( a & 0x40 ) == 0x40 ) {
+                is_block_addressing = true;
                 uart_putstring ( PSTR ( "INFO: SD2.0 disk with block addressing has been found" ), true );
             } else {
                 uart_putstring ( PSTR ( "INFO: SD2.0 disk with byte addressing has been found" ), true );
@@ -337,13 +338,13 @@ static uint8_t mmc_cmd ( uint8_t *cmd )
      * it should be discarded before receive the response of the CMD12
      */
     if ( cmd0 == ( CMD12 ) ) {
-        recv_byte();
+        tmp = recv_byte();
     }
 
     do {
         send_dummy_byte();
         tmp = recv_byte();
-    } while ( ( tmp & 0x80 ) && --i );
+    } while ( ( tmp & 0x80 ) == 0x80 && --i > 0 );
 
     return tmp;
 }
@@ -442,7 +443,7 @@ static uint8_t mmc_read_block ( uint8_t *cmd, uint8_t *buffer, uint16_t bytes )
     }
 
     /* wait for startbyte */
-    while ( 1 ) {
+    while ( true ) {
         send_dummy_byte();
         if ( recv_byte() == SB_START ) {
             break;
@@ -590,7 +591,7 @@ uint8_t mmc_read_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks 
         numblocks--;
         i = MMC_BLOCKLEN - 1;
         /* wait for startbyte */
-        while ( 1 ) {
+        while ( true ) {
             send_dummy_byte();
             if ( recv_byte() == SB_START ) {
                 break;
@@ -606,7 +607,7 @@ uint8_t mmc_read_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks 
             i--;
             wait_till_send_done();
             *buffer = recv_byte();
-        } while ( i );
+        } while ( i > 0 );
         /* handle CRC */
 #ifdef SPI_CRC
         buffer = buffer - ( MMC_BLOCKLEN - 1 );
@@ -625,7 +626,7 @@ uint8_t mmc_read_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks 
         buffer++;
 #endif
 
-    } while ( numblocks );
+    } while ( numblocks > 0 );
 #ifdef MMC_MULTIBLOCK
     wait_till_card_ready();
 
@@ -655,8 +656,6 @@ uint8_t mmc_write_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks
     sint32  x;
     uint8_t resp;
     uint8_t cmd[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF };
-
-/*    uint16_t i; */
 
     enable_mmc();
     wait_till_card_ready();
@@ -743,7 +742,7 @@ uint8_t mmc_write_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks
         xmit_byte ( SB_START );
 #endif
         /* actually transfer the data */
-        for ( i = MMC_BLOCKLEN; i; i-- ) {
+        for ( i = MMC_BLOCKLEN; i > 0; i-- ) {
             uint8_t data = *buffer;
             buffer++;
             wait_till_send_done();
@@ -779,7 +778,7 @@ uint8_t mmc_write_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks
         wait_till_card_ready();
 #endif
 
-    } while ( numblocks );
+    } while ( numblocks > 0 );
 
 #ifdef MMC_MULTIBLOCK
     wait_till_card_ready();

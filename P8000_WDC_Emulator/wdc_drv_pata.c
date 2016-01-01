@@ -44,7 +44,7 @@ static uint8_t ata_identify ();
 static void    set_io_register ( uint8_t ioreg );
 static uint8_t read_io_register ( uint8_t ioreg );
 static void    write_io_register ( uint8_t ioreg, uint8_t byte );
-static void    pata_read_bytes ( uint8_t *buffer, uint8_t numblocks );
+static void    pata_read_bytes ( /*@out@*/ uint8_t *buffer, uint8_t numblocks );
 static void    pata_write_bytes ( uint8_t *buffer, uint8_t numblocks );
 
 /*
@@ -157,7 +157,7 @@ static void inline write_io_register ( uint8_t ioreg, uint8_t byte )
     ata_wr_disable();
 }
 
-static void pata_read_bytes ( uint8_t *buffer, uint8_t numblocks )
+static void pata_read_bytes ( /*@out@*/ uint8_t *buffer, uint8_t numblocks )
 {
     uint8_t i = 0;
 
@@ -217,6 +217,9 @@ static uint8_t ata_identify ()
     write_io_register ( PATA_W_COMMAND_REGISTER, CMD_IDENTIFY_DEVICE );
 
     pata_read_bytes ( buffer, 1 );
+    if ( pata_err() > 0 ) {
+        return 1;
+    }
 
     i = 0;
     for ( n = 0; n < 512; n += 2 ) {
@@ -226,7 +229,7 @@ static uint8_t ata_identify ()
 
     /* check if data is nonsense */
     if ( word[1] == word[3] ) {
-        return 1;
+        return 2;
     }
 
 
