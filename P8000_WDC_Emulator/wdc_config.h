@@ -132,16 +132,6 @@
 #define PIN_ATADA_DA1       PINB2
 #define PIN_ATADA_DA2       PINB3
 
-/*
- * maximum performance with both turned off
- *
- *
- * #define MMC_PRESET_MULTIBLOCKCOUNT 1
- * #define SPI_CRC       1
- */
-
-#define MMC_MULTIBLOCK 1
-
 #define MEASURE_DISK_PERFORMANCE 1
 #undef  MEASURE_DISK_PERFORMANCE
 
