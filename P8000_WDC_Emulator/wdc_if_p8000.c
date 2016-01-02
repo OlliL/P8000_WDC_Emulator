@@ -37,7 +37,7 @@ void wdc_wait_for_reset ()
 {
     wdc_set_initialized();
 
-    while ( isset_info_reset() ) {}
+    while ( info_rst_is_high() ) {}
 }
 
 static bool wdc_read_data_from_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status )
@@ -46,56 +46,55 @@ static bool wdc_read_data_from_p8k ( uint8_t *buffer, uint16_t count, uint8_t wd
 
     configure_port_data_read();
 
-    while ( !isset_info_te() ) {
-        if ( isset_info_reset() ) {
+    while ( !info_te_is_high() ) {
+        if ( info_rst_is_high() ) {
             return false;
         }
     }
 
-    while ( !isset_info_wdardy() ) {}
+    while ( !info_wardy_is_high() ) {}
 
     do {
-        while ( isset_info_wdardy() ) {}
+        while ( info_wardy_is_high() ) {}
         assert_astb();
         *buffer++ = port_data_get();
         deassert_astb();
-        while ( !isset_info_wdardy() ) {}
-        count--;
-    } while ( count > 0 );
+        while ( !info_wardy_is_high() ) {}
+    } while ( --count > 0 );
 
     reset_status();
 
     return true;
 }
 
-static void wdc_write_data_to_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status )
+static  void wdc_write_data_to_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status )
 {
     assert_tr();
     set_status ( wdc_status );
 
-    while ( isset_info_te() ) {}
+    while ( info_te_is_high() ) {}
 
     configure_port_data_write();
 
-    while ( !isset_info_wdardy() ) {}
+    while ( !info_wardy_is_high() ) {}
 
     do {
-        while ( isset_info_wdardy() ) {}
-        assert_astb();
         port_data_set ( *buffer++ );
+        while ( info_wardy_is_high() ) {}
+        assert_astb();
+		nop();
         deassert_astb();
-        while ( !isset_info_wdardy() ) {}
-        count--;
-    } while ( count > 0 );
+        while ( !info_wardy_is_high() ) {}
+    } while ( --count > 0 );
 
-    while ( isset_info_wdardy() ) {}
+    while ( info_wardy_is_high() ) {}
 
     /* toggle /ASB once more */
     assert_astb();
     nop();
     deassert_astb();
 
-    while ( !isset_info_wdardy() ) {}
+    while ( !info_wardy_is_high() ) {}
 
     deassert_tr();
     reset_status();

@@ -29,9 +29,9 @@
 #define WDC_IF_P8000_H_
 
 /* input pin handling */
-#define isset_info_reset()          ((( PIN_INFO ) & ( 1 << PIN_INFO_RST )) != 0 )
-#define isset_info_te()             ((( PIN_INFO ) & ( 1 << PIN_INFO_TE )) != 0 )
-#define isset_info_wdardy()         ((( PIN_INFO ) & ( 1 << PIN_INFO_WDARDY )) != 0 )
+#define info_rst_is_high()          ((( PIN_INFO ) & ( 1 << PIN_INFO_RST )) != 0 )
+#define info_te_is_high()             ((( PIN_INFO ) & ( 1 << PIN_INFO_TE )) != 0 )
+#define info_wardy_is_high()         ((( PIN_INFO ) & ( 1 << PIN_INFO_WDARDY )) != 0 )
 
 #define port_data_set( x )          ( PORT_DATA = ( x ) )
 #define port_data_get()             PIN_DATA
