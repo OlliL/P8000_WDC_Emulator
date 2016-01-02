@@ -419,7 +419,11 @@ main ( void )
                         }
 
                         if ( errorcode > 0 ) {
-                            wdc_send_error();
+	                        wdc_send_error();
+	                        } else {
+	                        wdc_send_data ( data_buffer
+	                        , data_counter
+	                        );
                         }
                         break;
 
