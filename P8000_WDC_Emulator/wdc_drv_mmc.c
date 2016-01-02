@@ -265,7 +265,7 @@ uint8_t mmc_write_sector ( uint32_t addr, uint8_t *buffer )
     xmit_byte ( SB_START );
 
     /* write a single block */
-    for ( i = MMC_BLOCKLEN; i; i-- ) {
+    for ( i = MMC_BLOCKLEN; i > 0; i-- ) {
         uint8_t data = *buffer;
         buffer++;
         wait_till_send_done();
