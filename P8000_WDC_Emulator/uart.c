@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2013 Oliver Lehmann
+ * Copyright (c) 2013, 2016 Oliver Lehmann
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,12 +25,9 @@
  *
  */
 
-/*
- * $Id: uart.c,v 1.6 2013/05/04 15:40:14 olivleh1 Exp $
- */
-
 #include <stdio.h>
 #include <stdbool.h>
+#include <avr/pgmspace.h>
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <avr/sfr_defs.h>

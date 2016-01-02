@@ -29,17 +29,8 @@
  * $Id: uart.h,v 1.2 2013/05/04 15:40:14 olivleh1 Exp $
  */
 
-#ifndef UART_H
-#define UART_H
-
-#include <stdint.h>
-#include <stdbool.h>
-#include <avr/pgmspace.h>
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+#ifndef UART_H_
+#define UART_H_
 
 void uart_init ();
 
@@ -55,8 +46,4 @@ void uart_putstring ( PGM_P str, bool newline );
 
 void uart_put_nl ();
 
-#ifdef __cplusplus
-}
-#endif
-
-#endif
+#endif /* UART_H_ */

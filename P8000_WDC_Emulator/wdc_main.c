@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2012, 2013, 2015 Oliver Lehmann
+ * Copyright (c) 2012, 2013, 2015, 2016 Oliver Lehmann
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,12 +25,12 @@
  *
  */
 
-/* TODO:  - right now, BTT entries are not taken into account */
+/* Right now, BTT entries are ignored and not considered when reading or writing to a disk */
 
+#include "wdc_config.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "wdc_config.h"
 #include <avr/pgmspace.h>
 #include <avr/sleep.h>
 #include <avr/interrupt.h>

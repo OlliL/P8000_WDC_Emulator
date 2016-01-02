@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2012, 2013, 2015 Oliver Lehmann
+ * Copyright (c) 2012, 2013, 2015, 2016 Oliver Lehmann
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,14 +25,15 @@
  *
  */
 
+#include "wdc_config.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <avr/pgmspace.h>
 #include <avr/sleep.h>
-#include "wdc_config.h"
 #include "wdc_if_disk.h"
 #include "wdc_ram.h"
 #include "uart.h"

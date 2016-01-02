@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2012, 2013 Oliver Lehmann
+ * Copyright (c) 2012, 2013, 2016 Oliver Lehmann
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,10 +25,7 @@
  *
  */
 
-/*
- * $Id: wdc_ram.c,v 1.7 2013/05/04 15:40:15 olivleh1 Exp $
- */
-
+#include "wdc_config.h"
 #include <avr/pgmspace.h>
 #include "wdc_ram.h"
 

@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2012, 2013, 2015 Oliver Lehmann
+ * Copyright (c) 2012, 2013, 2015, 2016 Oliver Lehmann
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,8 +32,8 @@
  *  - SUT_CKSEL EXTXOSC_8MHZ_XX_16KCK_65MS
  */
 
-#include <avr/io.h>
 #include "wdc_config.h"
+#include <avr/io.h>
 #include "wdc_avr.h"
 #include "wdc_drv_mmc.h"
 #include "wdc_drv_pata.h"
