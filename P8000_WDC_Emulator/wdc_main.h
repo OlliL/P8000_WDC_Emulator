@@ -29,7 +29,7 @@
 #define MAIN_H_
 
 #define CMD_RD_SECTOR         0x01              /* read data beginning at given sector              */
-#define ___CMD_WR_SECTOR      0x02              /* write sector                                     */
+#define CMD_WR_SECTOR      0x02              /* write sector                                     */
 #define ___CMD_FMT_TRACK      0x04              /* format a track                                   */
 #define CMD_RD_WDC_RAM        0x08              /* read data from WDC RAM                           */
 #define ___CMD_RDBTT_SECTOR   0x11              /* read sector taking BTT into account              */

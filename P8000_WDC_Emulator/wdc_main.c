@@ -413,9 +413,9 @@ main ( void )
                         }
 
                         if ( data_counter == WDC_BLOCKLEN ) {
-                            errorcode = wdc_write_sector ( blockno, data_buffer );
+                            errorcode = wdc_read_sector ( blockno, data_buffer );
                         } else {
-                            errorcode = wdc_write_multiblock ( blockno, data_buffer, data_counter / WDC_BLOCKLEN );
+                            errorcode = wdc_read_multiblock ( blockno, data_buffer, data_counter / WDC_BLOCKLEN );
                         }
 
                         if ( errorcode > 0 ) {
@@ -424,6 +424,34 @@ main ( void )
                             wdc_send_data ( data_buffer
                                           , data_counter
                                           );
+                        }
+                        break;
+                    case CMD_WR_SECTOR:
+                        data_counter = ( cmd_buffer[7] << 8 ) | cmd_buffer[6];
+
+                        blockno = wdc_sector2diskblock ( cmd_buffer[2] | ( cmd_buffer[3] << 8 )
+                                                       , cmd_buffer[4]
+                                                       , cmd_buffer[5]
+                                                       );
+
+                        errorcode = wdc_validate_cylhead ( cmd_buffer[2] | ( cmd_buffer[3] << 8 ), cmd_buffer[4], blockno );
+                        if ( errorcode != 0 ) {
+                            wdc_send_errorcode ( errorcode );
+                            break;
+                        }
+
+                        wdc_receive_data ( data_buffer
+                                         , data_counter
+                                         );
+
+                        if ( data_counter == WDC_BLOCKLEN ) {
+                            errorcode = wdc_write_sector ( blockno, data_buffer );
+                        } else {
+                            errorcode = wdc_write_multiblock ( blockno, data_buffer, data_counter / WDC_BLOCKLEN );
+                        }
+
+                        if ( errorcode ) {
+                            wdc_send_error();
                         }
                         break;
 
