@@ -80,8 +80,8 @@ static void wdc_write_data_to_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc
     while ( !info_wardy_is_high() ) {}
 
     do {
-        port_data_set ( *buffer++ );
         while ( info_wardy_is_high() ) {}
+        port_data_set ( *buffer++ );
         assert_astb();
         nop();
         nop();

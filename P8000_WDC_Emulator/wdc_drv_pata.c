@@ -83,6 +83,8 @@ static uint8_t       p8000_info_restore;
 static void deactivate_p8000com ()
 {
     disable_p8000com();
+    nop();
+    nop();
     p8000_info_restore = PORT_INFO;
 }
 
@@ -91,7 +93,15 @@ static void activate_p8000com ()
     ata_wr_disable();
     ata_rd_disable();
     wdc_config_p8000_ports();
-    PORT_INFO = p8000_info_restore;
+
+/*    PORT_INFO = p8000_info_restore; */
+
+    PORT_INFO &= ~(( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ));
+    deassert_astb();
+    deassert_tr();
+    nop();
+    nop();
+
     enable_p8000com();
 }
 

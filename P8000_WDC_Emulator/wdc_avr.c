@@ -76,16 +76,18 @@ void wdc_config_p8000_ports ()
     configure_pin_wdardy();
     configure_pin_reset();
     configure_port_data_read();
-    configure_p8000_com();
 }
 
 void wdc_init_avr ()
 {
     /* configure the P8000 interface */
     wdc_config_p8000_ports();
+    configure_p8000_com();
+
     deassert_astb();
     deassert_tr();
-
+    nop();
+    nop();
     enable_p8000com();
 
     /* Jumper configuration */
