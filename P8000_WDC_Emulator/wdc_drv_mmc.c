@@ -172,7 +172,7 @@ static uint8_t mmc_do_init ()
 
     if ( is_sd2 == 1 ) {
         /*
-         * Send CMD58 to find out if the SD 2.0 card wants block or by addressing.
+         * Send CMD58 to find out if the SD 2.0 card wants block or byte addressing.
          */
         cmd[0] = CMD58;
         cmd[1] = 0x00;
@@ -426,7 +426,7 @@ uint8_t mmc_read_multiblock ( uint32_t addr, uint8_t *buffer, uint8_t numblocks 
     cmd[1] = cmd[2] = cmd[3] = cmd[4] = 0;
 
     /*
-     * My Apacer SD-Card sends sometimes 0x7f as response to the CMD12 even if the write was
+     * My Apacer SD-Card sends sometimes 0x7f as response to the CMD12 even if the read was
      * successfull. Because of that, no checking of the response to CMD12 is done.
      */
     mmc_cmd ( cmd );

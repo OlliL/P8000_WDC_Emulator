@@ -78,14 +78,12 @@ typedef struct {
 } typeDriveInfo;
 
 static typeDriveInfo ataDriveInfo;
-static uint8_t       p8000_info_restore;
 
 static void deactivate_p8000com ()
 {
     disable_p8000com();
     nop();
     nop();
-    p8000_info_restore = PORT_INFO;
 }
 
 static void activate_p8000com ()
@@ -94,11 +92,13 @@ static void activate_p8000com ()
     ata_rd_disable();
     wdc_config_p8000_ports();
 
-/*    PORT_INFO = p8000_info_restore; */
-
     PORT_INFO &= ~(( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ));
     deassert_astb();
     deassert_tr();
+
+    nop();
+    nop();
+    nop();
     nop();
     nop();
 
@@ -243,15 +243,15 @@ static uint8_t ata_identify ()
         return 2;
     }
 
-
     ataDriveInfo.cylinders = word[1];
     ataDriveInfo.heads = word[3];
     ataDriveInfo.sectors = word[6];
     ataDriveInfo.LBAsupport = ( word[53] & ( 1 << 0 )) == 1 ? true : false;
-    ataDriveInfo.sizeinsectors = word[60] | (uint32_t)word[61] << 16;
 
     if ( !ataDriveInfo.LBAsupport ) {
         ataDriveInfo.sizeinsectors = ataDriveInfo.cylinders * ataDriveInfo.heads * ataDriveInfo.sectors;
+    } else {
+        ataDriveInfo.sizeinsectors = word[60] | (uint32_t)word[61] << 16;
     }
 
     uart_putstring ( PSTR ( "INFO: PATA disk has been found" ), true );

@@ -80,8 +80,8 @@ static void wdc_write_data_to_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc
     while ( !info_wardy_is_high() ) {}
 
     do {
-        while ( info_wardy_is_high() ) {}
         port_data_set ( *buffer++ );
+        while ( info_wardy_is_high() ) {}
         assert_astb();
         nop();
         nop();
@@ -108,7 +108,7 @@ static void wdc_write_data_to_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc
 bool wdc_receive_cmd ( uint8_t *buffer )
 {
     /* needed for at least sa.format when issuing command 0x28, 0x58 */
-    _delay_us ( 200 );
+    _delay_us ( 500 );
 
     return wdc_read_data_from_p8k ( buffer
                                   , 9
