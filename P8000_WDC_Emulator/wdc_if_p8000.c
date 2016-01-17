@@ -40,6 +40,24 @@ void wdc_wait_for_reset ()
     while ( info_rst_is_high() ) {}
 }
 
+static inline void wait_until_ardy_asserted ()
+{
+    do {
+        if ( !info_wardy_is_high() && !info_wardy_is_high() ) {
+            return;
+        }
+    } while ( true );
+}
+
+static inline void wait_until_ardy_deasserted ()
+{
+    do {
+        if ( info_wardy_is_high() && info_wardy_is_high() ) {
+            return;
+        }
+    } while ( true );
+}
+
 static bool wdc_read_data_from_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status )
 {
     set_status ( wdc_status );
@@ -52,15 +70,14 @@ static bool wdc_read_data_from_p8k ( uint8_t *buffer, uint16_t count, uint8_t wd
         }
     }
 
-    while ( !info_wardy_is_high() ) {}
+    wait_until_ardy_deasserted();
 
     do {
-        while ( info_wardy_is_high() ) {}
+        wait_until_ardy_asserted();
         assert_astb();
         *buffer++ = port_data_get();
-        nop();
         deassert_astb();
-        while ( !info_wardy_is_high() ) {}
+        wait_until_ardy_deasserted();
     } while ( --count > 0 );
 
     reset_status();
@@ -81,25 +98,23 @@ static void wdc_write_data_to_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc
 
     do {
         port_data_set ( *buffer++ );
-        while ( info_wardy_is_high() ) {}
+        wait_until_ardy_asserted();
         assert_astb();
         nop();
         nop();
         nop();
-        nop();
         deassert_astb();
-        while ( !info_wardy_is_high() ) {}
+        wait_until_ardy_deasserted();
     } while ( --count > 0 );
 
     /* toggle /ASB once more */
-    while ( info_wardy_is_high() ) {}
+    wait_until_ardy_asserted();
     assert_astb();
     nop();
     nop();
     nop();
-    nop();
     deassert_astb();
-    while ( !info_wardy_is_high() ) {}
+    wait_until_ardy_deasserted();
 
     deassert_tr();
     reset_status();
@@ -108,7 +123,7 @@ static void wdc_write_data_to_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc
 bool wdc_receive_cmd ( uint8_t *buffer )
 {
     /* needed for at least sa.format when issuing command 0x28, 0x58 */
-    _delay_us ( 500 );
+    _delay_us ( 200 );
 
     return wdc_read_data_from_p8k ( buffer
                                   , 9
