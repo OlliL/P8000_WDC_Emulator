@@ -36,8 +36,8 @@
 #define configure_pin_status2()     DDR_INFO |= ( 1 << PIN_INFO_STATUS2 )
 #define configure_pin_tr()          DDR_INFO |= ( 1 << PIN_INFO_TR )
 #define configure_pin_astb()        DDR_INFO |= ( 1 << PIN_INFO_ASTB )
-#define configure_pin_te()          DDR_INFO &= ~( 1 << PIN_INFO_TE )
-#define configure_pin_wdardy()      DDR_INFO &= ~( 1 << PIN_INFO_WDARDY )
+#define configure_pin_te()          DDR_INFO &= ~( 1 << PIN_INFO_TE ); PORT_INFO |= ( 1 << PIN_INFO_TE )
+#define configure_pin_wdardy()      DDR_INFO &= ~( 1 << PIN_INFO_WDARDY ); PORT_INFO |= ( 1 << PIN_INFO_WDARDY )
 #define configure_pin_reset()       DDR_INFO &= ~( 1 << PIN_INFO_RST ); PORT_INFO |= ( 1 << PIN_INFO_RST )
 #define configure_p8000_com()       DDR_P8000_ACT |= ( 1 << PIN_P8000_COM )
 
