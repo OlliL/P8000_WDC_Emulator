@@ -42,20 +42,20 @@ void wdc_wait_for_reset ()
 
 static inline void wait_until_ardy_asserted ()
 {
-    do {
-        if ( !info_wardy_is_high() && !info_wardy_is_high() ) {
-            return;
-        }
-    } while ( true );
+	do {
+		if ( !info_wardy_is_high() && !info_wardy_is_high() ) {
+			return;
+		}
+	} while ( true );
 }
 
 static inline void wait_until_ardy_deasserted ()
 {
-    do {
-        if ( info_wardy_is_high() && info_wardy_is_high() ) {
-            return;
-        }
-    } while ( true );
+	do {
+		if ( info_wardy_is_high() && info_wardy_is_high() ) {
+			return;
+		}
+	} while ( true );
 }
 
 static bool wdc_read_data_from_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status )
@@ -64,8 +64,8 @@ static bool wdc_read_data_from_p8k ( uint8_t *buffer, uint16_t count, uint8_t wd
 
     configure_port_data_read();
 
-    while ( !info_te_is_high() ) {
-        if ( info_rst_is_high() ) {
+    while ( !info_te_is_high() || !info_te_is_high() ) {
+        if ( info_rst_is_high() && info_rst_is_high() ) {
             return false;
         }
     }
@@ -90,11 +90,11 @@ static void wdc_write_data_to_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc
     assert_tr();
     set_status ( wdc_status );
 
-    while ( info_te_is_high() ) {}
+    while ( info_te_is_high() || info_te_is_high() ) {}
 
     configure_port_data_write();
 
-    while ( !info_wardy_is_high() ) {}
+    wait_until_ardy_deasserted();
 
     do {
         port_data_set ( *buffer++ );
