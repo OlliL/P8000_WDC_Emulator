@@ -1,0 +1,10 @@
+(module P8000_WDC_Emulator:HOLE_4x8mm_4mmclear_copper (layer F.Cu) (tedit 51E06E83)
+  (fp_text reference HOLE_4x8mm (at 0 0) (layer F.SilkS) hide
+    (effects (font (thickness 0.3048)))
+  )
+  (fp_text value VAL** (at 0 0) (layer F.SilkS) hide
+    (effects (font (thickness 0.3048)))
+  )
+  (pad "" thru_hole oval (at 0 0) (size 11.99896 15.99946) (drill oval 4.0005 8.001) (layers *.Cu *.Mask F.SilkS)
+    (solder_mask_margin 0.50038) (clearance 0.50038))
+)
