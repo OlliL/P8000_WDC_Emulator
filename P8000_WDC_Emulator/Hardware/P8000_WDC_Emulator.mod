@@ -1,4 +1,4 @@
-PCBNEW-LibModule-V1  14.07.2013 14:28:07
+PCBNEW-LibModule-V1  25.01.2016 21:00:32
 # encoding utf-8
 $INDEX
 4PIN_MOLEX
@@ -16,6 +16,7 @@ PCB_PUSH
 PIN_ARRAY_5x2
 SW_6x6
 TO92-LM317
+VIA-0.6mm
 crystal_hc-49s
 mini_din-M_DIN6
 pin_strip_6
@@ -1472,4 +1473,21 @@ Po 0 0
 .LocalClearance 1674
 $EndPAD
 $EndMODULE  HOLE_4x8mm_pad
+$MODULE VIA-0.6mm
+Po 0 0 0 15 56A67EDD 00000000 ~~
+Li VIA-0.6mm
+Sc 00000000
+AR 
+Op 0 0 0
+T0 0 -1750 600 600 0 120 N I 21 N "VIA-0.6mm"
+T1 250 1500 600 600 0 120 N I 21 N "VAL**"
+$PAD
+Sh "1" C 236 236 0 0 0
+Dr 118 0 0
+At STD N 0000FFFF
+Ne 0 ""
+Po 0 0
+.LocalClearance 1
+$EndPAD
+$EndMODULE  VIA-0.6mm
 $EndLIBRARY
