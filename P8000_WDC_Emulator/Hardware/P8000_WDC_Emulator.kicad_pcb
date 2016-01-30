@@ -3,7 +3,7 @@
   (general
     (links 226)
     (no_connects 0)
-    (area 19.428459 21.160739 163.809681 181.940201)
+    (area 19.428459 20.282295 164.490038 181.940201)
     (thickness 1.6002)
     (drawings 45)
     (tracks 1219)
@@ -20,8 +20,8 @@
   )
 
   (layers
-    (0 Front signal hide)
-    (31 Back signal hide)
+    (0 Front signal)
+    (31 Back signal)
     (32 B.Adhes user)
     (33 F.Adhes user hide)
     (34 B.Paste user)
