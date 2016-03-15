@@ -15,15 +15,15 @@
   (page A4)
   (title_block
     (title "P8000 WDC Emulator")
-    (date "25 jan 2016")
+    (date 2016-03-15)
     (rev 2.0)
   )
 
   (layers
-    (0 Front signal hide)
-    (31 Back signal hide)
+    (0 Front signal)
+    (31 Back signal)
     (32 B.Adhes user)
-    (33 F.Adhes user hide)
+    (33 F.Adhes user)
     (34 B.Paste user)
     (35 F.Paste user)
     (36 B.SilkS user)
