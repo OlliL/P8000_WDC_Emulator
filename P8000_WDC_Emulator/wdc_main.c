@@ -101,12 +101,10 @@ main ( void )
 
     while ( true ) {
 
-        wdc_wait_for_reset();
-
         if ( wdc_receive_cmd ( cmd_buffer ) ) {
 
 #if DEBUG >= 2
-#if DEBUG >= 3
+#if DEBUG >= 4
             uart_putstring ( PSTR ( "DEBUG: received command is: " ), false );
 #endif
             uart_putc_hex ( cmd_buffer[0] );

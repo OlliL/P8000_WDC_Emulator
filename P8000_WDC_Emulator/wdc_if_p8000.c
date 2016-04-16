@@ -33,39 +33,37 @@
 #include "wdc_if_p8000.h"
 #include "wdc_par.h"
 
-void wdc_wait_for_reset ()
-{
-    wdc_set_initialized();
-
-    while ( info_rst_is_high() ) {}
-}
-
 static inline void wait_until_ardy_asserted ()
 {
-	do {
-		if ( !info_wardy_is_high() && !info_wardy_is_high() ) {
-			return;
-		}
-	} while ( true );
+    do {
+        if ( !info_wardy_is_high() && !info_wardy_is_high() ) {
+            return;
+        }
+    } while ( true );
 }
 
 static inline void wait_until_ardy_deasserted ()
 {
-	do {
-		if ( info_wardy_is_high() && info_wardy_is_high() ) {
-			return;
-		}
-	} while ( true );
+    do {
+        if ( info_wardy_is_high() && info_wardy_is_high() ) {
+            return;
+        }
+    } while ( true );
 }
 
 static bool wdc_read_data_from_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status )
 {
+    if ( info_rst_is_high() && info_rst_is_high() ) {
+        return false;
+    }
+
     set_status ( wdc_status );
 
     configure_port_data_read();
 
     while ( !info_te_is_high() || !info_te_is_high() ) {
         if ( info_rst_is_high() && info_rst_is_high() ) {
+            reset_status();
             return false;
         }
     }
