@@ -1,4 +1,4 @@
-(module VIA-0.6mm (layer F.Cu) (tedit 56AD0D24)
+(module VIA-0.6mm (layer F.Cu) (tedit 5724F4F4)
   (fp_text reference VIA-0.6mm (at 0 -4.445) (layer F.SilkS) hide
     (effects (font (thickness 0.3048)))
   )
@@ -6,5 +6,5 @@
     (effects (font (thickness 0.3048)))
   )
   (pad 1 thru_hole circle (at 0 0) (size 0.59944 0.59944) (drill 0.35) (layers *.Cu)
-    (clearance 0.00254))
+    (clearance 0.00254) (zone_connect 2))
 )
