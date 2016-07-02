@@ -1,6 +1,6 @@
 
 
------------------------ Apacer SD 60x 2GB ----------------------- 
+----------------------- SD-Card Apacer SD 60x 2GB ----------------------- 
 AP2GSD60
 540824525053
 S482C002GRFBB
@@ -55,7 +55,7 @@ Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
 End
 
 
------------------------ Transcend SD 2GB ----------------------- 
+----------------------- SD-Card Transcend SD 2GB ----------------------- 
 6451AG 2G 02DS1
 1555528 8163
 
@@ -108,7 +108,7 @@ Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
 End
 
 
------------------------ MicroSD 2GB ----------------------- 
+----------------------- MicroSD-Card  2GB ----------------------- 
 MMAGR02GUECA-MB
 F6910000 052
 
@@ -161,8 +161,8 @@ Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
 End
 
 
------------------------ Kingston 512MB ----------------------- 
-30330 - 026.ADOLF P775692X02
+----------------------- SD-Card Kingston 512MB ----------------------- 
+30330 - 026.A0OLF P775692X02
 0532 TM4269M
 
 === P8000 WDC Emulator 2.10 - 2016-06-26 ===
@@ -214,7 +214,7 @@ Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
 End
 
 
------------------------ Kingston Elite Pro 512MB ----------------------- 
+----------------------- SD-Card Kingston Elite Pro 512MB ----------------------- 
 9930330-018.A00
 D000  BK5FA108455
 
@@ -265,3 +265,138 @@ Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
 107.514040 KiB/sec
 107.905400 KiB/sec
 End
+
+
+----------------------- SD-Card SanDisk 256MB ----------------------- 
+AR0311NC
+
+=== P8000 WDC Emulator 2.10 - 2016-07-02 ===
+INFO: SDCard init start
+INFO: SDSC disk has been found
+INFO: Performance Measurement.
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+567.823360 KiB/sec
+573.000240 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+320.878480 KiB/sec
+318.882050 KiB/sec
+Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):
+496.579130 KiB/sec
+496.612000 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+318.863980 KiB/sec
+318.909180 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+573.657650 KiB/sec
+573.657650 KiB/sec
+Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
+514.238710 KiB/sec
+513.968510 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+573.657650 KiB/sec
+573.657650 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+318.796230 KiB/sec
+318.913730 KiB/sec
+Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
+514.121220 KiB/sec
+514.132930 KiB/sec
+Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):
+496.655850 KiB/sec
+496.590060 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+573.672300 KiB/sec
+573.672300 KiB/sec
+Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):
+496.699710 KiB/sec
+496.622990 KiB/sec
+Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
+514.226930 KiB/sec
+514.309200 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+318.931790 KiB/sec
+318.967960 KiB/sec
+End
+
+
+----------------------- SD-Card Kingston 2GB ----------------------- 
+P801849
+31135-002.A00LF
+SD-M02G
+0920 T19721D
+
+=== P8000 WDC Emulator 2.10 - 2016-07-02 ===
+INFO: SDCard init start
+INFO: SD2.0 disk with byte addressing has been found
+INFO: Performance Measurement.
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+585.129940 KiB/sec
+585.175600 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+61.323109 KiB/sec
+56.146549 KiB/sec
+Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):
+464.137660 KiB/sec
+464.616850 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+59.419746 KiB/sec
+56.422226 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+584.749690 KiB/sec
+585.662960 KiB/sec
+Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
+379.881500 KiB/sec
+318.376710 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+586.533200 KiB/sec
+586.609620 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+55.888542 KiB/sec
+55.169640 KiB/sec
+Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
+385.584290 KiB/sec
+319.216860 KiB/sec
+Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):
+466.592040 KiB/sec
+466.572630 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+586.441470 KiB/sec
+586.502620 KiB/sec
+Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):
+466.534000 KiB/sec
+466.543610 KiB/sec
+Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
+385.610750 KiB/sec
+319.493350 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+56.842152 KiB/sec
+55.136112 KiB/sec
+End
+
+----------------------- SD-Card CORSAIR 1GB 60x ----------------------- 
+SD1GBA0618SEKU4TWN
+
+----------------------- SD-Card SanDisk 2GB ----------------------- 
+
+=== P8000 WDC Emulator 2.10 - 2016-07-02 ===
+INFO: SDCard init start
+INFO: SD2.0 disk with byte addressing has been found
+INFO: Performance Measurement.
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+571.138490 KiB/sec
+571.138490 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+237.026730 KiB/sec
+236.361920 KiB/sec
+Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):
+456.917720 KiB/sec
+456.880620 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+234.394550 KiB/sec
+239.064130 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+570.921080 KiB/sec
+571.051510 KiB/sec
+Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
+ERROR: write error at address: 409624 / errorcode is: 02
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
