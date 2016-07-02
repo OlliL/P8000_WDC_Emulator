@@ -69,7 +69,9 @@ main ( void )
     atmega_setup();
 
 #ifdef MEASURE_DISK_PERFORMANCE
-    measure_performance();
+    if ( wdc_get_disk_valid()) {
+        measure_performance();
+    }
 #else
 
     /* load Parameter Table into RAM if valid */
@@ -87,8 +89,28 @@ main ( void )
 
             if ( errorcode == 0 ) {
                 wdc_write_par_table ( data_buffer, WDC_BLOCKLEN );
-                uart_putstring ( PSTR ( "INFO: Disk found and ready to use." ), true );
                 wdc_set_disk_valid();
+
+                uart_putstring ( PSTR ( "INFO: Disk found and ready to use." ), true );
+                uart_putstring ( PSTR ( "INFO: Heads: " ), false );
+                uart_putw_dec ( wdc_get_hdd_heads());
+                uart_put_nl();
+
+                uart_putstring ( PSTR ( "INFO: Cylinders: " ), false );
+                uart_putw_dec ( wdc_get_hdd_cylinder());
+                uart_put_nl();
+
+                uart_putstring ( PSTR ( "INFO: Sectors: " ), false );
+                uart_putw_dec ( wdc_get_hdd_sectors());
+                uart_put_nl();
+
+                uart_putstring ( PSTR ( "INFO: Blocks: " ), false );
+                uart_putdw_dec ( wdc_get_hdd_blocks());
+                uart_put_nl();
+
+                uart_putstring ( PSTR ( "INFO: Useable blocks: " ), false );
+                uart_putdw_dec ( wdc_get_hdd_blocks() - ((uint32_t)wdc_get_hdd_heads() * (uint32_t)wdc_get_hdd_sectors()));
+                uart_put_nl();
             } else {
                 uart_putstring ( PSTR ( "INFO: Disk found but Sector 0 is invalid, please execute sa.format to initialize this disk properly." ), true );
                 wdc_set_disk_invalid();
@@ -121,45 +143,49 @@ main ( void )
             uart_put_nl();
 #endif
 
-            /* no drive attached */
-            if ( wdc_get_initialized() && wdc_get_num_of_drvs() == 0 ) {
-                if ( cmd_buffer[0] == CMD_WR_WDC_RAM
-                     || cmd_buffer[0] == CMD_RD_BLOCK ) {
-                    wdc_send_errorcode ( 0xc1 );
-                } else if ( cmd_buffer[0] == CMD_RD_WDC_RAM ) {
-                    wdc_send_errorcode ( ERR_NO_DRIVE_READY );
-                    wdc_unset_initialized();
-                }
-                /* WDC freshly initialized after RESET, the disk is not valid */
-            } else if ( wdc_get_initialized()
-                        && !wdc_get_disk_valid()
-                        && ( cmd_buffer[0] == CMD_WR_WDC_RAM || cmd_buffer[0] == CMD_RD_BLOCK ) ) {
-                wdc_send_errorcode ( ERR_CYL0_NOT_READABLE );
+            /* drive problems - error occurs on the first command only*/
+            if ( wdc_get_initialized() ) {
                 wdc_unset_initialized();
-                /* if the disk is not valid, only maintenance commands are allowed */
-            } else if ( !wdc_get_disk_valid()
-                        && cmd_buffer[0] != CMD_RD_WDC_RAM
-                        && cmd_buffer[0] != CMD_FMTRD_TRACK
-                        && cmd_buffer[0] != CMD_WR_WDC_RAM
-                        && cmd_buffer[0] != CMD_FMTBTT_TRACK
-                        && cmd_buffer[0] != CMD_RD_PARTAB
-                        && cmd_buffer[0] != CMD_RD_WDCERR
-                        && cmd_buffer[0] != CMD_VER_TRACK
-                        && cmd_buffer[0] != CMD_DL_BTTAB
-                        && cmd_buffer[0] != CMD_RD_BTTAB
-                        && cmd_buffer[0] != CMD_WR_BTTAB
-                        && cmd_buffer[0] != CMD_WR_PARTAB
-                        && cmd_buffer[0] != CMD_ST_PARBTT
-                      ) {
-                if ( cmd_buffer[0] == CMD_RD_BLOCK ) {
-                    wdc_send_errorcode ( ERR_SECT_N_ON_SURFACE );
+                if ( wdc_get_num_of_drvs() == 0 ) {
+                    wdc_send_errorcode ( ERR_NO_DRIVE_READY );
+                    continue;
+                } else if ( !wdc_get_disk_valid()) {
+                    wdc_send_errorcode ( ERR_CYL0_NOT_READABLE );
+                    continue;
+                }
+            }
+
+            /* if the disk is not valid, only maintenance commands are allowed */
+            if ( wdc_get_num_of_drvs() > 0 && !wdc_get_disk_valid()
+                 && cmd_buffer[0] != CMD_RD_WDC_RAM
+                 && cmd_buffer[0] != CMD_FMTRD_TRACK
+                 && cmd_buffer[0] != CMD_WR_WDC_RAM
+                 && cmd_buffer[0] != CMD_FMTBTT_TRACK
+                 && cmd_buffer[0] != CMD_RD_PARTAB
+                 && cmd_buffer[0] != CMD_RD_WDCERR
+                 && cmd_buffer[0] != CMD_DL_BTTAB
+                 && !( cmd_buffer[0] == CMD_RD_BTTAB && wdc_get_btt_cleared())
+                 && cmd_buffer[0] != CMD_WR_BTTAB
+                 && cmd_buffer[0] != CMD_WR_PARTAB
+                 && cmd_buffer[0] != CMD_ST_PARBTT
+               ) {
+                if ( cmd_buffer[0] == CMD_RD_BLOCK
+                     || cmd_buffer[0] == CMD_WR_BLOCK
+                     || cmd_buffer[0] == CMD_RD_SECTOR
+                     || cmd_buffer[0] == CMD_WR_SECTOR ) {
+                    wdc_send_errorcode ( ERR_NO_MARK_FOUND );
+                } else if ( cmd_buffer[0] == CMD_RD_BTTAB ) {
+                    wdc_send_errorcode ( ERR_BTT_INVALID );
+                } else if ( cmd_buffer[0] == CMD_VER_TRACK ) {
+                    wdc_send_errorcode ( ERR_DUR_TIM_CONST_CLC );
                 } else {
                     wdc_send_error();
                 }
                 /* if the specified drive exceeds the number of drives, no drive commands are allowed */
-            } else if ( cmd_buffer[1] >= wdc_number_of_disks()
+            } else if ( cmd_buffer[1] >= wdc_get_num_of_drvs()
                         && ( cmd_buffer[0] == CMD_RD_SECTOR
                              || cmd_buffer[0] == CMD_FMTRD_TRACK
+                             || cmd_buffer[0] == CMD_WR_SECTOR
                              || cmd_buffer[0] == CMD_RD_BLOCK
                              || cmd_buffer[0] == CMD_WR_BLOCK
                              || cmd_buffer[0] == CMD_FMTBTT_TRACK
@@ -178,16 +204,17 @@ main ( void )
                         data_counter = ( cmd_buffer[7] << 8 ) | cmd_buffer[6];
 
                         blockno = wdc_p8kblock2diskblock ( ( (uint32_t)cmd_buffer[5] << 24 ) | ( (uint32_t)cmd_buffer[4] << 16 ) | ( (uint16_t)cmd_buffer[3] << 8 ) | cmd_buffer[2] );
-
                         errorcode = wdc_validate_blockno ( blockno );
+
+                        wdc_receive_data ( data_buffer
+                                         , data_counter
+                                         );
+
                         if ( errorcode != 0 ) {
                             wdc_send_errorcode ( errorcode );
                             break;
                         }
 
-                        wdc_receive_data ( data_buffer
-                                         , data_counter
-                                         );
                         if ( data_counter == WDC_BLOCKLEN ) {
                             errorcode = wdc_write_sector ( blockno, data_buffer );
                         } else {
@@ -448,7 +475,7 @@ main ( void )
                             errorcode = wdc_write_multiblock ( blockno, data_buffer, data_counter / WDC_BLOCKLEN );
                         }
 
-                        if ( errorcode ) {
+                        if ( errorcode > 0 ) {
                             wdc_send_error();
                         }
                         break;
@@ -467,6 +494,7 @@ main ( void )
                         uart_putc_hex ( cmd_buffer[8] );
                         uart_put_nl();
 #endif
+
                         wdc_send_error();
                         break;
                 }
@@ -483,16 +511,18 @@ static void atmega_setup ( void )
 
     wdc_led_bootup();
 
-    _delay_ms ( 1000 );
+    _delay_ms ( 3000 );
 
     wdc_init_avr();
     uart_init();
 
-    uart_putstring ( PSTR ( "=== P8000 WDC Emulator 2.00 ===" ), true );
+    uart_putstring ( PSTR ( "=== P8000 WDC Emulator 2.10 - 2016-07-02 ===" ), true );
     wdc_get_sysconf();
 
     if ( wdc_init_disk() != 0 ) {
         uart_putstring ( PSTR ( "ERROR: No disk found!" ), true );
         wdc_set_no_disk();
     }
+
+    wdc_set_initialized();
 }

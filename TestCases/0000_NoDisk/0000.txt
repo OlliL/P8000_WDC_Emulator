@@ -1,0 +1,36 @@
+- P8000 anschalten
+- WDC anschalten
+- am U880-Prompt "x" eingeben
+- am U8000 Prompt NMI drücken
+
+Bildschirmausgaben:
+
+	P8000 Hardwaretest U880 - Version 3.1
+	
+	U880-Softwaremonitor Version 3.1 - Press RETURN
+	>x
+	
+	U8000-Softwaremonitor Version 3.1 - Press NMI
+	*** ERROR 52   C1  AAAA
+	*** ERROR 52   C1  AAAA
+	*** ERROR 53   27  AAAA 0000
+	MAXSEG=<3F>
+	*
+
+- RESET an der P8000 drücken
+- am U880-Prompt "x" eingeben
+- am U8000 Prompt NMI drücken
+
+Bildschirmausgaben:
+
+	identisch
+
+Erkenntnis:
+
+- Im Rahmen des Eigentests wird an der PIO für den WDC auf der P8000 /RST
+  aktiv was den WDC bei jedem Eigentest neu initialisieren lässt
+- Der WDC benötigt ca. 35 Sekunden nachdem /RST freigegeben wurde,
+  bis er über die Statusleitungen eine Kommandobereitschaft signalisiert
+  wenn keine Festplatte angeschlossen ist.
+- Das erste Kommando nachdem Kommandobereitschaft erlangt wurde wird dann
+  mit dem Fehlercode 0x27 (no drive ready) quittiert

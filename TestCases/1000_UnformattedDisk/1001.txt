@@ -1,0 +1,51 @@
+- P8000 anschalten
+- WDC anschalten
+- WEGA Startdiskette in LAufwerk 0 einlegen
+- am U880-Prompt Enter drücken
+- am U8000 Prompt "O U" eingeben
+- den Primary Bootloader mit Enter zum laden des sekundären Bootloaders auffordern
+- am Prompt des Secondary Bootloaders sa.format starten
+- sa.format beenden
+
+Bildschirmausgaben:
+
+	P8000 Hardwaretest U880 - Version 3.1
+		
+	U880-Softwaremonitor Version 3.1 - Press RETURN
+	>
+		
+	U8000-Softwaremonitor Version 3.1 - Press NMI
+	 O U
+	BOOTING FROM UDOS FLOPPY
+	> boot
+	
+	
+	
+	Boot
+	: ud(0,0)sa.format
+	
+	>>>  Format Hard-Disk 4.1  <<<
+	Firmwareversion 'WDC_4.2'
+	Number of Drives: 1  (Drive 0)
+	Error on RESET
+	Cyl 0 Hd 0 Sc 1 of Drive 0 not readable
+	
+	List of Drive-Parameters:
+	|No.|  Name      |  cyls; hds; secs; prae; ramp;
+	-----------------------------------------------
+	| 1 |NEC D5126   |  615; 4; 18; 128; 12;
+	| 2 |NEC D5146   |  615; 8; 18; 128; 12;
+	| 3 |ROBOTRON VS |  820; 6; 18; 820; 1;
+	| 4 |ROB K5504.50|  1024; 5; 18; 1024; 1;
+	-----------------------------------------------
+	Which Typ ? (No./n/q) q
+	
+	End of 'sa.format' (y/n) ? y
+	Exit called
+
+
+Erkenntnis:
+
+- Im Parameterblock wird sa.format mitgegeben, dass der Zylinder 0 der
+  Platte nicht lesbar war, und somit die Plattenparameter nicht
+  ermittelbar waren.

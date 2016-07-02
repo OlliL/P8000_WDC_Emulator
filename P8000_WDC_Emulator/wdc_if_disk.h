@@ -56,8 +56,6 @@ t_drv_write_block      drv_write_block;
 t_drv_read_multiblock  drv_read_multiblock;
 t_drv_write_multiblock drv_write_multiblock;
 
-#define wdc_number_of_disks() 1
-
 #define WDC_BLOCKLEN 512
 
 #endif /* WDC_IF_DISK_H_ */

@@ -104,7 +104,7 @@ static const uint8_t
 static bool     valid_disk = true;
 static bool     initialized = false;
 static bool     btt_cleared = false;
-static uint32_t blocks;
+static uint32_t blocks, useful_blocks;
 
 
 void wdc_read_par_table ( uint8_t *buffer, uint16_t count )
@@ -200,11 +200,33 @@ uint8_t wdc_get_hdd_heads ()
     return par_table[17 + POS_PAR_WDC_PAR];
 }
 
-static uint16_t wdc_get_hdd_cylinder ()
+uint16_t wdc_get_hdd_cylinder ()
 {
     return ( par_table[16 + POS_PAR_WDC_PAR] << 8 ) | par_table[15 + POS_PAR_WDC_PAR];
 }
 
+uint32_t wdc_get_hdd_blocks ()
+{
+    return blocks;
+}
+
+/*************************************************************************/
+/* Die uebergeben Blocknummer muss bereits auf die physische Blocknummer */
+/* des Speichermediums umgerechnet worden sein. Es ist NICHT die Block-  */
+/* nummer aus der P8000 Kommunikation (welche erst noch mit den reser-   */
+/* vierten Bloecken addiert werden muss - siehe wdc_if_disk.c.           */
+/*************************************************************************/
+/**
+ * \brief
+ * Die uebergeben Blocknummer muss bereits auf die physische Blocknummer
+ * des Speichermediums umgerechnet worden sein. Es ist NICHT die Blocknummer
+ * aus der P8000 Kommunikation (welche erst noch mit den reservierten
+ * Bloecken addiert werden muss - siehe wdc_if_disk.c.
+ *
+ * \param blockno
+ *
+ * \return uint8_t
+ */
 uint8_t wdc_validate_blockno ( uint32_t blockno )
 {
     if ( valid_disk && blockno > blocks ) {
@@ -242,11 +264,11 @@ void wdc_set_disk_valid ()
 {
     uint16_t zw0, zw1;
 
-    blocks = (uint32_t)wdc_get_hdd_sectors() * (uint32_t)wdc_get_hdd_heads() * (uint32_t)wdc_get_hdd_cylinder()
-             - (uint32_t)wdc_get_hdd_sectors() * (uint32_t)wdc_get_hdd_heads();
+    blocks = (uint32_t)wdc_get_hdd_sectors() * (uint32_t)wdc_get_hdd_heads() * (uint32_t)wdc_get_hdd_cylinder();
+    useful_blocks = blocks - (uint32_t)wdc_get_hdd_sectors() * (uint32_t)wdc_get_hdd_heads();
 
-    zw0 = blocks / 65536;
-    zw1 = ( blocks % 65536 ) - 1;
+    zw0 = useful_blocks / 65536;
+    zw1 = ( useful_blocks % 65536 ) - 1;
 
     valid_disk = true;
     par_table[42] = zw1;

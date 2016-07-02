@@ -29,7 +29,7 @@
 #define MAIN_H_
 
 #define CMD_RD_SECTOR         0x01              /* read data beginning at given sector              */
-#define CMD_WR_SECTOR      0x02              /* write sector                                     */
+#define CMD_WR_SECTOR         0x02              /* write sector                                     */
 #define ___CMD_FMT_TRACK      0x04              /* format a track                                   */
 #define CMD_RD_WDC_RAM        0x08              /* read data from WDC RAM                           */
 #define ___CMD_RDBTT_SECTOR   0x11              /* read sector taking BTT into account              */
@@ -54,15 +54,18 @@
 #define ___CMD_WRRD_BLOCK     0xa2              /* write and reread block                           */
 #define CMD_ST_PARBTT         0xc2              /* store Parameter block and BTT on hard disk       */
 
-#define ERR_STANDARD          0x01
-#define ERR_PAR_HEAD_TO_HIGH  0x02
-#define ERR_DRIVE_NOT_READY   0x03
-#define ERR_PAR_CYL_TO_HIGH   0x04
-#define ERR_PAR_BLOCK_TO_HIGH 0x05
-#define ERR_SECT_N_ON_SURFACE 0x0A
-#define ERR_BTT_FULL          0x16
-#define ERR_BTT_INVALID       0x18
-#define ERR_NO_DRIVE_READY    0x27
-#define ERR_CYL0_NOT_READABLE 0x31
+#define ERR_STANDARD              0x01
+#define ERR_PAR_HEAD_TO_HIGH      0x02
+#define ERR_DRIVE_NOT_READY       0x03
+#define ERR_PAR_CYL_TO_HIGH       0x04
+#define ERR_PAR_BLOCK_TO_HIGH     0x05
+#define ___ERR_SECT_N_ON_SURFACE  0x0A
+#define ERR_NO_MARK_FOUND         0x0B
+#define ___ERR_ERROR_IN_DATAFIELD 0x0C
+#define ERR_DUR_TIM_CONST_CLC     0x15
+#define ERR_BTT_FULL              0x16
+#define ERR_BTT_INVALID           0x18
+#define ERR_NO_DRIVE_READY        0x27
+#define ERR_CYL0_NOT_READABLE     0x31
 
 #endif /* MAIN_H_ */

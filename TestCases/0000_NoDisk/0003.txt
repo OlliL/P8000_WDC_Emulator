@@ -1,0 +1,59 @@
+- P8000 anschalten
+- WDC anschalten
+- WEGA Startdiskette in LAufwerk 0 einlegen
+- am U880-Prompt Enter drücken
+- am U8000 Prompt "O U" eingeben
+- den Primary Bootloader mit Enter zum laden des sekundären Bootloaders auffordern
+- am Prompt des Secondary Bootloaders sa.shipdisk starten
+- sa.shipdisk beenden
+
+Bildschirmausgaben:
+
+	P8000 Hardwaretest U880 - Version 3.1
+		
+	U880-Softwaremonitor Version 3.1 - Press RETURN
+	>
+		
+	U8000-Softwaremonitor Version 3.1 - Press NMI
+	 O U
+	BOOTING FROM UDOS FLOPPY
+	> boot
+	
+	
+	
+	Boot
+	: ud(0,0)sa.shipdisk
+	
+	
+	>>> Shipdisk 4.1 <<<
+	
+	Shipdisk ok.
+	Exit called
+
+
+- erneut sa.shipdisk starten
+
+Bildschirmausgaben:
+
+	Boot
+	: ud(0,0)sa.shipdisk
+	
+	
+	>>> Shipdisk 4.1 <<<
+	
+	Shipdisk ok.
+	Exit called
+
+
+	
+	Boot
+	:
+
+Erkenntnis:
+
+- Das das erste Kommando nachdem Kommandobereitschaft erlangt wurde 
+  mit dem Fehlercode 0x27 (no drive ready) quittiert wurde wird nicht
+  angezeigt, da sa.shipdisk bei einem Fehler automatisch das Kommando
+  nochmal an den WDC sendet - und beim 2. Mal die Daten erhällt.
+- Da im PArameterblock 0 Laufwerke gemeldet werden, wird die eigentlich
+  Kopfplatzierung von sa.shipdisk nicht vorgenommen.

@@ -1,0 +1,36 @@
+- P8000 anschalten
+- WDC anschalten
+- am U880-Prompt "x" eingeben
+- am U8000 Prompt merhmals "O D" eingeben
+
+Bildschirmausgaben:
+
+	P8000 Hardwaretest U880 - Version 3.1
+		
+	U880-Softwaremonitor Version 3.1 - Press RETURN
+	>
+		
+	U8000-Softwaremonitor Version 3.1 - Press NMI
+	 O D
+	BOOTING FROM HARD DISK
+	HARD DISK ERROR 31
+	*O D
+	BOOTING FROM HARD DISK
+	HARD DISK ERROR 0B
+	*O D
+	BOOTING FROM HARD DISK
+	HARD DISK ERROR 0B
+	*O D
+	BOOTING FROM HARD DISK
+	HARD DISK ERROR 0B
+	*
+
+
+Erkenntnis:
+
+- noch innerhalb der ersten Kommandoausführung wird die Kommando-
+  bereitschaft des WDC erreicht.
+- Wie erwartet wird das 1. einlaufende Kommando mit 0x31 (cylinder
+  0 not readable) quittiert.
+- Alle folgenden Ausführungen werden mit dem Fehler 0x0B (no mark
+  in time found) quittiert.

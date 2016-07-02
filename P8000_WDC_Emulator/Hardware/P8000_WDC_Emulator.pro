@@ -1,13 +1,8 @@
-update=12.04.2016 22:10:43
+update=27.06.2016 12:09:05
 version=1
 last_client=kicad
 [general]
 version=1
-[cvpcb]
-version=1
-NetIExt=net
-[cvpcb/libraries]
-EquName1=devcms
 [pcbnew]
 version=1
 PadDrlX=320
@@ -25,19 +20,19 @@ EdgeLar=150
 TxtLar=120
 MSegLar=150
 LastNetListRead=P8000_WDC_Emulator.net
-[pcbnew/libraries]
-LibDir=
-LibName1=P8000_WDC_Emulator
-LibName2=sockets
-LibName3=connect
-LibName4=discret
-LibName5=pin_array
-LibName6=divers
-LibName7=libcms
-LibName8=display
-LibName9=valves
-LibName10=led
-LibName11=dip_sockets
+[cvpcb]
+version=1
+NetIExt=net
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=Pcbnew
+SpiceForceRefPrefix=0
+SpiceUseNetNumbers=0
+LabSize=60
 [eeschema]
 version=1
 LibDir=C:/Program Files (x86)/KiCad/share/library/converted
@@ -72,13 +67,4 @@ LibName27=opto
 LibName28=atmel
 LibName29=contrib
 LibName30=valves
-[schematic_editor]
-version=1
-PageLayoutDescrFile=
-PlotDirectoryName=
-SubpartIdSeparator=0
-SubpartFirstId=65
-NetFmtName=Pcbnew
-SpiceForceRefPrefix=0
-SpiceUseNetNumbers=0
-LabSize=60
+LibName31=C:/Users/olivleh1/Desktop/Socket-DIN41612_RevA.lib/Socket-DIN41612_RevA

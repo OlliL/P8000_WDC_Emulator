@@ -28,10 +28,7 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-/*#define F_CPU        8000000UL*/
-/*#define F_CPU       16000000UL */
 #define F_CPU       18432000UL
-/*#define F_CPU       20000000UL*/
 
 /*
  * P8000 Interface
@@ -85,8 +82,8 @@
 #define PIN_LED     PIND
 #define DDR_LED     DDRD
 
-#define PIN_INFO_LED1 PIND6
-#define PIN_INFO_LED2 PIND7
+#define PIN_INFO_LED1 PIND7
+#define PIN_INFO_LED2 PIND6
 
 
 /*

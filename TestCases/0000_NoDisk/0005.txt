@@ -1,0 +1,42 @@
+- P8000 anschalten
+- WDC anschalten
+- am U880-Prompt "x" eingeben
+- am U8000 Prompt merhmals "O D" eingeben
+
+Bildschirmausgaben:
+
+	P8000 Hardwaretest U880 - Version 3.1
+		
+	U880-Softwaremonitor Version 3.1 - Press RETURN
+	>
+		
+	U8000-Softwaremonitor Version 3.1 - Press NMI
+	 O D
+	BOOTING FROM HARD DISK
+	HARD DISK ERROR C1
+	*O D
+	BOOTING FROM HARD DISK
+	HARD DISK ERROR C1
+	*O D
+	BOOTING FROM HARD DISK
+	HARD DISK ERROR 27
+	*O D
+	BOOTING FROM HARD DISK
+	HARD DISK ERROR 03
+	*O D
+	BOOTING FROM HARD DISK
+	HARD DISK ERROR 03
+	*O D
+	BOOTING FROM HARD DISK
+	HARD DISK ERROR 03
+	*
+
+
+Erkenntnis:
+
+- Beim dritten Kommando hat der WDC endlich seine Kommandobereitschaft
+  erreicht
+- Wie erwartet wird dan das 1. einlaufende Kommando mit 0x27 (no drive
+  ready) quittiert.
+- Alle folgenden Ausführungen werden mit dem Fehler 0x03 (drive not
+  ready) quittiert.

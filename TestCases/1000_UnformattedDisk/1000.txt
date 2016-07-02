@@ -1,0 +1,24 @@
+- P8000 anschalten
+- WDC anschalten
+- am U880-Prompt "x" eingeben
+- am U8000 Prompt NMI drücken
+
+Bildschirmausgaben:
+
+	P8000 Hardwaretest U880 - Version 3.1
+	
+	U880-Softwaremonitor Version 3.1 - Press RETURN
+	>x
+	
+	U8000-Softwaremonitor Version 3.1 - Press NMI
+	*** ERROR 52   31  AAAA
+	MAXSEG=<3F>
+	*
+
+Erkenntnis:
+
+- Der WDC benötigt ca. 4,5 Sekunden nachdem /RST freigegeben wurde,
+  bis er über die Statusleitungen eine Kommandobereitschaft signalisiert
+  wenn eine unformatierte Festplatte angeschlossen ist.
+- Das erste Kommando nachdem Kommandobereitschaft erlangt wurde wird dann
+  mit dem Fehlercode 0x31 (cylinder 0 not readable) quittiert

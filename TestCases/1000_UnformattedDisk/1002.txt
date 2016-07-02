@@ -1,0 +1,65 @@
+- P8000 anschalten
+- WDC anschalten
+- WEGA Startdiskette in LAufwerk 0 einlegen
+- am U880-Prompt Enter drücken
+- am U8000 Prompt "O U" eingeben
+- den Primary Bootloader mit Enter zum laden des sekundären Bootloaders auffordern
+- am Prompt des Secondary Bootloaders sa.verify starten
+- sa.verify beenden
+
+Bildschirmausgaben:
+
+	P8000 Hardwaretest U880 - Version 3.1
+		
+	U880-Softwaremonitor Version 3.1 - Press RETURN
+	>
+		
+	U8000-Softwaremonitor Version 3.1 - Press NMI
+	 O U
+	BOOTING FROM UDOS FLOPPY
+	> boot
+	
+	
+	
+	Boot
+	: ud(0,0)sa.verify
+	
+	>>>  Verify Hard-Disk 4.1  <<<
+
+	Firmwareversion 'WDC_4.2'
+	PAR --- Drivetype: ''
+	PAR --- Cylinders: 100  Heads: 2  Sectors: 18  Praecomp: 100  Ramp: 1
+	  Number of Drives: 1 (Drive 0)  Blocks/Drive: 3564
+	
+	*** BTT of Drive 0 not ok
+	Verify Begin: Cylinder 0
+	Verify   End: Cylinder 2
+	   Cylinder 0
+	Error 15 --- Kc 44  Dr 0  Cyl 0  Hd 0   continue (y) ?y
+	
+	Error 15 --- Kc 44  Dr 0  Cyl 0  Hd 1   continue (y) ?y
+	   Cylinder 1
+	Error 15 --- Kc 44  Dr 0  Cyl 1  Hd 0   continue (y) ?y
+	
+	Error 15 --- Kc 44  Dr 0  Cyl 1  Hd 1   continue (y) ?y
+	   Cylinder 2
+	Error 15 --- Kc 44  Dr 0  Cyl 2  Hd 0   continue (y) ?y
+	
+	Error 15 --- Kc 44  Dr 0  Cyl 2  Hd 1   continue (y) ?y
+	Verify complete
+	End of 'sa.verify' ? (y/n)y
+	Exit called
+
+
+Erkentniss:
+
+- Das das erste Kommando nachdem Kommandobereitschaft erlangt wurde 
+  mit dem Fehlercode 0x31 (cyl 0 not readabel) quittiert wurde wird
+  nicht angezeigt, da sa.verify bei einem Fehler automatisch das
+  Kommando nochmal an den WDC sendet - und beim 2. Mal die Daten
+  erhällt.
+- Die danach ausgelesene Fehlertabelle wird geliefert
+- Die danach ausgelesene BTT wird mit dem Fehler 0x18 (BTT invalid)
+  quittiert
+- Die jeweiligen Verify Tracks Aufrufe werden mit dem Fehler 0x15
+  (error during time constant calculation) quittiert.

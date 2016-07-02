@@ -1,0 +1,135 @@
+- P8000 anschalten
+- WDC anschalten
+- WEGA Startdiskette in LAufwerk 0 einlegen
+- am U880-Prompt Enter drücken
+- am U8000 Prompt "O U" eingeben
+- im Primary Bootloader sa.diags aufrufen
+
+Bildschirmausgaben:
+
+	P8000 Hardwaretest U880 - Version 3.1
+		
+	U880-Softwaremonitor Version 3.1 - Press RETURN
+	>
+		
+	U8000-Softwaremonitor Version 3.1 - Press NMI
+	 O U
+	BOOTING FROM UDOS FLOPPY
+	> sa.diags
+
+
+
+
+***************************************************
+*                                                 *
+*       Stand alone Hardware-Eigentest            *
+*                                                 *
+***************************************************
+
+
+
+        *** TESTKOMMANDO-EBENE ***
+
+t  Auswaehlen und Abarbeiten von Einzeltests
+r  Wiederholen des aktuellen Einzeltests
+l  Abarbeiten der vollstaendigen Testliste
+d  Anzeige der Fehlerliste
+q  Quitt
+
+        Geben Sie Ihre Auswahl ein ]=> t
+
+
+        *** WAEHLE TESTZEILE ***
+
+1  Test EPROM
+2  Test STATISCHER RAM
+3  Test PIO
+4  Test CTC
+5  Test SIO
+6  Test DYNAMISCHER RAM
+7  Test MMU
+8  Test WDC
+
+#  Auswahl des Tests mit der Nr. #
+^  Rueckkehr zur "Testkommando-Ebene"
+
+          Geben Sie Ihre Auswahl ein ]=> 8
+
+
+    *** Veraendere Testzeile (optional) ***
+
+Die Testzeile hat folgenden aktuellen Stand:
+
+Name          Anzahl der Wiederholungen
+WDC                      1
+
+ w   Wiederholungszaehler veraendern
+ p   Testparameter veraendern
+<CR> Testzeile ist korrekt, Test abarbeiten!
+ ^   Rueckkehr zu "Waehle Testzeile"
+
+        Geben Sie Ihre Auswahl ein ]=>w
+
+
+    *** Veraendere Wiederholungszaehler ***
+Aktueller Wiederholungszaehler = 1
+
+ 0   Test laeuft, bis Reset-Taste betaetigt wird
+ #   Test laeuft # mal (# positiv <= 9999)
+ ^   Rueckkehr zu "Veraendere Testzeile"
+<CR> Wiederholungszaehler bleibt unveraendert
+
+          Geben Sie Ihre Auswahl ein ]=>2
+
+
+    *** Veraendere Testzeile (optional) ***
+
+Die Testzeile hat folgenden aktuellen Stand:
+
+Name          Anzahl der Wiederholungen
+WDC                      2
+
+ w   Wiederholungszaehler veraendern
+ p   Testparameter veraendern
+<CR> Testzeile ist korrekt, Test abarbeiten!
+ ^   Rueckkehr zu "Waehle Testzeile"
+
+        Geben Sie Ihre Auswahl ein ]=>
+
+
+Der folgende Test wird jetzt abgearbeitet:
+
+Name          Anzahl der Wiederholungen
+
+WDC                      2
+WDC_
+*** ERROR 52   C1  AAAA
+*** ERROR 53   C1  AAAA 0000
+WDC_
+*** ERROR 52   C1  AAAA
+*** ERROR 53   C1  AAAA 0000
+
+
+Rueckkehr zu "Veraendere Testzeile" durch CR-Eingabe :
+
+
+    *** Veraendere Testzeile (optional) ***
+
+Die Testzeile hat folgenden aktuellen Stand:
+
+Name          Anzahl der Wiederholungen
+WDC                      2
+
+ w   Wiederholungszaehler veraendern
+ p   Testparameter veraendern
+<CR> Testzeile ist korrekt, Test abarbeiten!
+ ^   Rueckkehr zu "Waehle Testzeile"
+
+        Geben Sie Ihre Auswahl ein ]=>
+
+
+Erkenntnis:
+
+- Der Timeout der einzelnen Kommandos ist im Eigentest eher erreicht,
+  als dass der WDC Kommandobereitschaft erlangt.
+- Vor jeder Testwiederholung wird der WDC in den Reset versetzt.

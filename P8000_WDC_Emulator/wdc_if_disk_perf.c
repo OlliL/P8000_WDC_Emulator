@@ -29,6 +29,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -52,6 +53,24 @@ ISR ( TIMER0_OVF_vect ) {
 extern uint8_t data_buffer[];
 extern uint8_t cmd_buffer[];
 
+
+void print_speed ( uint16_t size_in_kb, uint32_t overflow_count )
+{
+    uint32_t total_timer_ticks;
+    float    new_frequency;
+    float    real_time;
+    uint16_t timer_resolution = 256; /* 8 Bit Timer */
+    float    prescaler_freq = F_CPU / 8;
+    char     speed[100];
+
+    total_timer_ticks = timer_resolution * overflow_count;
+    new_frequency = prescaler_freq / total_timer_ticks;
+    real_time = 1 / new_frequency;
+
+    sprintf ( speed, "%f KiB/sec", size_in_kb / real_time );
+    uart_puts ( speed );
+    uart_put_nl();
+}
 
 void test_write4k ( uint8_t numblocks, uint8_t nr_of_tests )
 {
@@ -77,8 +96,7 @@ void test_write4k ( uint8_t numblocks, uint8_t nr_of_tests )
             break;
         }
 
-        uart_putdw_dec ( overflow - starttime );
-        uart_putc ( '\n' );
+        print_speed ( 2500, overflow - starttime );
     }
 }
 
@@ -105,8 +123,7 @@ void test_read4k ( uint8_t numblocks, uint8_t nr_of_tests )
             break;
         }
 
-        uart_putdw_dec ( overflow - starttime );
-        uart_putc ( '\n' );
+        print_speed ( 2500, overflow - starttime );
     }
 }
 
@@ -134,8 +151,7 @@ void test_write512 ( uint8_t numblocks, uint8_t nr_of_tests )
             break;
         }
 
-        uart_putdw_dec ( overflow - starttime );
-        uart_putc ( '\n' );
+        print_speed ( 2500, overflow - starttime );
     }
 }
 
@@ -162,8 +178,7 @@ void test_read512 ( uint8_t numblocks, uint8_t nr_of_tests )
             break;
         }
 
-        uart_putdw_dec ( overflow - starttime );
-        uart_putc ( '\n' );
+        print_speed ( 2500, overflow - starttime );
     }
 }
 
@@ -176,8 +191,8 @@ void measure_performance ()
     TIMSK0 |= ( 0x01 << TOIE0 );
     TCCR0B = ( 1 << CS01 ); /* Prescaler 8 */
     TCNT0 = 0x00;
-    uart_putstring ( PSTR ( "Performance Measurement. Displayed are the Timer-Overflows." ), true );
-    uart_putstring ( PSTR ( "Timer is initialized with a Prescaler 8" ), true );
+    uart_putstring ( PSTR ( "INFO: Performance Measurement." ), true );
+    test_read4k ( numblocks, nr_of_tests );
     test_write512 ( numblocks, nr_of_tests );
     test_read512 ( numblocks, nr_of_tests );
     test_write512 ( numblocks, nr_of_tests );

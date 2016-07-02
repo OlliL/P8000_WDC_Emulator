@@ -104,13 +104,20 @@ void uart_putdw_dec ( uint32_t dw )
     while ( num > 0 ) {
         uint8_t b = dw / num;
 
-        if ( b > 0 || started == 0 || num == 1 ) {
+        if ( b > 0 || started == 1 || num == 1 ) {
             uart_putc ( '0' + b );
             started = 1;
         }
 
         dw -= b * num;
         num /= 10;
+    }
+}
+
+void uart_puts ( const char *str )
+{
+    while ( *str ) {
+        uart_putc ( *str++ );
     }
 }
 

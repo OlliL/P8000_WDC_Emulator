@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2012, 2013 Oliver Lehmann
+ * Copyright (c) 2012, 2013, 2015 Oliver Lehmann
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,37 +25,35 @@
  *
  */
 
-/*
- * $Id: wdc_par.h,v 1.7 2013/05/09 12:30:25 olivleh1 Exp $
- */
-
 #ifndef WDC_PAR_H_
 #define WDC_PAR_H_
 
-extern void    wdc_read_par_table ( uint8_t *buffer, uint16_t count );
-extern void    wdc_write_par_table ( uint8_t *buffer, uint16_t count );
+extern void     wdc_read_par_table ( uint8_t *buffer, uint16_t count );
+extern void     wdc_write_par_table ( uint8_t *buffer, uint16_t count );
 
-extern void    wdc_read_wdc_par ( uint8_t *buffer, uint16_t count );
-extern void    wdc_write_wdc_par ( uint8_t *buffer, uint16_t count );
+extern void     wdc_read_wdc_par ( uint8_t *buffer, uint16_t count );
+extern void     wdc_write_wdc_par ( uint8_t *buffer, uint16_t count );
 
-extern void    wdc_del_wdc_btt ();
-extern void    wdc_read_wdc_btt ( uint8_t *buffer, uint16_t count );
-extern void    wdc_write_wdc_btt ( uint8_t *buffer, uint16_t count );
-extern uint8_t wdc_add_btt_entry ( uint16_t cylinder, uint8_t head );
-extern uint8_t wdc_get_hdd_sectors ();
-extern uint8_t wdc_get_hdd_heads ();
-extern void    wdc_set_disk_invalid ();
-extern void    wdc_set_disk_valid ();
-extern bool    wdc_get_disk_valid ();
-extern void    wdc_set_no_disk ();
-extern uint8_t wdc_get_num_of_drvs ();
-extern void    wdc_unset_initialized ();
-extern void    wdc_set_initialized ();
-extern bool    wdc_get_initialized ();
-extern bool    wdc_get_btt_cleared ();
+extern void     wdc_del_wdc_btt ();
+extern void     wdc_read_wdc_btt ( uint8_t *buffer, uint16_t count );
+extern void     wdc_write_wdc_btt ( uint8_t *buffer, uint16_t count );
+extern uint8_t  wdc_add_btt_entry ( uint16_t cylinder, uint8_t head );
+extern uint8_t  wdc_get_hdd_sectors ();
+extern uint8_t  wdc_get_hdd_heads ();
+extern uint16_t wdc_get_hdd_cylinder ();
+extern uint32_t wdc_get_hdd_blocks ();
+extern void     wdc_set_disk_invalid ();
+extern void     wdc_set_disk_valid ();
+extern bool     wdc_get_disk_valid ();
+extern void     wdc_set_no_disk ();
+extern uint8_t  wdc_get_num_of_drvs ();
+extern void     wdc_unset_initialized ();
+extern void     wdc_set_initialized ();
+extern bool     wdc_get_initialized ();
+extern bool     wdc_get_btt_cleared ();
 
-extern uint8_t wdc_validate_blockno ( uint32_t blockno );
-extern uint8_t wdc_validate_cylhead ( uint16_t req_cylinder, uint8_t req_head, uint32_t blockno );
+extern uint8_t  wdc_validate_blockno ( uint32_t blockno );
+extern uint8_t  wdc_validate_cylhead ( uint16_t req_cylinder, uint8_t req_head, uint32_t blockno );
 
 
 #define POS_PAR_VERSION     0           /* defines at which position in the PAR table the WDC version string starts */

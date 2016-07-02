@@ -33,10 +33,35 @@
 #include "wdc_if_p8000.h"
 #include "wdc_par.h"
 
+static inline bool is_rst_asserted ()
+{
+    return info_rst_is_high() && info_rst_is_high();
+}
+
+static inline bool is_ardy_asserted ()
+{
+    return !info_wardy_is_high() && !info_wardy_is_high();
+}
+
+static inline bool is_ardy_deasserted ()
+{
+    return info_wardy_is_high() && info_wardy_is_high();
+}
+
+static inline bool is_te_asserted ()
+{
+    return !info_te_is_high() && !info_te_is_high();
+}
+
+static inline bool is_te_deasserted ()
+{
+    return info_te_is_high() && info_te_is_high();
+}
+
 static inline void wait_until_ardy_asserted ()
 {
     do {
-        if ( !info_wardy_is_high() && !info_wardy_is_high() ) {
+        if ( is_ardy_asserted() ) {
             return;
         }
     } while ( true );
@@ -45,7 +70,7 @@ static inline void wait_until_ardy_asserted ()
 static inline void wait_until_ardy_deasserted ()
 {
     do {
-        if ( info_wardy_is_high() && info_wardy_is_high() ) {
+        if ( is_ardy_deasserted() ) {
             return;
         }
     } while ( true );
@@ -53,22 +78,27 @@ static inline void wait_until_ardy_deasserted ()
 
 static bool wdc_read_data_from_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status )
 {
-    if ( info_rst_is_high() && info_rst_is_high() ) {
-        return false;
+    if ( is_rst_asserted() ) {
+        goto reset;
     }
 
     set_status ( wdc_status );
 
     configure_port_data_read();
 
-    while ( !info_te_is_high() || !info_te_is_high() ) {
-        if ( info_rst_is_high() && info_rst_is_high() ) {
-            reset_status();
-            return false;
+    /* TE and ARDY have to be checked sepperatly to detect a small RST flank savely. */
+    /* If both are checked together, the RST check could miss small RST flanks. */
+    while ( is_te_asserted() ) {
+        if ( is_rst_asserted() ) {
+            goto reset;
         }
     }
 
-    wait_until_ardy_deasserted();
+    while ( is_ardy_deasserted() ) {
+        if ( is_rst_asserted() ) {
+            goto reset;
+        }
+    }
 
     do {
         wait_until_ardy_asserted();
@@ -79,8 +109,12 @@ static bool wdc_read_data_from_p8k ( uint8_t *buffer, uint16_t count, uint8_t wd
     } while ( --count > 0 );
 
     reset_status();
-
     return true;
+
+reset:
+    wdc_set_initialized();
+    reset_status();
+    return false;
 }
 
 static void wdc_write_data_to_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc_status )
@@ -88,7 +122,7 @@ static void wdc_write_data_to_p8k ( uint8_t *buffer, uint16_t count, uint8_t wdc
     assert_tr();
     set_status ( wdc_status );
 
-    while ( info_te_is_high() || info_te_is_high() ) {}
+    while ( is_te_deasserted() ) {}
 
     configure_port_data_write();
 
@@ -155,6 +189,11 @@ void wdc_send_errorcode ( uint8_t error )
     uint8_t buffer[1];
 
     buffer[0] = error;
+
+    /* It is important to wait some time until the error is sent back because otherwise some errors */
+    /* would be send back to the Host too fast after the cmd was received. This would result in freezing*/
+    /* the communication (detected with sa.diags with an unformatted disk attached) */
+    _delay_ms ( 70 );
 
     wdc_write_data_to_p8k ( buffer
                           , 1

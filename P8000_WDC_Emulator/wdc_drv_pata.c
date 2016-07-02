@@ -78,12 +78,16 @@ typedef struct {
 } typeDriveInfo;
 
 static typeDriveInfo ataDriveInfo;
+static uint8_t       p8000_info_restore;
 
 static void deactivate_p8000com ()
 {
     disable_p8000com();
+
     nop();
     nop();
+
+    p8000_info_restore = PORT_INFO;
 }
 
 static void activate_p8000com ()
@@ -92,13 +96,8 @@ static void activate_p8000com ()
     ata_rd_disable();
     wdc_config_p8000_ports();
 
-    PORT_INFO &= ~(( 1 << PIN_INFO_STATUS0 ) | ( 1 << PIN_INFO_STATUS1 ) | ( 1 << PIN_INFO_STATUS2 ));
-    deassert_astb();
-    deassert_tr();
+    PORT_INFO = p8000_info_restore;
 
-    nop();
-    nop();
-    nop();
     nop();
     nop();
 
@@ -318,13 +317,13 @@ static uint8_t ata_identify ()
         uart_putstring ( PSTR ( "INFO: User addressable sectors for 28-bit commands: " ), false );
         uart_putdw_dec ( word[60] | (uint32_t)word[61] << 16 );
         uart_put_nl();
-        uart_putstring ( PSTR ( "Single Word DMA modes: " ), false );
+        uart_putstring ( PSTR ( "INFO: Single Word DMA modes: " ), false );
         uart_putw_dec ( word[62] );
         uart_put_nl();
-        uart_putstring ( PSTR ( "Multiword Word DMA modes: " ), false );
+        uart_putstring ( PSTR ( "INFO: Multiword Word DMA modes: " ), false );
         uart_putw_dec ( word[63] );
         uart_put_nl();
-        uart_putstring ( PSTR ( "PIO modes: " ), false );
+        uart_putstring ( PSTR ( "INFO: PIO modes: " ), false );
         uart_putw_dec ( word[64] );
         uart_put_nl();
         uart_putstring ( PSTR ( "INFO: Minimum Multiword DMA cycle time per word: " ), false );
@@ -401,12 +400,27 @@ uint8_t pata_init ()
     uart_putstring ( PSTR ( "INFO: PATA init start" ), true );
     while ( !pata_rdy() ) {
         if ( --wait_for_drive == 0 ) {
+            uart_put_nl();
             ret = 1;
             goto out;
         }
+        uart_putc ( 'r' );
         _delay_ms ( 500 );
     }
-    while ( pata_bsy() ) {}
+
+    wait_for_drive = 50;
+
+    while ( pata_bsy() ) {
+        if ( --wait_for_drive == 0 ) {
+            uart_put_nl();
+            ret = 1;
+            goto out;
+        }
+        uart_putc ( 'b' );
+        _delay_ms ( 500 );
+    }
+
+    uart_put_nl();
 
     write_io_register ( PATA_RW_DEVICE_HEAD_REGISTER, ATA_CHS_DRIVE_0 );
 

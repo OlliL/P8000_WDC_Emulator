@@ -1,3 +1,4 @@
 (fp_lib_table
   (lib (name Footprints)(type KiCad)(uri "$(KIPRJMOD)\\Footprints")(options "")(descr ""))
+  (lib (name Mechanical_Socket-Plug_DIN41612-Stuff_RevA)(type Legacy)(uri C:\Users\olivleh1\Desktop\BW_Mechanical_Socket-Plug_DIN41612-Stuff_RevA\Mechanical_Socket-Plug_DIN41612-Stuff_RevA.mod)(options "")(descr ""))
 )
