@@ -395,6 +395,56 @@ Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
 Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
 [no further output]
 
+2nd try:
+
+=== P8000 WDC Emulator 2.10 - 2016-07-02 ===
+INFO: SDCard init start
+INFO: SDSC disk has been found
+INFO: Performance Measurement.
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+369.033970 KiB/sec
+274.022670 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+505.390840 KiB/sec
+507.717320 KiB/sec
+Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):
+548.432680 KiB/sec
+548.459410 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+508.141540 KiB/sec
+508.095640 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+575.933650 KiB/sec
+612.911990 KiB/sec
+Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
+647.780270 KiB/sec
+647.742980 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+612.945370 KiB/sec
+612.911990 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+508.084170 KiB/sec
+508.130070 KiB/sec
+Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
+647.742980 KiB/sec
+647.742980 KiB/sec
+Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):
+548.512880 KiB/sec
+548.526310 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+448.689820 KiB/sec
+612.995480 KiB/sec
+Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):
+548.512880 KiB/sec
+548.526310 KiB/sec
+Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
+647.780270 KiB/sec
+647.798950 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+508.164490 KiB/sec
+508.198940 KiB/sec
+End
+
 
 ----------------------- SD-Card SanDisk 2GB ----------------------- 
 
@@ -511,6 +561,46 @@ INFO: SDCard init start
 INFO: SD2.0 disk with block addressing has been found
 INFO: Performance Measurement.
 Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+563.471980 KiB/sec
+[no further output]
+
+2nd try:
+
+=== P8000 WDC Emulator 2.10 - 2016-07-02 ===
+INFO: SDCard init start
+INFO: SD2.0 disk with block addressing has been found
+INFO: Performance Measurement.
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+550.243290 KiB/sec
+550.283750 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+169.861310 KiB/sec
+170.093730 KiB/sec
+Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):
+375.638610 KiB/sec
+375.651120 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+170.066740 KiB/sec
+169.739580 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+551.971190 KiB/sec
+552.120180 KiB/sec
+Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
+291.885590 KiB/sec
+289.013610 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+553.287720 KiB/sec
+553.260560 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+169.676860 KiB/sec
+169.928020 KiB/sec
+Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
+310.019840 KiB/sec
+288.854060 KiB/sec
+Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):
+374.581700 KiB/sec
+374.550540 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
 [no further output]
 
 
@@ -564,4 +654,60 @@ Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
 Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
 266.001460 KiB/sec
 267.068630 KiB/sec
+End
+
+
+----------------------- SD-Card Kingston 8GB ----------------------- 
+31741-001-A00LF
+P1118871
+SD-K08G
+1547
+WL67176
+
+=== P8000 WDC Emulator 2.10 - 2016-07-02 ===
+INFO: SDCard init start
+INFO: SD2.0 disk with block addressing has been found
+INFO: Performance Measurement.
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+593.745850 KiB/sec
+593.777220 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+136.982970 KiB/sec
+136.441360 KiB/sec
+Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):
+380.923370 KiB/sec
+380.923370 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+136.134280 KiB/sec
+134.135380 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+554.023440 KiB/sec
+554.241760 KiB/sec
+Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
+266.398320 KiB/sec
+262.243900 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+562.851810 KiB/sec
+562.795470 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+136.763150 KiB/sec
+136.510090 KiB/sec
+Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
+264.059720 KiB/sec
+263.124020 KiB/sec
+Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):
+377.548430 KiB/sec
+377.333160 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+557.413570 KiB/sec
+557.344540 KiB/sec
+Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):
+376.991760 KiB/sec
+376.878110 KiB/sec
+Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
+261.621830 KiB/sec
+250.855700 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+136.617000 KiB/sec
+136.486050 KiB/sec
 End
