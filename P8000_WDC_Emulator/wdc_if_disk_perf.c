@@ -40,7 +40,7 @@
 #include "uart.h"
 
 #ifdef MEASURE_DISK_PERFORMANCE
-#define BLOCKNO 524288
+#define BLOCKNO 409600
 
 static uint8_t    data_buffer[4096];
 
