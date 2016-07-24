@@ -711,3 +711,117 @@ Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
 136.617000 KiB/sec
 136.486050 KiB/sec
 End
+
+
+----------------------- SD-Card Intenso 8GB ----------------------- 
+(Intenso)
+SDHC
+MEMORY CARD
+Class 10
+
+S708K1601
+TFLKA61026A02
+
+=== P8000 WDC Emulator 2.10 - 2016-07-02 ===
+INFO: SDCard init start
+INFO: SD2.0 disk with block addressing has been found
+INFO: Performance Measurement.
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+592.292300 KiB/sec
+592.307860 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+171.412900 KiB/sec
+176.174880 KiB/sec
+Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):
+374.569240 KiB/sec
+374.519380 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+176.458130 KiB/sec
+176.163850 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+552.934200 KiB/sec
+553.124510 KiB/sec
+Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
+314.329220 KiB/sec
+276.310970 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+564.560670 KiB/sec
+564.603150 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+176.155590 KiB/sec
+176.169370 KiB/sec
+Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
+314.821840 KiB/sec
+291.734190 KiB/sec
+Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):
+377.795680 KiB/sec
+377.744930 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+557.482600 KiB/sec
+557.468810 KiB/sec
+Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):
+377.662540 KiB/sec
+377.592800 KiB/sec
+Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
+292.310270 KiB/sec
+277.161830 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+176.010890 KiB/sec
+176.563390 KiB/sec
+End
+
+
+----------------------- SD-Card Intenso 4GB ----------------------- 
+(Intenso)
+SDHC
+MEMORY CARD
+Class 10
+
+=== P8000 WDC Emulator 2.10 - 2016-07-02 ===
+INFO: SDCard init start
+INFO: SD2.0 disk with block addressing has been found
+INFO: Performance Measurement.
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+602.328980 KiB/sec
+602.409610 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+254.248760 KiB/sec
+267.106720 KiB/sec
+Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):
+442.608460 KiB/sec
+442.625820 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+267.030610 KiB/sec
+268.496400 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+567.279300 KiB/sec
+567.307920 KiB/sec
+Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
+502.782040 KiB/sec
+508.198940 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+566.993410 KiB/sec
+567.022030 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+266.470860 KiB/sec
+270.078860 KiB/sec
+Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
+498.107180 KiB/sec
+508.486080 KiB/sec
+Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):
+441.999790 KiB/sec
+442.034520 KiB/sec
+Test Read 5000 512B-Blocks with Multiblock-Read (4KB Blocksize):
+567.022030 KiB/sec
+567.007750 KiB/sec
+Test Read 5000 512B-Blocks with Singleblock-Read (512B Blocksize):
+441.999790 KiB/sec
+441.999790 KiB/sec
+Test Write 5000 512B-Blocks with Multiblock-Write (4KB Blocksize):
+517.967710 KiB/sec
+507.958010 KiB/sec
+Test Write 5000 512B-Blocks with Singleblock-Write (512B Blocksize):
+268.118900 KiB/sec
+270.722290 KiB/sec
+End
+
