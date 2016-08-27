@@ -2152,7 +2152,7 @@ Connection ~ 14300 6650
 Wire Wire Line
 	14300 5750 14300 6650
 Text Notes 4400 2450 0    60   ~ 0
-Abblockkondensator übernimmt C7 mit
+Abblockkondensator übernimmt C2 mit
 $Comp
 L 74LS243 D6
 U 1 1 570CB6C4
